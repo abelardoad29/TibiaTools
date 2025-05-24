@@ -40,18 +40,16 @@ def Exp_view(page: ft.Page):
         else:
             result_text.value = "⚠️ Ingresa al menos un nombre o un nivel."
 
-        # Limpiar los campos después del cálculo
         name_input.value = ""
         level_input.value = ""
         page.update()
 
-    return ft.Column(
-        controls=[
-            name_input,
-            level_input,
-            ft.ElevatedButton("Calcular Share EXP", on_click=on_click),
-            result_text,
-        ],
-        spacing=20,
-        expand=True,
+    # ⬇️ Este contenedor soluciona la alineación en Web y Escritorio
+    return ft.Container(
+    content=ft.Column(
+        controls=[...],
+        expand=True
+    ),
+    expand=True,
+    alignment=ft.alignment.top_left 
     )

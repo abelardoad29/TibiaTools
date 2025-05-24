@@ -1,111 +1,235 @@
 import flet as ft
-from split_loot_view import split_loot_view
-from Exp_view import Exp_view
-from imbuiments_view import imbuiments
+import datetime
+import json
+import requests
 
-def main(page: ft.Page):
-    page.title = "Tibia Toolkit"
-    page.theme_mode = ft.ThemeMode.DARK
-    page.scroll = ft.ScrollMode.AUTO
-    page.window_min_width = 400
+day = datetime.datetime.now().strftime("%A")
 
-    page.selected_index = 0
-    body_content = ft.Container(content=ft.Column(expand=True), expand=True)
+rashid_locations = {
+    "Monday": "Svargrond",
+    "Tuesday": "Liberty Bay",
+    "Wednesday": "Port Hope",
+    "Thursday": "Ankrahmun",
+    "Friday": "Darashia",
+    "Saturday": "Edron",
+    "Sunday": "Carlin"
+}
 
-    app_bar = ft.Container(
-        content=ft.Text("🛠️ Tibia Tools", size=20, weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER),
-        height=60,
-        alignment=ft.alignment.center,
-        padding=ft.padding.symmetric(horizontal=10),
-    )
+rashid_city = rashid_locations.get(day, "Unknown")
 
-    def update_body(index):
-        page.selected_index = index
-        body_column = body_content.content
-        body_column.controls.clear()
-        if index == 0:
-            body_column.controls.append(split_loot_view(page))
-        elif index == 1:
-            body_column.controls.append(Exp_view(page))
-        elif index == 2:
-            body_column.controls.append(imbuiments(page))
-        body_content.update()
-        update_nav_selection(index)
+class TibiaTools(ft.Container):
+    def __init__(self, page: ft.Page):
+        super().__init__(expand=True)
+        self.page = page
+        self.page.title = "Tibia Tools"
+        self.bgcolor = "#ffffff"
+        self.dark_white = "#e7e6e9"
+        self.grey_color = "#f3f2f2"
+        self.yellow_color = "#ece5d5"
+        self.page.bgcolor = self.bgcolor
 
-    def update_nav_selection(index):
-        if hasattr(page, "nav_rail"):
-            page.nav_rail.selected_index = index
-            page.nav_rail.update()
-        if hasattr(page, "nav_bar"):
-            page.nav_bar.selected_index = index
-            page.nav_bar.update()
+        # Cargar JSON con gifs
+        try:
+            with open("creature_gifs.json", encoding="utf-8") as f:
+                self.creatures = json.load(f)
+        except Exception as e:
+            print(f"Error cargando creature_gifs.json: {e}")
+            self.creatures = {}
 
-    def build_layout():
-        page.controls.clear()
+        # Obtener boosted creature y boss (solo nombres)
+        boosted_name, boss_name = self.fetch_boosted_creatures()
 
-    if page.width > 600:
-        nav = ft.NavigationRail(
-            selected_index=page.selected_index,
-            label_type=ft.NavigationRailLabelType.ALL,
-            min_width=100,
-            min_extended_width=200,
-            group_alignment=-0.99,
-            destinations=[
-                ft.NavigationRailDestination(icon=ft.Icons.ASSESSMENT, label="Split Loot"),
-                ft.NavigationRailDestination(icon=ft.Icons.PEOPLE, label="EXP Share"),
-                #ft.NavigationRailDestination(icon=ft.Icons.AUTO_AWESOME, label="Imbuiments"),
-            ],
-            on_change=lambda e: update_body(e.control.selected_index),
-        )
-        page.nav_rail = nav
-        if hasattr(page, "nav_bar"):
-            del page.nav_bar
+        # Buscar gifs en JSON, si no existe poner placeholder
+        boosted_gif = self.creatures.get(boosted_name, "assets/placeholder.png")
+        boss_gif = self.creatures.get(boss_name, "assets/placeholder.png")
 
-        layout = ft.Column([
-            app_bar,
-            ft.Row(
-                [
-                    ft.Container(nav, height=page.height - 60),
-                    ft.VerticalDivider(width=1),
-                    ft.Container(body_content, expand=True),  # <-- cuerpo se expande
-                ],
-                expand=True  # <-- el Row se expande también
+        # Menu (igual que antes)
+        self.menu = ft.Container(
+            width=60,
+            margin=10,
+            alignment=ft.alignment.center,
+            content=ft.Column(
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                controls=[
+                    ft.Container(
+                        width=40,
+                        height=40,
+                        border_radius=10,
+                        bgcolor=self.dark_white,
+                        content=ft.IconButton(icon=ft.Icons.MENU_SHARP, icon_color="black")
+                    ),
+                    ft.Column(
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            ft.Container(
+                                width=40,
+                                height=40,
+                                border_radius=10,
+                                bgcolor=self.dark_white,
+                                content=ft.IconButton(icon=ft.Icons.SAFETY_DIVIDER, icon_color="black")
+                            ),
+                            ft.Divider(height=1, color=self.dark_white),
+                            ft.Container(
+                                width=40,
+                                height=40,
+                                border_radius=10,
+                                bgcolor=self.dark_white,
+                                content=ft.IconButton(icon=ft.Icons.PEOPLE_ALT, icon_color="black")
+                            ),
+                            ft.Divider(height=1, color=self.dark_white),
+                            ft.Container(
+                                width=40,
+                                height=40,
+                                border_radius=10,
+                                bgcolor=self.dark_white,
+                                content=ft.IconButton(icon=ft.Icons.ATTACH_MONEY, icon_color="black")
+                            ),
+                            ft.Divider(height=1, color=self.dark_white),
+                            ft.Container(
+                                width=40,
+                                height=40,
+                                border_radius=10,
+                                bgcolor=self.dark_white,
+                                content=ft.IconButton(icon=ft.Icons.MANAGE_HISTORY, icon_color="black")
+                            ),
+                            ft.Divider(height=1, color=self.dark_white),
+                            ft.Container(
+                                width=40,
+                                height=40,
+                                border_radius=10,
+                                bgcolor=self.dark_white,
+                                content=ft.IconButton(icon=ft.Icons.ADD_ALERT, icon_color="black")
+                            ),
+                        ]
+                    ),
+                    ft.Column(
+                        controls=[
+                            ft.Container(
+                                width=40,
+                                height=40,
+                                border_radius=10,
+                                bgcolor=self.dark_white,
+                                content=ft.IconButton(icon=ft.Icons.SETTINGS, icon_color="black")
+                            ),
+                        ]
+                    )
+                ]
             )
-        ], expand=True)
-
-        page.add(layout)
-
-    else:
-        nav_bar = ft.NavigationBar(
-            selected_index=page.selected_index,
-            destinations=[
-                ft.NavigationBarDestination(icon=ft.Icons.ASSESSMENT, label="Split Loot"),
-                ft.NavigationBarDestination(icon=ft.Icons.PEOPLE, label="EXP Share"),
-                ft.NavigationBarDestination(icon=ft.Icons.AUTO_AWESOME, label="Imbuiments"),
-            ],
-            on_change=lambda e: update_body(e.control.selected_index),
-        )
-        page.nav_bar = nav_bar
-        if hasattr(page, "nav_rail"):
-            del page.nav_rail
-
-        layout = ft.Column(
-            [
-                app_bar,
-                ft.Container(body_content, expand=True),  # <-- también se expande aquí
-            ],
-            expand=True
         )
 
-        page.navigation_bar = nav_bar
-        page.add(layout)
+        fixed_width = 180
+        fixed_height = 220
 
-    update_body(page.selected_index)
-    page.update()
+        def create_box(title: str, image_src: str, text: str):
+            return ft.Container(
+                width=fixed_width,
+                height=fixed_height,
+                border_radius=10,
+                padding=10,
+                bgcolor=self.grey_color,
+                content=ft.Column(
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    spacing=10,
+                    controls=[
+                        ft.Text(title, size=14, weight=ft.FontWeight.BOLD, color="black"),
+                        ft.Image(src=image_src, width=100, height=100, fit=ft.ImageFit.CONTAIN),
+                        ft.Text(
+                            text,
+                            size=16,
+                            weight=ft.FontWeight.BOLD,
+                            color="black",
+                            max_lines=1,
+                            overflow=ft.TextOverflow.ELLIPSIS,
+                            text_align=ft.TextAlign.CENTER,
+                            expand=False,
+                            width=fixed_width - 20  # para que el texto tenga espacio para no salirse
+                        ),
+                    ],
+                ),
+            )
 
-    page.on_resize = lambda e: build_layout()
-    build_layout()
-if __name__ == "__main__":
-    ft.app(target=main, view=ft.WEB_BROWSER, port=51383)
-#ft.app(target=main, host="0.0.0.0", port=51383)
+        self.column_1 = ft.Column(
+            expand=True,
+            alignment=ft.MainAxisAlignment.CENTER,
+            controls=[
+                ft.Row(
+                    expand=True,
+                    spacing=20,
+                    controls=[
+                        create_box("Where is Rashid?", "assets/Rashid.gif", rashid_city),
+                        create_box("Boosted Creature:", boosted_gif, boosted_name),
+                        create_box("Boosted Boss:", boss_gif, boss_name),
+                    ],
+                ),
+                ft.Column(
+                    expand=2,
+                    controls=[
+                        ft.Container(
+                            expand=True,
+                            border_radius=10,
+                            padding=20,
+                            content=ft.Container(
+                                bgcolor=self.grey_color,
+                                border_radius=20,
+                            ),
+                        )
+                    ]
+                )
+            ]
+        )
 
+        self.column_2 = ft.Column(
+            expand=True,
+            alignment=ft.MainAxisAlignment.CENTER,
+            controls=[
+                ft.Container(
+                    expand=True,
+                    border_radius=10,
+                    padding=20,
+                    content=ft.Container(
+                        bgcolor=self.grey_color,
+                        border_radius=20,
+                    ),
+                ),
+                ft.Container(
+                    expand=True,
+                    border_radius=10,
+                    padding=20,
+                    content=ft.Container(
+                        bgcolor=self.grey_color,
+                        border_radius=20,
+                    ),
+                )
+            ]
+        )
+
+        self.page.add(
+            ft.Row(
+                expand=True,
+                controls=[
+                    self.menu,
+                    self.column_1,
+                    self.column_2,
+                ]
+            )
+        )
+
+    def fetch_boosted_creatures(self):
+        try:
+            response_boosted = requests.get("https://api.tibialabs.com/v3/boosted/creature")
+            text_boosted = response_boosted.text.strip()
+            boosted_name = text_boosted.split(":")[-1].strip()
+
+            response_boss = requests.get("https://api.tibialabs.com/v3/boosted/boss")
+            text_boss = response_boss.text.strip()
+            boss_name = text_boss.split(":")[-1].strip()
+
+            return boosted_name, boss_name
+
+        except Exception as e:
+            print(f"Error al obtener boosted creatures: {e}")
+            return "Unknown Boosted", "Unknown Boss"
+
+ft.app(target=TibiaTools, assets_dir="assets")
