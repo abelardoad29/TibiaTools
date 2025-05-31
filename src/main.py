@@ -3,7 +3,8 @@ import datetime
 import json
 import requests
 from split_loot import split_loot_view
-
+from Exp_view import Exp_view
+from imbuiments_view import ImbuementCalculator
 
 day = datetime.datetime.now().strftime("%A")
 
@@ -30,6 +31,7 @@ class TibiaTools(ft.Container):
         self.grey_color = "#f3f2f2"
         self.darkgrey_color = "#6b6b6b"
         self.page.bgcolor = self.bgcolor
+        self.page.theme_mode = ft.ThemeMode.LIGHT
 
 
 
@@ -132,18 +134,7 @@ class TibiaTools(ft.Container):
                         create_box("Boosted Boss:", boss_gif, boss_name),
                     ],
                 ),
-                ft.Container(
-                    expand=True,
-                    border_radius=10,
-                    padding=20,
-                    bgcolor=self.grey_color,
-                    content=ft.Column(
-                        expand=True,
-                        controls=[
-                            ft.Text("imbus", size=14, weight=ft.FontWeight.BOLD, color="black")
-                        ]
-                    )
-                )
+                ImbuementCalculator()
             ]
         )
 
@@ -168,10 +159,7 @@ class TibiaTools(ft.Container):
                     border_radius=10,
                     padding=20,
                     bgcolor=self.grey_color,
-                    content=ft.Container(
-                        bgcolor=self.grey_color,
-                        border_radius=20,
-                    ),
+                    content=Exp_view(self.page)
                 )
             ]
         )

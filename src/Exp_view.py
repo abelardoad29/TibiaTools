@@ -44,12 +44,19 @@ def Exp_view(page: ft.Page):
         level_input.value = ""
         page.update()
 
-    # ⬇️ Este contenedor soluciona la alineación en Web y Escritorio
+    button = ft.ElevatedButton("Calcular Share", on_click=on_click)
+
     return ft.Container(
-    content=ft.Column(
-        controls=[...],
-        expand=True
-    ),
-    expand=True,
-    alignment=ft.alignment.top_left 
+        content=ft.Column(
+            controls=[
+                ft.Text("Share Exp", size=14, weight=ft.FontWeight.BOLD, color="black"),
+                name_input,
+                level_input,
+                button,
+                result_text
+            ],
+            expand=True
+        ),
+        expand=True,
+        alignment=ft.alignment.top_left,
     )
