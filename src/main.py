@@ -2,6 +2,8 @@ import flet as ft
 import datetime
 import json
 import requests
+from split_loot import split_loot_view
+
 
 day = datetime.datetime.now().strftime("%A")
 
@@ -17,6 +19,7 @@ rashid_locations = {
 
 rashid_city = rashid_locations.get(day, "Unknown")
 
+
 class TibiaTools(ft.Container):
     def __init__(self, page: ft.Page):
         super().__init__(expand=True)
@@ -25,10 +28,11 @@ class TibiaTools(ft.Container):
         self.bgcolor = "#ffffff"
         self.dark_white = "#e7e6e9"
         self.grey_color = "#f3f2f2"
-        self.yellow_color = "#ece5d5"
+        self.darkgrey_color = "#6b6b6b"
         self.page.bgcolor = self.bgcolor
 
-        # Cargar JSON con gifs
+
+
         try:
             with open("creature_gifs.json", encoding="utf-8") as f:
                 self.creatures = json.load(f)
@@ -36,14 +40,10 @@ class TibiaTools(ft.Container):
             print(f"Error cargando creature_gifs.json: {e}")
             self.creatures = {}
 
-        # Obtener boosted creature y boss (solo nombres)
         boosted_name, boss_name = self.fetch_boosted_creatures()
-
-        # Buscar gifs en JSON, si no existe poner placeholder
         boosted_gif = self.creatures.get(boosted_name, "assets/placeholder.png")
         boss_gif = self.creatures.get(boss_name, "assets/placeholder.png")
 
-        # Menu (igual que antes)
         self.menu = ft.Container(
             width=60,
             margin=10,
@@ -62,56 +62,26 @@ class TibiaTools(ft.Container):
                     ft.Column(
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                         controls=[
-                            ft.Container(
-                                width=40,
-                                height=40,
-                                border_radius=10,
-                                bgcolor=self.dark_white,
-                                content=ft.IconButton(icon=ft.Icons.SAFETY_DIVIDER, icon_color="black")
-                            ),
+                            ft.Container(width=40, height=40, border_radius=10, bgcolor=self.dark_white,
+                                         content=ft.IconButton(icon=ft.Icons.SAFETY_DIVIDER, icon_color="black")),
                             ft.Divider(height=1, color=self.dark_white),
-                            ft.Container(
-                                width=40,
-                                height=40,
-                                border_radius=10,
-                                bgcolor=self.dark_white,
-                                content=ft.IconButton(icon=ft.Icons.PEOPLE_ALT, icon_color="black")
-                            ),
+                            ft.Container(width=40, height=40, border_radius=10, bgcolor=self.dark_white,
+                                         content=ft.IconButton(icon=ft.Icons.PEOPLE_ALT, icon_color="black")),
                             ft.Divider(height=1, color=self.dark_white),
-                            ft.Container(
-                                width=40,
-                                height=40,
-                                border_radius=10,
-                                bgcolor=self.dark_white,
-                                content=ft.IconButton(icon=ft.Icons.ATTACH_MONEY, icon_color="black")
-                            ),
+                            ft.Container(width=40, height=40, border_radius=10, bgcolor=self.dark_white,
+                                         content=ft.IconButton(icon=ft.Icons.ATTACH_MONEY, icon_color="black")),
                             ft.Divider(height=1, color=self.dark_white),
-                            ft.Container(
-                                width=40,
-                                height=40,
-                                border_radius=10,
-                                bgcolor=self.dark_white,
-                                content=ft.IconButton(icon=ft.Icons.MANAGE_HISTORY, icon_color="black")
-                            ),
+                            ft.Container(width=40, height=40, border_radius=10, bgcolor=self.dark_white,
+                                         content=ft.IconButton(icon=ft.Icons.MANAGE_HISTORY, icon_color="black")),
                             ft.Divider(height=1, color=self.dark_white),
-                            ft.Container(
-                                width=40,
-                                height=40,
-                                border_radius=10,
-                                bgcolor=self.dark_white,
-                                content=ft.IconButton(icon=ft.Icons.ADD_ALERT, icon_color="black")
-                            ),
+                            ft.Container(width=40, height=40, border_radius=10, bgcolor=self.dark_white,
+                                         content=ft.IconButton(icon=ft.Icons.ADD_ALERT, icon_color="black")),
                         ]
                     ),
                     ft.Column(
                         controls=[
-                            ft.Container(
-                                width=40,
-                                height=40,
-                                border_radius=10,
-                                bgcolor=self.dark_white,
-                                content=ft.IconButton(icon=ft.Icons.SETTINGS, icon_color="black")
-                            ),
+                            ft.Container(width=40, height=40, border_radius=10, bgcolor=self.dark_white,
+                                         content=ft.IconButton(icon=ft.Icons.SETTINGS, icon_color="black")),
                         ]
                     )
                 ]
@@ -144,18 +114,17 @@ class TibiaTools(ft.Container):
                             overflow=ft.TextOverflow.ELLIPSIS,
                             text_align=ft.TextAlign.CENTER,
                             expand=False,
-                            width=fixed_width - 20  # para que el texto tenga espacio para no salirse
+                            width=fixed_width - 20
                         ),
                     ],
                 ),
             )
 
         self.column_1 = ft.Column(
-            expand=True,
+            expand=1,
             alignment=ft.MainAxisAlignment.CENTER,
             controls=[
                 ft.Row(
-                    expand=True,
                     spacing=20,
                     controls=[
                         create_box("Where is Rashid?", "assets/Rashid.gif", rashid_city),
@@ -163,40 +132,42 @@ class TibiaTools(ft.Container):
                         create_box("Boosted Boss:", boss_gif, boss_name),
                     ],
                 ),
-                ft.Column(
-                    expand=2,
-                    controls=[
-                        ft.Container(
-                            expand=True,
-                            border_radius=10,
-                            padding=20,
-                            content=ft.Container(
-                                bgcolor=self.grey_color,
-                                border_radius=20,
-                            ),
-                        )
-                    ]
+                ft.Container(
+                    expand=True,
+                    border_radius=10,
+                    padding=20,
+                    bgcolor=self.grey_color,
+                    content=ft.Column(
+                        expand=True,
+                        controls=[
+                            ft.Text("imbus", size=14, weight=ft.FontWeight.BOLD, color="black")
+                        ]
+                    )
                 )
             ]
         )
 
         self.column_2 = ft.Column(
-            expand=True,
+            expand=1,
             alignment=ft.MainAxisAlignment.CENTER,
             controls=[
                 ft.Container(
-                    expand=True,
+                    expand=1,
                     border_radius=10,
                     padding=20,
-                    content=ft.Container(
-                        bgcolor=self.grey_color,
-                        border_radius=20,
+                    bgcolor=self.grey_color,
+                    content=ft.Column(
+                        expand=1,
+                        controls=[
+                            split_loot_view(self.page)
+                        ]
                     ),
                 ),
                 ft.Container(
-                    expand=True,
+                    expand=1,
                     border_radius=10,
                     padding=20,
+                    bgcolor=self.grey_color,
                     content=ft.Container(
                         bgcolor=self.grey_color,
                         border_radius=20,
@@ -227,9 +198,14 @@ class TibiaTools(ft.Container):
             boss_name = text_boss.split(":")[-1].strip()
 
             return boosted_name, boss_name
-
         except Exception as e:
             print(f"Error al obtener boosted creatures: {e}")
             return "Unknown Boosted", "Unknown Boss"
 
-ft.app(target=TibiaTools, assets_dir="assets")
+
+def main(page: ft.Page):
+    page.title = "Tibia Tools"
+    TibiaTools(page)
+
+
+ft.app(target=main)

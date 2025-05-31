@@ -4,10 +4,10 @@ import re
 def parse_session_text(session_text):
     players = []
     lines = session_text.strip().split('\n')
-    
+
     if len(lines) < 7:
         raise ValueError("El texto de sesión es demasiado corto para contener datos válidos.")
-    
+
     total_loot = total_supplies = total_balance = 0
     for line in lines[:6]:
         line = line.strip()
@@ -78,7 +78,7 @@ def split_loot_view(page: ft.Page):
         min_lines=10,
         max_lines=20,
         height=200,
-        expand=False
+        expand=True
     )
 
     result_column = ft.Column()
@@ -98,17 +98,17 @@ def split_loot_view(page: ft.Page):
         try:
             individual_balance, transfers = parse_session_text(session_input.value)
             result_column.controls.append(ft.Text(f"Balance individual: {individual_balance:,} gp", weight="bold"))
-            
+
             for t in transfers:
                 text = f"transfer {t['amount']} to {t['to']}"
                 current_transfers_text.append(text)
                 result_column.controls.append(
                     ft.Row([
-                        ft.Text(f"{t['from']} -> {t['to']}: {t['amount']:,} gp"),
+                        ft.Text(f"{t['from']} -> {t['to']}: {t['amount']:,} gp", expand=True),
                         ft.ElevatedButton("Copiar", on_click=lambda e, txt=text: copy_to_clipboard(txt))
                     ])
                 )
-            
+
             if transfers:
                 result_column.controls.append(
                     ft.ElevatedButton(
@@ -117,15 +117,17 @@ def split_loot_view(page: ft.Page):
                     )
                 )
         except Exception as ex:
-            result_column.controls.append(ft.Text(f"Error al procesar: {ex}", color=ft.Colors.RED))
+            result_column.controls.append(ft.Text(f"Error al procesar: {ex}", color=ft.colors.RED))
 
-        result_column.update()  # ✅ solo actualiza los resultados, no toda la pantalla
+        page.update()
 
     return ft.Column(
         controls=[
+            ft.Text("Split Loot - Calculadora de Profit", size=20, weight="bold"),
             session_input,
             ft.ElevatedButton("Calcular", on_click=calculate_session),
             result_column
         ],
+        scroll=ft.ScrollMode.AUTO,
         expand=True
     )
