@@ -123,7 +123,7 @@ def split_loot_view(page: ft.Page):
 
     return ft.Column(
         controls=[
-            ft.Text("Split Loot - Calculadora de Profit", size=14, weight=ft.FontWeight.BOLD, color="black"),
+            ft.Text("Split Loot", size=14, weight=ft.FontWeight.BOLD, color="black"),
             session_input,
             ft.ElevatedButton("Calcular", on_click=calculate_session),
             result_column

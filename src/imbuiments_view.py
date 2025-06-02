@@ -69,7 +69,7 @@ def ImbuementCalculator():
     tier_dropdown.on_change = update_materials
 
     # Inicializar materiales
-    update_materials()
+    #update_materials()
 
     return ft.Container(
         content=ft.Column(
