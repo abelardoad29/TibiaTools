@@ -86,7 +86,7 @@ def split_loot_view(page: ft.Page):
 
     def copy_to_clipboard(text):
         page.set_clipboard(text)
-        page.snack_bar = ft.SnackBar(ft.Text("¡Texto copiado al portapapeles!"))
+        page.snack_bar = ft.SnackBar(ft.Text("¡Copied!"))
         page.snack_bar.open = True
         page.update()
 
@@ -105,14 +105,14 @@ def split_loot_view(page: ft.Page):
                 result_column.controls.append(
                     ft.Row([
                         ft.Text(f"{t['from']} -> {t['to']}: {t['amount']:,} gp", expand=True),
-                        ft.ElevatedButton("Copiar", on_click=lambda e, txt=text: copy_to_clipboard(txt))
+                        ft.ElevatedButton("Copy", on_click=lambda e, txt=text: copy_to_clipboard(txt))
                     ])
                 )
 
             if transfers:
                 result_column.controls.append(
                     ft.ElevatedButton(
-                        "Copiar todas las transferencias",
+                        "Copy all",
                         on_click=lambda e: copy_to_clipboard("\n".join(current_transfers_text))
                     )
                 )
@@ -125,7 +125,7 @@ def split_loot_view(page: ft.Page):
         controls=[
             ft.Text("Split Loot", size=14, weight=ft.FontWeight.BOLD, color="black"),
             session_input,
-            ft.ElevatedButton("Calcular", on_click=calculate_session),
+            ft.ElevatedButton("Calculate", on_click=calculate_session),
             result_column
         ],
         scroll=ft.ScrollMode.AUTO,
