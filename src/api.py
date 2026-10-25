@@ -19,13 +19,12 @@ def fetch_boosted_creatures():
 
 
 async def fetch_character_data(session, name):
-    try:
-        async with session.get(f"https://api.tibiadata.com/v4/character/{name}") as resp:
-            data = await resp.json()
-            if "character" in data and "character" in data["character"]:
-                return data["character"]["character"]
-            else:
-                return None
-    except Exception as e:
-        print(f"Error fetching character data for {name}: {e}")
+    async with session.get(f"https://api.tibiadata.com/v5/character/{name}") as resp:
+        if resp.status == 404:
+            return None
+
+        resp.raise_for_status()
+        data = await resp.json()
+        if "character" in data and "character" in data["character"]:
+            return data["character"]["character"]
         return None
