@@ -19,12 +19,16 @@ def Exp_view(page: ft.Page):
 
         if nombre:
             try:
-                res = requests.get(f"https://api.tibiadata.com/v4/character/{nombre}")
-                data = res.json()
+                res = requests.get(f"https://api.tibiadata.com/v5/character/{nombre}")
 
-                if data.get("information", {}).get("status", {}).get("http_code") == 502:
+                if res.status_code == 404:
                     result_text.value = f"⚠️ Personaje '{nombre}' no encontrado."
+                elif res.status_code == 502:
+                    result_text.value = "⚠️ TibiaData no está disponible temporalmente."
+                elif res.status_code != 200:
+                    result_text.value = f"⚠️ Error de TibiaData (HTTP {res.status_code})."
                 else:
+                    data = res.json()
                     level = data["character"]["character"]["level"]
                     min_lvl, max_lvl = calcular_rango(level)
                     result_text.value = f"🧍 {nombre} (Nivel {level}) puede sharear con niveles de {min_lvl} a {max_lvl}."
