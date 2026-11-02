@@ -95,7 +95,7 @@ describe('split loot', () => {
 describe('imbuements', () => {
   const vamp: ImbuementDef = {
     name: 'Vampirism',
-    effect: 'Roubo de Vida',
+    effect: 'Life Leech',
     materials: [
       { qty: 25, item: 'Vampire Teeth' },
       { qty: 15, item: 'Bloody Pincers' },

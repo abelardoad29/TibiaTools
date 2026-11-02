@@ -1,8 +1,7 @@
 {
  "source": "https://www.tibiawiki.com.br/wiki/Imbuements",
- "parsedAt": "2026-11-02T17:07:20.910Z",
- "notes": "Tarifas: noticia oficial de Tibia del 12-06-2025 (100 % de éxito). Duración de 20 h: TibiaWiki BR. Gold Tokens por paquete (2/4/6) y fórmula de costo por hora (total/20): NabBot (cogs/tibiawiki.py), contrastado el 02-11-2026.",
- "durationHours": 20,
+ "parsedAt": "2026-11-02T22:12:54.651Z",
+ "notes": "Tarifas: noticia oficial de Tibia del 12-06-2025 (100 % de éxito). Duración de 20 h: TibiaWiki BR. Gold Tokens por paquete (2/4/6) y costo por hora (total/20): NabBot. Efectos en inglés: tibiawiki-sql (TibiaWiki EN).",
  "tiers": [
   {
    "tier": "Basic",
@@ -30,10 +29,11 @@
   "Intricate": 4,
   "Powerful": 6
  },
+ "durationHours": 20,
  "imbuements": [
   {
    "name": "Bash",
-   "effect": "Skillboost de Clava",
+   "effect": "Club Fighting",
    "materials": [
     {
      "qty": 20,
@@ -51,7 +51,7 @@
   },
   {
    "name": "Blockade",
-   "effect": "Skillboost de Escudo",
+   "effect": "Shielding",
    "materials": [
     {
      "qty": 20,
@@ -69,7 +69,7 @@
   },
   {
    "name": "Chop",
-   "effect": "Skillboost de Machado",
+   "effect": "Axe Fighting",
    "materials": [
     {
      "qty": 20,
@@ -87,7 +87,7 @@
   },
   {
    "name": "Epiphany",
-   "effect": "Skillboost de Nível Mágico",
+   "effect": "Magic Level",
    "materials": [
     {
      "qty": 25,
@@ -105,7 +105,7 @@
   },
   {
    "name": "Precision",
-   "effect": "Skillboost de Distância",
+   "effect": "Distance Fighting",
    "materials": [
     {
      "qty": 25,
@@ -123,7 +123,7 @@
   },
   {
    "name": "Punch",
-   "effect": "Skillboost de Punhos",
+   "effect": "Fist Fighting",
    "materials": [
     {
      "qty": 25,
@@ -141,7 +141,7 @@
   },
   {
    "name": "Slash",
-   "effect": "Skillboost de Espada",
+   "effect": "Sword Fighting",
    "materials": [
     {
      "qty": 25,
@@ -159,7 +159,7 @@
   },
   {
    "name": "Electrify",
-   "effect": "Dano de Energia",
+   "effect": "Energy Damage",
    "materials": [
     {
      "qty": 25,
@@ -177,7 +177,7 @@
   },
   {
    "name": "Frost",
-   "effect": "Dano de Gelo",
+   "effect": "Ice Damage",
    "materials": [
     {
      "qty": 25,
@@ -195,7 +195,7 @@
   },
   {
    "name": "Reap",
-   "effect": "Dano de Morte",
+   "effect": "Death Damage",
    "materials": [
     {
      "qty": 25,
@@ -213,7 +213,7 @@
   },
   {
    "name": "Scorch",
-   "effect": "Dano de Fogo",
+   "effect": "Fire Damage",
    "materials": [
     {
      "qty": 25,
@@ -231,7 +231,7 @@
   },
   {
    "name": "Venom",
-   "effect": "Dano de Terra",
+   "effect": "Earth Damage",
    "materials": [
     {
      "qty": 25,
@@ -249,7 +249,7 @@
   },
   {
    "name": "Cloud Fabric",
-   "effect": "Proteção de Energia",
+   "effect": "Energy Protection",
    "materials": [
     {
      "qty": 20,
@@ -267,7 +267,7 @@
   },
   {
    "name": "Demon Presence",
-   "effect": "Proteção de Sagrado",
+   "effect": "Holy Protection",
    "materials": [
     {
      "qty": 25,
@@ -285,7 +285,7 @@
   },
   {
    "name": "Dragon Hide",
-   "effect": "Proteção de Fogo",
+   "effect": "Fire Protection",
    "materials": [
     {
      "qty": 20,
@@ -303,7 +303,7 @@
   },
   {
    "name": "Lich Shroud",
-   "effect": "Proteção de Morte",
+   "effect": "Death Protection",
    "materials": [
     {
      "qty": 25,
@@ -321,7 +321,7 @@
   },
   {
    "name": "Quara Scale",
-   "effect": "Proteção de Gelo",
+   "effect": "Ice Protection",
    "materials": [
     {
      "qty": 25,
@@ -339,7 +339,7 @@
   },
   {
    "name": "Snake Skin",
-   "effect": "Proteção de Terra",
+   "effect": "Earth Protection",
    "materials": [
     {
      "qty": 25,
@@ -357,7 +357,7 @@
   },
   {
    "name": "Featherweight",
-   "effect": "Aumento de Capacidade",
+   "effect": "Capacity",
    "materials": [
     {
      "qty": 20,
@@ -375,7 +375,7 @@
   },
   {
    "name": "Strike",
-   "effect": "Dano Crítico",
+   "effect": "Critical Hit",
    "materials": [
     {
      "qty": 20,
@@ -393,7 +393,7 @@
   },
   {
    "name": "Swiftness",
-   "effect": "Skillboost de Velocidade",
+   "effect": "Speed",
    "materials": [
     {
      "qty": 15,
@@ -411,7 +411,7 @@
   },
   {
    "name": "Vampirism",
-   "effect": "Roubo de Vida",
+   "effect": "Life Leech",
    "materials": [
     {
      "qty": 25,
@@ -429,7 +429,7 @@
   },
   {
    "name": "Vibrancy",
-   "effect": "Remoção de Paralisia",
+   "effect": "Paralysis Removal",
    "materials": [
     {
      "qty": 20,
@@ -447,7 +447,7 @@
   },
   {
    "name": "Void",
-   "effect": "Roubo de Mana",
+   "effect": "Mana Leech",
    "materials": [
     {
      "qty": 25,
