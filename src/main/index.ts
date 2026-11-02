@@ -24,10 +24,13 @@ const DATA_ROOT = join(process.env.LOCALAPPDATA ?? app.getPath('appData'), 'Tibi
 app.setPath('userData', join(DATA_ROOT, 'electron'))
 app.setAppUserModelId('com.abelardoad29.tibiatools')
 
+// corsEnabled + Access-Control-Allow-Origin: la página (file://) lee estas imágenes con fetch() para el OCR,
+// y sin CORS el navegador las bloquea ("Failed to fetch") aunque un <img> sí las muestre.
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'tt-img', privileges: { standard: true, secure: true, supportFetchAPI: true } },
-  { scheme: 'tt-evidence', privileges: { standard: true, secure: true, supportFetchAPI: true } },
+  { scheme: 'tt-img', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } },
+  { scheme: 'tt-evidence', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } },
 ])
+const CORS = { 'Access-Control-Allow-Origin': '*' }
 
 if (!app.requestSingleInstanceLock()) app.quit()
 
@@ -194,7 +197,7 @@ async function boot(): Promise<void> {
     const bytes = await itemIcon(ctx, id)
     if (!bytes) return new Response(null, { status: 404 })
     const isPng = bytes[0] === 0x89 && bytes[1] === 0x50
-    return new Response(bytes, { headers: { 'Content-Type': isPng ? 'image/png' : 'image/gif', 'Cache-Control': 'max-age=86400' } })
+    return new Response(bytes, { headers: { ...CORS, 'Content-Type': isPng ? 'image/png' : 'image/gif', 'Cache-Control': 'max-age=86400' } })
   })
   protocol.handle('tt-evidence', (req) => {
     const url = new URL(req.url)
@@ -202,7 +205,7 @@ async function boot(): Promise<void> {
     const file = url.host === 'shot' ? screenshotPath(ctx.db, id) : null
     if (!file) return new Response(null, { status: 404 })
     const type = { '.png': 'image/png', '.jpg': 'image/jpeg', '.bmp': 'image/bmp' }[extname(file).toLowerCase()] ?? 'application/octet-stream'
-    return new Response(readFileSync(file), { headers: { 'Content-Type': type } })
+    return new Response(readFileSync(file), { headers: { ...CORS, 'Content-Type': type } })
   })
 
   // Solo se permite capturar pantalla (getDisplayMedia) desde la propia app; nada más.

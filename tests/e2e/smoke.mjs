@@ -73,6 +73,15 @@ try {
   await page.getByRole('link', { name: 'Revisión OCR', exact: true }).click()
   await page.waitForSelector('text=Pendientes (1)', { timeout: 10_000 })
   console.log('✓ la captura aparece en Revisión OCR')
+  // El OCR y el editor de perfiles leen la captura con fetch(): debe funcionar (CORS del protocolo).
+  const fetched = await page.evaluate(async () => {
+    const list = await window.tibia.invoke('collector.screenshots.list', { status: null, limit: 1 })
+    const res = await fetch(list.data[0].url)
+    const bmp = await createImageBitmap(await res.blob())
+    return { status: res.status, width: bmp.width }
+  })
+  if (fetched.status !== 200 || !fetched.width) throw new Error(`fetch de la captura falló: ${JSON.stringify(fetched)}`)
+  console.log('✓ la captura se puede leer para el OCR')
 } catch (e) {
   await page.screenshot({ path: join(shots, 'failure.png') }).catch(() => undefined)
   console.error('Alertas en pantalla:', await page.locator('[role=alert]').allTextContents().catch(() => []))
