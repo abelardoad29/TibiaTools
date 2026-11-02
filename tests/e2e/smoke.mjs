@@ -19,7 +19,7 @@ try {
   page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))
   await page.waitForSelector('nav[aria-label="Secciones"]', { timeout: 30_000 })
-  const sections = ['Inicio', 'Herramientas', 'Catálogo', 'Collector', 'Revisión OCR', 'Market', 'Histórico', 'Tibia Coins', 'Arbitraje', 'Transferencias', 'Carrito', 'Alertas', 'Ajustes']
+  const sections = ['Inicio', 'Herramientas', 'Hunted', 'Catálogo', 'Collector', 'Revisión OCR', 'Market', 'Histórico', 'Tibia Coins', 'Arbitraje', 'Transferencias', 'Carrito', 'Alertas', 'Ajustes']
   for (const name of sections) {
     await page.getByRole('link', { name, exact: true }).click()
     await page.waitForTimeout(700)

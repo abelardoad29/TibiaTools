@@ -34,6 +34,22 @@ const characterSchema = z.object({
     .optional(),
 })
 
+const worldOnlineSchema = z.object({
+  world: z.object({
+    name: z.string(),
+    online_players: z.array(z.object({ name: z.string(), level: z.number().int(), vocation: z.string() })).nullable().optional(),
+  }),
+  information: z.object({ timestamp: z.string() }).partial().optional(),
+})
+
+const guildSchema = z.object({
+  guild: z.object({
+    name: z.string(),
+    world: z.string(),
+    members: z.array(z.object({ name: z.string(), rank: z.string().optional(), level: z.number().int(), vocation: z.string() })).nullable().optional(),
+  }),
+})
+
 export type TibiaDataWorld = z.infer<typeof worldsSchema>['worlds']['regular_worlds'][number]
 
 export function tibiaData(http: HttpClient) {
@@ -54,6 +70,23 @@ export function tibiaData(http: HttpClient) {
         creature: c.success ? { name: c.data.name, imageUrl: c.data.image_url ?? null } : null,
         boss: b.success ? { name: b.data.name, imageUrl: b.data.image_url ?? null } : null,
         fetchedAt: creatures.fetchedAt,
+      }
+    },
+    /** Lista pública de conectados de un mundo. Sin caché local: TibiaData ya la guarda 60 s. */
+    async worldOnline(world: string) {
+      const r = await http.getJson<unknown>(`${BASE}/world/${encodeURIComponent(world)}`, { cacheSeconds: 0, staleOnError: false, retries: 1 })
+      const d = worldOnlineSchema.parse(r.data)
+      return { players: d.world.online_players ?? [], sourceTimestamp: d.information?.timestamp ?? r.fetchedAt, fetchedAt: r.fetchedAt }
+    },
+    /** null si la guild no existe (TibiaData responde 502). */
+    async guild(name: string) {
+      try {
+        const r = await http.getJson<unknown>(`${BASE}/guild/${encodeURIComponent(name.trim())}`, { cacheSeconds: 600, staleOnError: false, retries: 0 })
+        const g = guildSchema.safeParse(r.data)
+        return g.success ? { name: g.data.guild.name, world: g.data.guild.world, members: g.data.guild.members ?? [] } : null
+      } catch (e) {
+        if (e instanceof ExternalError && (e.status === 502 || e.status === 404)) return null
+        throw e
       }
     },
     /** null si el personaje no existe. TibiaData responde 502 (no 404) para nombres inexistentes: no se reintenta. */

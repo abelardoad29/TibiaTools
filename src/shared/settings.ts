@@ -45,6 +45,8 @@ export interface Settings {
     builds: ImbuedItemBuild[]
   }
   notifications: { enabled: boolean }
+  /** Vigilancia de listas (hunted, amigos…) sobre la lista de conectados de cada mundo. */
+  watch: { enabled: boolean; intervalSec: number; sound: boolean }
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -67,6 +69,7 @@ export const DEFAULT_SETTINGS: Settings = {
   network: { tibiaDataEnabled: true, thirdPartyEnabled: true },
   imbuements: { world: null, tokensPerTier: { Basic: null, Intricate: null, Powerful: null }, manualPrices: {}, huntHours: 2, builds: [] },
   notifications: { enabled: true },
+  watch: { enabled: true, intervalSec: 60, sound: true },
 }
 
 /** Mezcla profunda de un parche parcial sobre la configuración (solo objetos planos). */

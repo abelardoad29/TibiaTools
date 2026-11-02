@@ -385,4 +385,67 @@ CREATE TABLE seed_versions (
 );
 `,
   },
+  {
+    version: 2,
+    name: 'watch_lists',
+    sql: `
+-- Vigilancia de personajes (hunted list, amigos…) sobre la lista pública de conectados de cada mundo.
+CREATE TABLE watch_lists (
+  id INTEGER PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL,
+  notify_login INTEGER NOT NULL DEFAULT 1,
+  burst_threshold INTEGER,
+  burst_window_sec INTEGER NOT NULL DEFAULT 60,
+  created_at TEXT NOT NULL
+);
+INSERT INTO watch_lists (name, notify_login, burst_threshold, burst_window_sec, created_at)
+VALUES ('Hunted', 1, 5, 60, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+
+CREATE TABLE watch_entries (
+  id INTEGER PRIMARY KEY,
+  list_id INTEGER NOT NULL REFERENCES watch_lists(id) ON DELETE CASCADE,
+  kind TEXT NOT NULL CHECK (kind IN ('character','guild')),
+  name TEXT NOT NULL,
+  world TEXT,
+  note TEXT,
+  resolved_at TEXT,
+  created_at TEXT NOT NULL,
+  UNIQUE (list_id, kind, name)
+);
+
+CREATE TABLE watch_guild_members (
+  entry_id INTEGER NOT NULL REFERENCES watch_entries(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  rank TEXT,
+  level INTEGER,
+  vocation TEXT,
+  PRIMARY KEY (entry_id, name)
+);
+
+-- Último estado conocido de cada personaje vigilado (clave: nombre en minúsculas).
+CREATE TABLE watch_status (
+  name_key TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  world TEXT NOT NULL,
+  online INTEGER NOT NULL,
+  level INTEGER,
+  vocation TEXT,
+  last_login_at TEXT,
+  last_seen_at TEXT,
+  updated_at TEXT NOT NULL
+);
+
+CREATE TABLE watch_events (
+  id INTEGER PRIMARY KEY,
+  list_id INTEGER REFERENCES watch_lists(id) ON DELETE SET NULL,
+  kind TEXT NOT NULL CHECK (kind IN ('login','logout','level','burst')),
+  name TEXT,
+  world TEXT,
+  level INTEGER,
+  message TEXT NOT NULL,
+  detected_at TEXT NOT NULL
+);
+CREATE INDEX idx_watch_events ON watch_events(detected_at);
+`,
+  },
 ]

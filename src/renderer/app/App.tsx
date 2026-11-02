@@ -9,6 +9,7 @@ import {
   Camera,
   ChartLine,
   Coins,
+  Crosshair,
   Home,
   Plane,
   ScanText,
@@ -33,6 +34,7 @@ import { TransfersPage } from '../features/transfers/TransfersPage'
 import { CartPage } from '../features/cart/CartPage'
 import { AlertsPage } from '../features/alerts/AlertsPage'
 import { SettingsPage } from '../features/settings/SettingsPage'
+import { HuntedPage } from '../features/hunted/HuntedPage'
 
 interface NavItem {
   path: string
@@ -45,6 +47,7 @@ interface NavItem {
 const NAV: NavItem[] = [
   { path: '/', label: 'Inicio', icon: Home, element: OverviewPage },
   { path: '/tools', label: 'Herramientas', icon: Wrench, element: ToolsPage },
+  { path: '/hunted', label: 'Hunted', icon: Crosshair, element: HuntedPage, desktopOnly: true },
   { path: '/catalog', label: 'Catálogo', icon: BookOpen, element: CatalogPage },
   { path: '/collector', label: 'Collector', icon: Camera, element: CollectorPage, desktopOnly: true },
   { path: '/ocr', label: 'Revisión OCR', icon: ScanText, element: OcrReviewPage, desktopOnly: true },
@@ -85,6 +88,8 @@ function Layout() {
   useTheme()
   const qc = useQueryClient()
   const [toast, setToast] = useState<string | null>(null)
+  const [urgent, setUrgent] = useState(false)
+  const [watchOnline, setWatchOnline] = useState(0)
   const { data: unread = [] } = useApi('alerts.events.list', { unreadOnly: true, limit: 50 }, { enabled: platform.kind === 'electron', refetchInterval: 60_000 })
   const onAlerts = useCallback(
     (p: { count: number; messages: string[] }) => {
@@ -94,6 +99,20 @@ function Layout() {
     [qc],
   )
   useEvent('alerts.fired', onAlerts)
+  useEvent(
+    'watch.update',
+    useCallback(
+      (p: { online: number; messages: string[]; burst: boolean }) => {
+        setWatchOnline(p.online)
+        for (const k of ['watch.status', 'watch.lists', 'watch.entries', 'watch.online', 'watch.events']) void qc.invalidateQueries({ queryKey: [k] })
+        if (p.messages.length) {
+          setUrgent(p.burst)
+          setToast(p.messages.length === 1 ? p.messages[0]! : `${p.messages[0]} (+${p.messages.length - 1})`)
+        }
+      },
+      [qc],
+    ),
+  )
   useEvent(
     'collector.imported',
     useCallback(
@@ -107,9 +126,9 @@ function Layout() {
   )
   useEffect(() => {
     if (!toast) return
-    const t = setTimeout(() => setToast(null), 6_000)
+    const t = setTimeout(() => (setToast(null), setUrgent(false)), urgent ? 15_000 : 6_000)
     return () => clearTimeout(t)
-  }, [toast])
+  }, [toast, urgent])
 
   return (
     <div className="flex h-full flex-col md:flex-row">
@@ -131,6 +150,7 @@ function Layout() {
             <n.icon className="size-4" aria-hidden />
             {n.label}
             {n.path === '/alerts' && unread.length > 0 && <span className="ml-auto rounded-full bg-accent px-1.5 text-[11px] font-semibold text-accent-ink">{unread.length}</span>}
+            {n.path === '/hunted' && watchOnline > 0 && <span className="ml-auto rounded-full bg-bad px-1.5 text-[11px] font-semibold text-white" title="Vigilados conectados">{watchOnline}</span>}
           </NavLink>
         ))}
       </nav>
@@ -138,8 +158,8 @@ function Layout() {
         <Outlet />
       </main>
       {toast && (
-        <div role="status" className="fixed bottom-4 right-4 z-50 max-w-sm rounded-lg border border-accent/50 bg-panel px-4 py-3 text-sm shadow-xl">
-          <Bell className="mr-2 inline size-4 text-accent" aria-hidden />
+        <div role="status" className={clsx('fixed bottom-4 right-4 z-50 max-w-sm rounded-lg border bg-panel px-4 py-3 text-sm shadow-xl', urgent ? 'border-bad bg-bad/15 font-semibold' : 'border-accent/50')}>
+          <Bell className={clsx('mr-2 inline size-4', urgent ? 'text-bad' : 'text-accent')} aria-hidden />
           {toast}
         </div>
       )}

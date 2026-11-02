@@ -144,6 +144,17 @@ const schemas = {
   'collector.tibiaFolder.importExisting': z.object({ sinceDays: z.number().positive().max(3_650).nullable() }),
   'collector.tibiaFolder.pick': v,
 
+  'watch.status': v,
+  'watch.lists': v,
+  'watch.lists.save': z.object({ id: id.nullable(), name: z.string().trim().min(1).max(40), notifyLogin: z.boolean(), burstThreshold: z.number().int().min(2).max(100).nullable(), burstWindowSec: z.number().int().min(30).max(3_600) }),
+  'watch.lists.delete': z.object({ id }),
+  'watch.entries': z.object({ listId: id.nullable() }),
+  'watch.entries.add': z.object({ listId: id, kind: z.enum(['character', 'guild']), name: z.string().trim().min(2).max(40), note: z.string().max(200).nullable() }),
+  'watch.entries.remove': z.object({ id }),
+  'watch.online': v,
+  'watch.events': z.object({ limit: z.number().int().min(1).max(1_000) }),
+  'watch.scanNow': v,
+
   'ocr.profiles.list': v,
   'ocr.profiles.save': ocrProfileSchema,
   'ocr.profiles.delete': z.object({ id }),

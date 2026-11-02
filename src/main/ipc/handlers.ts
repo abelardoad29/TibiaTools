@@ -20,6 +20,8 @@ import { getSettings, setSettings } from '../services/settings'
 import { tibiaData } from '../external/tibiadata'
 import { tibiaMarket } from '../external/tibiamarket'
 import type { TibiaFolderWatcher } from '../services/tibia-folder'
+import * as watch from '../services/watch'
+import type { ScanResult, Watcher } from '../services/watch'
 import { ocrProfileSchema } from './schemas'
 
 /** Capacidades que dependen de Electron (diálogos, captura, atajos, notificaciones). */
@@ -33,6 +35,8 @@ export interface Host {
   setHotkey(accelerator: string | null): boolean
   pickFolder(title: string): Promise<string | null>
   tibiaFolder: TibiaFolderWatcher
+  watcher: Watcher
+  onWatchResult(r: ScanResult): void
   restoreBackup(path: string): Promise<void>
   notify(title: string, body: string): void
 }
@@ -71,6 +75,7 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
         host.setHotkey(next.collector.hotkey)
         host.tibiaFolder.restart()
       }
+      if ('watch' in patch) host.watcher.restart()
       return next
     },
     'app.backup.create': () => ({ path: backup.createBackup(db, ctx.paths) }),
@@ -147,6 +152,26 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
       setSettings(db, { collector: { ...c, tibiaFolder: { ...c.tibiaFolder, path } } })
       host.tibiaFolder.restart()
       return { path }
+    },
+
+    'watch.status': () => host.watcher.status(),
+    'watch.lists': () => watch.listWatchLists(db),
+    'watch.lists.save': (l) => watch.saveWatchList(db, l),
+    'watch.lists.delete': ({ id }) => void run(db, 'DELETE FROM watch_lists WHERE id = ?', [id]),
+    'watch.entries': ({ listId }) => watch.listWatchEntries(db, listId),
+    'watch.entries.add': async (e) => {
+      const entry = await watch.addWatchEntry(ctx, e)
+      // Arranca la vigilancia si era la primera entrada.
+      if (!host.watcher.status().running) host.watcher.restart()
+      return entry
+    },
+    'watch.entries.remove': ({ id }) => void run(db, 'DELETE FROM watch_entries WHERE id = ?', [id]),
+    'watch.online': () => watch.listWatchOnline(db),
+    'watch.events': ({ limit }) => watch.listWatchEvents(db, limit),
+    'watch.scanNow': async () => {
+      const r = await host.watcher.scan()
+      host.onWatchResult(r)
+      return { logins: r.logins, logouts: r.logouts, bursts: r.bursts }
     },
 
     'ocr.profiles.list': () => scans.listProfiles(db),

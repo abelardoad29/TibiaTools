@@ -129,6 +129,67 @@ export interface Screenshot {
   status: 'new' | 'processed' | 'confirmed' | 'rejected'
 }
 
+export interface WatchList {
+  id: number
+  name: string
+  notifyLogin: boolean
+  /** null = sin alerta de ráfaga. */
+  burstThreshold: number | null
+  burstWindowSec: number
+  entries: number
+  online: number
+}
+
+export interface WatchEntry {
+  id: number
+  listId: number
+  kind: 'character' | 'guild'
+  name: string
+  world: string | null
+  note: string | null
+  /** Miembros de la guild (null para personajes). */
+  members: number | null
+  online: number
+  level: number | null
+  vocation: string | null
+  lastLoginAt: string | null
+  lastSeenAt: string | null
+}
+
+export interface WatchOnline {
+  name: string
+  world: string
+  level: number | null
+  vocation: string | null
+  /** null si ya estaba conectado cuando empezó la vigilancia. */
+  lastLoginAt: string | null
+  lists: string[]
+  via: string | null
+}
+
+export interface WatchEvent {
+  id: number
+  listName: string | null
+  kind: 'login' | 'logout' | 'level' | 'burst'
+  name: string | null
+  world: string | null
+  level: number | null
+  message: string
+  detectedAt: string
+}
+
+export interface WatchStatus {
+  enabled: boolean
+  intervalSec: number
+  running: boolean
+  lastScanAt: string | null
+  /** Hora de la lista de conectados según TibiaData. */
+  sourceTimestamp: string | null
+  worlds: string[]
+  watched: number
+  error: string | null
+}
+
 export interface TibiaFolderStatus {
   path: string
   exists: boolean
@@ -386,6 +447,17 @@ export interface ApiMap {
   'collector.tibiaFolder.importExisting': { in: { sinceDays: number | null }; out: { imported: Screenshot[]; skipped: number; errors: string[] } }
   'collector.tibiaFolder.pick': { in: void; out: { path: string } | null }
 
+  'watch.status': { in: void; out: WatchStatus }
+  'watch.lists': { in: void; out: WatchList[] }
+  'watch.lists.save': { in: { id: number | null; name: string; notifyLogin: boolean; burstThreshold: number | null; burstWindowSec: number }; out: WatchList }
+  'watch.lists.delete': { in: { id: number }; out: void }
+  'watch.entries': { in: { listId: number | null }; out: WatchEntry[] }
+  'watch.entries.add': { in: { listId: number; kind: 'character' | 'guild'; name: string; note: string | null }; out: WatchEntry }
+  'watch.entries.remove': { in: { id: number }; out: void }
+  'watch.online': { in: void; out: WatchOnline[] }
+  'watch.events': { in: { limit: number }; out: WatchEvent[] }
+  'watch.scanNow': { in: void; out: { logins: number; logouts: number; bursts: number } }
+
   'ocr.profiles.list': { in: void; out: OcrProfile[] }
   'ocr.profiles.save': { in: OcrProfile; out: OcrProfile }
   'ocr.profiles.delete': { in: { id: number }; out: void }
@@ -439,6 +511,7 @@ export interface EventMap {
   'characters.updated': { events: number }
   'icons.progress': { done: number; total: number }
   'collector.imported': { count: number }
+  'watch.update': { online: number; messages: string[]; burst: boolean }
 }
 export type EventName = keyof EventMap
 

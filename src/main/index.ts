@@ -16,6 +16,7 @@ import { refreshCharacters } from './services/tools'
 import { runAlerts } from './services/alerts'
 import { restoreBackup } from './services/backup'
 import { createTibiaFolderWatcher } from './services/tibia-folder'
+import { createWatcher, type ScanResult } from './services/watch'
 
 // Datos en %LOCALAPPDATA%\TibiaTools (no en Roaming: las capturas pueden pesar mucho).
 // La caché de Chromium va en una subcarpeta aparte para no mezclarla con los datos.
@@ -36,6 +37,7 @@ let selectedSourceId: string | null = null
 let currentHotkey: string | null = null
 const timers: NodeJS.Timeout[] = []
 let stopTibiaFolder: () => void = () => undefined
+let stopWatcher: () => void = () => undefined
 
 const DEV_URL = process.env.ELECTRON_RENDERER_URL
 
@@ -122,6 +124,15 @@ async function boot(): Promise<void> {
   log.info(`Tibia Tools ${ctx.version} iniciado; datos en ${paths.root}`)
   const tibiaFolder = createTibiaFolderWatcher(ctx, (shots) => emit('collector.imported', { count: shots.length }))
   stopTibiaFolder = () => tibiaFolder.stop()
+  // Vigilancia: cada lectura empuja el estado a la ventana y avisa con notificaciones de Windows.
+  const onWatchResult = (r: ScanResult) => {
+    emit('watch.update', { online: r.online, messages: r.messages, burst: r.bursts > 0 })
+    const s = getSettings(ctx.db)
+    if (!s.notifications.enabled || !Notification.isSupported()) return
+    for (const n of r.notifications.slice(0, 5)) new Notification({ title: n.title, body: n.body, silent: !s.watch.sound, urgency: r.bursts > 0 ? 'critical' : 'normal' }).show()
+  }
+  const watcher = createWatcher(ctx, onWatchResult)
+  stopWatcher = () => watcher.stop()
 
   const host: Host = {
     emit,
@@ -147,6 +158,8 @@ async function boot(): Promise<void> {
       return r.canceled ? null : (r.filePaths[0] ?? null)
     },
     tibiaFolder,
+    watcher,
+    onWatchResult,
     restoreBackup: async (file) => {
       const current = ctx.db
       restoreBackup(paths, file, () => current.close(), current)
@@ -206,6 +219,7 @@ async function boot(): Promise<void> {
   win = createWindow()
   setHotkey(getSettings(ctx.db).collector.hotkey)
   tibiaFolder.restart()
+  watcher.restart()
 
   const trackerTick = async () => {
     const s = getSettings(ctx.db)
@@ -247,6 +261,7 @@ app.whenReady().then(boot).catch((e) => {
 app.on('will-quit', () => {
   globalShortcut.unregisterAll()
   stopTibiaFolder()
+  stopWatcher()
   for (const t of timers) clearInterval(t)
   try {
     db?.close()

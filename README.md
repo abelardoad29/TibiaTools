@@ -10,6 +10,7 @@ App de escritorio local (Windows) con las herramientas de Tibia Tools v1 y un m�
 |---|---|
 | Inicio | Rashid (con el día de servidor), boosted creature/boss (TibiaData), estado de los datos, cobertura del Market |
 | Herramientas | Share Exp (corregido), Split Loot, Imbuements (24, la opción más barata entre materiales, Gold Tokens y scrolls; items imbuidos con costo por hora y por hunt), seguimiento de personajes |
+| Hunted | Listas de personajes o guilds enteras; avisa cuando alguien se conecta y cuando se conectan varios de golpe (por defecto 5 en 60 s). Lee la lista de conectados de Tibia cada minuto |
 | Catálogo | 5,121 items con ID de cliente, categoría, precios NPC e iconos de TibiaWiki BR (caché local); 90 mundos con PvP/BattlEye/transferencia |
 | Collector | Importa sola cada captura de la tecla de screenshot de Tibia (carpeta del cliente); también captura de pantalla con región, atajo global, importación manual y captura asistida |
 | Revisión OCR | OCR por plantillas de glifos en un worker, tabla editable, correcciones auditadas, snapshots inmutables; editor de perfiles y calibración |
@@ -56,5 +57,5 @@ Todo vive en `%LOCALAPPDATA%\TibiaTools\`: `tibia_tools.db` (SQLite, WAL), `evid
 - [CODEX.md](CODEX.md): instrucciones permanentes para quien modifique el código
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/DATABASE.md](docs/DATABASE.md), [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md)
 - [docs/OCR_CALIBRATION.md](docs/OCR_CALIBRATION.md), [docs/ECONOMIC_MODEL.md](docs/ECONOMIC_MODEL.md), [docs/TRANSFER_RULES.md](docs/TRANSFER_RULES.md)
-- [docs/RELEASE.md](docs/RELEASE.md), [docs/SPIKE_REPORT.md](docs/SPIKE_REPORT.md)
+- [docs/RELEASE.md](docs/RELEASE.md), [docs/SPIKE_REPORT.md](docs/SPIKE_REPORT.md), [docs/NABBOT_REVIEW.md](docs/NABBOT_REVIEW.md)
 - La v1 en Flet queda en el tag `flet-v1`. La especificación original (PySide6) está en [docs/CODEX-v1-pyside.md](docs/CODEX-v1-pyside.md).
