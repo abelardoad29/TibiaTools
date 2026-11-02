@@ -2,8 +2,9 @@ name: CI
 
 on:
   pull_request:
+  # Las ramas de trabajo se validan por su PR; el push solo se revisa en master.
   push:
-    branches: [master, v2]
+    branches: [master]
 
 permissions:
   contents: read
