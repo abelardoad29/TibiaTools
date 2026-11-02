@@ -1,0 +1,36 @@
+{
+  "rules": [
+    {
+      "key": "market_fee",
+      "value": { "rateBps": 250, "minGp": 20, "maxGp": 2500000, "basis": "total", "rounding": "ceil", "basisVerified": false, "roundingVerified": false },
+      "sourceUrl": "https://www.tibia.com/gameguides/?section=controls_trading&subtopic=manual",
+      "effectiveFrom": "2026-10-06",
+      "verifiedAt": "2026-11-02",
+      "notes": "Manual: 'The fee amounts to 2.5% of the price of the offer you want to place, but at least 20 gold and no more than 2,500,000 gold.' Se cobra al publicar y se pierde al cancelar. No aclara si la base es unitaria o total ni el redondeo: verificar con el panel de crear oferta. effectiveFrom según CODEX (no verificado)."
+    },
+    {
+      "key": "offer_duration_days",
+      "value": 30,
+      "sourceUrl": "https://www.tibia.com/gameguides/?section=controls_trading&subtopic=manual",
+      "effectiveFrom": null,
+      "verifiedAt": "2026-11-02",
+      "notes": "'Offers are always valid for 30 days.'"
+    },
+    {
+      "key": "transfer_cost_tc",
+      "value": { "regular": null, "express": null },
+      "sourceUrl": "https://www.tibia.com/gameguides/?subtopic=manual&section=products",
+      "effectiveFrom": null,
+      "verifiedAt": null,
+      "notes": "El manual no publica montos. Copiarlos de la Store y registrar la fecha."
+    },
+    {
+      "key": "travora_travel_gp",
+      "value": 1000,
+      "sourceUrl": "https://www.tibia.com/gameguides/?subtopic=manual&section=products",
+      "effectiveFrom": null,
+      "verifiedAt": "2026-11-02",
+      "notes": "Viaje a la plataforma de transferencia (Travora): 1,000 gp, válido 24 h."
+    }
+  ]
+}

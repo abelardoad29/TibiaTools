@@ -1,0 +1,947 @@
+{
+ "sources": [
+  "https://api.tibiadata.com/v4/worlds",
+  "https://api.tibiamarket.top/world_data"
+ ],
+ "fetchedAt": "2026-11-02T17:06:23.779Z",
+ "tibiadata": [
+  {
+   "name": "Antica",
+   "location": "Europe",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-08-29",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Astera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Belobra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-06-22",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Bona",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Calmera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Celebra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-10-29",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Celesta",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-05",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Collabra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Descubra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Deslumbra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Dia",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Dracobra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Eclipta",
+   "location": "Europe",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Epoca",
+   "location": "Europe",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Escura",
+   "location": "Europe",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Farsabra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": true
+  },
+  {
+   "name": "Faunera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Ferobra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-07-04",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Firmera",
+   "location": "North America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Floribra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Gentebra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-12-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Gladera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Harmonia",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-05",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Havera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2021-12-06",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Honbra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Hostera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Idyllia",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Ignibra",
+   "location": "South America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Inabra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-12-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Issobra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Jadebra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Jambra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Jinxibra",
+   "location": "South America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Junera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Kalanta",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Kalibra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-12-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Kanda",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Karmeya",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Lobera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Luminera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-05",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Lutabra",
+   "location": "South America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-12-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Maligna",
+   "location": "Europe",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Menera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-05",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Monstera",
+   "location": "North America",
+   "pvpType": "Retro Hardcore PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Monza",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Mortabra",
+   "location": "South America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Mystera",
+   "location": "North America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Nebulera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": true
+  },
+  {
+   "name": "Nefera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Nevia",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Nociva",
+   "location": "Europe",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Oceanis",
+   "location": "Oceania",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2024-04-10",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Ombra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Opulera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Ourobra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Pacera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Peloria",
+   "location": "Europe",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-10-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Penumbra",
+   "location": "South America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Premia",
+   "location": "Europe",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-05",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": true
+  },
+  {
+   "name": "Quelibra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-12-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Quidera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Quintera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-10-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Quirina",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": true
+  },
+  {
+   "name": "Rasteibra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Refugia",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-12",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Retalia",
+   "location": "Europe",
+   "pvpType": "Retro Hardcore PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Secura",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-09-05",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Serdebra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-05-17",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Sinistra",
+   "location": "Europe",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Solidera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Stralis",
+   "location": "Oceania",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Talera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Tempestera",
+   "location": "North America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Terribra",
+   "location": "South America",
+   "pvpType": "Retro Hardcore PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Thyria",
+   "location": "Europe",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2021-12-06",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Tornabra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Ulmyra",
+   "location": "Europe",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Unebra",
+   "location": "South America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Ustebra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Venebra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Victoris",
+   "location": "Oceania",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Vunira",
+   "location": "Europe",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2017-10-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Westera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Wickera",
+   "location": "North America",
+   "pvpType": "Retro Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "blocked",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Wintera",
+   "location": "North America",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2018-04-19",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Xyla",
+   "location": "Europe",
+   "pvpType": "Open PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Yonabra",
+   "location": "South America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2020-05-27",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Yovera",
+   "location": "North America",
+   "pvpType": "Optional PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "release",
+   "transferType": "regular",
+   "gameWorldType": "regular",
+   "premiumOnly": false
+  },
+  {
+   "name": "Zuna",
+   "location": "Europe",
+   "pvpType": "Hardcore PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2025-02-18",
+   "transferType": "locked",
+   "gameWorldType": "experimental",
+   "premiumOnly": false
+  },
+  {
+   "name": "Zunera",
+   "location": "North America",
+   "pvpType": "Hardcore PvP",
+   "battleyeProtected": true,
+   "battleyeDate": "2025-02-18",
+   "transferType": "locked",
+   "gameWorldType": "experimental",
+   "premiumOnly": false
+  }
+ ],
+ "tibiamarketOnly": [
+  "Gravitera",
+  "Obscubra",
+  "Yubra",
+  "Esmera",
+  "Bravoria",
+  "Etebra",
+  "Luzibra",
+  "Kalimera",
+  "Sonira",
+  "Zephyra",
+  "Wadira",
+  "Ulera",
+  "Vitera",
+  "Vandera",
+  "Runera",
+  "Divina",
+  "Jaguna",
+  "Cantabra",
+  "Aethera",
+  "Noctalia",
+  "Ignitera",
+  "Yara",
+  "Xybra",
+  "Temera",
+  "Jacabra",
+  "Wildera",
+  "Quebra",
+  "Malivora",
+  "Fibera",
+  "Ambra",
+  "Flamera",
+  "Gladibra",
+  "Blumera",
+  "Sombra",
+  "Citra",
+  "Xymera"
+ ]
+}

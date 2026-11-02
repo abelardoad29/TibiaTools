@@ -1,0 +1,26 @@
+appId: com.abelardoad29.tibiatools
+productName: Tibia Tools
+directories:
+  output: release
+  buildResources: resources
+files:
+  - out/**
+  - package.json
+extraResources:
+  - from: resources
+    to: resources
+    filter: ['*.gif', '*.png']
+asar: true
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: resources/icon.png
+  artifactName: TibiaTools-${version}-setup.${ext}
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: Tibia Tools
+  deleteAppDataOnUninstall: false
