@@ -1,4 +1,4 @@
-import { inflateSync } from 'node:zlib'
+import { crc32, deflateSync, inflateSync } from 'node:zlib'
 import type { RgbaImage } from '../../src/core/ocr/types'
 
 // Decodificador PNG mínimo para el CLI de evaluación: 8 bits por canal, sin entrelazado,
@@ -70,4 +70,24 @@ export function decodePng(buf: Uint8Array): RgbaImage {
     prev.set(cur)
   }
   return { width, height, data: out }
+}
+
+/** Codificador PNG mínimo (RGBA de 8 bits, filtro 0). */
+export function encodePng(img: RgbaImage): Uint8Array {
+  const chunk = (type: string, data: Uint8Array) => {
+    const out = Buffer.alloc(12 + data.length)
+    out.writeUInt32BE(data.length, 0)
+    out.write(type, 4, 'ascii')
+    Buffer.from(data).copy(out, 8)
+    out.writeUInt32BE(crc32(Buffer.concat([Buffer.from(type, 'ascii'), Buffer.from(data)])) >>> 0, 8 + data.length)
+    return out
+  }
+  const ihdr = Buffer.alloc(13)
+  ihdr.writeUInt32BE(img.width, 0)
+  ihdr.writeUInt32BE(img.height, 4)
+  ihdr.set([8, 6, 0, 0, 0], 8)
+  const stride = img.width * 4
+  const raw = Buffer.alloc(img.height * (stride + 1))
+  for (let y = 0; y < img.height; y++) Buffer.from(img.data.subarray(y * stride, (y + 1) * stride)).copy(raw, y * (stride + 1) + 1)
+  return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', ihdr), chunk('IDAT', deflateSync(raw, { level: 9 })), chunk('IEND', new Uint8Array())])
 }
