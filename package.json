@@ -63,6 +63,7 @@
     "ocr:eval": "tsx scripts/ocr-eval.ts",
     "dist": "npm run build && electron-builder --win --x64",
     "dist:dir": "npm run build && electron-builder --win --x64 --dir",
-    "icon": "tsx scripts/make-icon.ts"
+    "icon": "tsx scripts/make-icon.ts",
+    "seed:imbuable": "node scripts/fetch-imbuable.ts"
   }
 }

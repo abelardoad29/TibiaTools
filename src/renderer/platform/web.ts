@@ -130,6 +130,15 @@ const handlers: WebHandlers = {
     return { tiers: s.tiers, imbuements: s.imbuements, tokenTradeable: s.tokenTradeable, tokensPerTier: s.tokensPerTier, durationHours: s.durationHours, source: s.source, notes: s.notes }
   },
   'tools.imbuements.prices': async ({ items }) => Object.fromEntries(items.map((n) => [n, null])),
+  'tools.imbuable': async () => {
+    const s = (await import('@seed/imbuable_items.json')).default as { source: string; fetchedAt: string; slotTypes: Record<string, string[]>; items: { tibiaItemId: number; slots: number; type: string | null; vocations: string | null }[] }
+    const byId = new Map((await seedItems()).map((i) => [i.id, i]))
+    const items = s.items.flatMap((i) => {
+      const it = byId.get(i.tibiaItemId)
+      return it ? [{ ...summary(it), slots: i.slots, type: i.type, vocations: i.vocations }] : []
+    })
+    return { source: s.source, fetchedAt: s.fetchedAt, slotTypes: s.slotTypes, items }
+  },
 }
 
 export function createWebPlatform(): PlatformApi {

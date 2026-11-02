@@ -1,12 +1,13 @@
-import type { BoostedInfo, CharacterEventRow, ImbuementCatalog, TrackedCharacter } from '@shared/api'
+import type { BoostedInfo, CharacterEventRow, ImbuableCatalog, ImbuementCatalog, TrackedCharacter } from '@shared/api'
 import type { DataSource } from '@shared/provenance'
 import imbuementsSeed from '@seed/imbuements.json'
+import imbuableSeed from '@seed/imbuable_items.json'
 import { detectCharacterEvents, deathKey } from '@core/domain/tools/characters'
 import type { ImbuementDef, TierDef } from '@core/domain/tools/imbuements'
 import { all, get, nowIso, parseJson, run, tx, type Db } from '../db/database'
 import { tibiaData } from '../external/tibiadata'
 import type { AppContext } from '../context'
-import { itemsByName, requireWorld } from './catalog'
+import { itemByTibiaId, itemsByName, requireWorld } from './catalog'
 import { bestSellPrice } from './market'
 
 export async function boosted(ctx: AppContext, refresh: boolean): Promise<BoostedInfo> {
@@ -22,6 +23,16 @@ export async function boosted(ctx: AppContext, refresh: boolean): Promise<Booste
 export function imbuements(): ImbuementCatalog {
   const s = imbuementsSeed as unknown as ImbuementCatalog & { tiers: TierDef[]; imbuements: ImbuementDef[] }
   return { tiers: s.tiers, imbuements: s.imbuements, tokenTradeable: s.tokenTradeable, tokensPerTier: s.tokensPerTier, durationHours: s.durationHours, source: s.source, notes: s.notes }
+}
+
+/** Items del catálogo que admiten imbuements, con sus slots (TibiaWiki EN). */
+export function imbuable(db: Db): ImbuableCatalog {
+  const s = imbuableSeed as { source: string; fetchedAt: string; slotTypes: Record<string, string[]>; items: { tibiaItemId: number; slots: number; type: string | null; vocations: string | null }[] }
+  const items = s.items.flatMap((i) => {
+    const summary = itemByTibiaId(db, i.tibiaItemId)
+    return summary ? [{ ...summary, slots: i.slots, type: i.type, vocations: i.vocations }] : []
+  })
+  return { source: s.source, fetchedAt: s.fetchedAt, slotTypes: s.slotTypes, items }
 }
 
 /** Mejor sell offer conocida de cada material en un mundo (comprar al instante). */

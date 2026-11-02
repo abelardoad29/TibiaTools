@@ -65,7 +65,7 @@ Por nivel de precio: cantidad reducida → `amount_reduced` + `possibly_filled`;
 
 - Tarifas del santuario 7,500 / 60,000 / 250,000 gp (100 % de éxito desde el 12-06-2025); duración 20 h de uso (el tiempo corre con el item equipado y fuera de zona de protección).
 - Opciones evaluadas: todos los materiales en el Market; paquetes de Yana con Gold Tokens (Basic 2, Intricate 4, Powerful 6 tokens, solo Strike / Vampirism / Void) combinados con comprar el resto en el Market; y el scroll ya inscrito si tiene precio en el Market. Se elige la más barata con todos los precios.
-- **Mis items imbuidos**: suma los slots de cada item; costo por ciclo (20 h), por hora y por hunt (horas configurables).
+- **Mis items imbuidos**: solo items imbuibles, con sus slots reales (1 a 3) y los imbuements que acepta su tipo y vocación (TibiaWiki EN; las excepciones de notas se habilitan a mano). Sin imbuements repetidos en un item. Cada slot puede tener precios propios o el total pagado, que mandan sobre los globales. Costo por ciclo (20 h), por hora y por hunt.
 
 ## Tibia Coins
 

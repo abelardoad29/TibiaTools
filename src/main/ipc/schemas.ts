@@ -109,6 +109,7 @@ const schemas = {
   'tools.boosted': z.object({ refresh: z.boolean() }),
   'tools.character': z.object({ name }),
   'tools.imbuements': v,
+  'tools.imbuable': v,
   'tools.imbuements.prices': z.object({ world: name, items: z.array(z.string().max(100)).max(100) }),
 
   'characters.list': v,

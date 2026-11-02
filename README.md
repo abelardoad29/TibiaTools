@@ -44,6 +44,7 @@ npm run dev
 | `npm run build:web` / `npm run dev:web` | PWA companion en `dist-web/` |
 | `npm run seed:fetch` | Regenera `seed/items.json` y `seed/worlds.json` desde tibiamarket.top y TibiaData |
 | `npm run seed:imbuements -- <pagina-guardada>` | Regenera `seed/imbuements.json` desde una copia guardada de la página de TibiaWiki |
+| `npm run seed:imbuable` | Regenera `seed/imbuable_items.json` (slots e imbuements permitidos por item) desde TibiaWiki EN |
 | `npm run ocr:eval -- --dataset <carpeta>` | Exactitud del OCR contra capturas anotadas |
 | `npm run icon` | Regenera el icono (emblema de Lumbre) desde `resources/brand/logo-lumbre.png` |
 

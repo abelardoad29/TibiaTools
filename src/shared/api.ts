@@ -348,6 +348,20 @@ export interface SavedCartSummary {
   lines: number
 }
 
+export interface ImbuableItem extends ItemSummary {
+  slots: number
+  type: string | null
+  vocations: string | null
+}
+
+export interface ImbuableCatalog {
+  source: string
+  fetchedAt: string
+  /** Tipos de item que admite cada imbuement (wiki: helmets, armors, swords, …). */
+  slotTypes: Record<string, string[]>
+  items: ImbuableItem[]
+}
+
 export interface ImbuementCatalog {
   tiers: TierDef[]
   imbuements: ImbuementDef[]
@@ -410,6 +424,7 @@ export interface ApiMap {
   'tools.boosted': { in: { refresh: boolean }; out: BoostedInfo }
   'tools.character': { in: { name: string }; out: CharacterSnapshot | null }
   'tools.imbuements': { in: void; out: ImbuementCatalog }
+  'tools.imbuable': { in: void; out: ImbuableCatalog }
   'tools.imbuements.prices': { in: { world: string; items: string[] }; out: Record<string, { price: number; observedAt: string; source: DataSource } | null> }
 
   'characters.list': { in: void; out: TrackedCharacter[] }

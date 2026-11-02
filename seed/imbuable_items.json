@@ -1,0 +1,5153 @@
+{
+ "source": "https://tibia.fandom.com/api.php (TibiaWiki EN: imbueslots, primarytype, vocrequired; slots de cada imbuement)",
+ "fetchedAt": "2026-11-02T22:52:07.521Z",
+ "slotTypes": {
+  "Bash": [
+   "helmets",
+   "clubs"
+  ],
+  "Blockade": [
+   "helmets",
+   "shields",
+   "spellbooks"
+  ],
+  "Chop": [
+   "helmets",
+   "axes"
+  ],
+  "Epiphany": [
+   "wands",
+   "rods",
+   "helmets (sorcerer)",
+   "helmets (druid)"
+  ],
+  "Precision": [
+   "helmets",
+   "bows",
+   "crossbows"
+  ],
+  "Punch": [
+   "helmets",
+   "fists"
+  ],
+  "Slash": [
+   "helmets",
+   "swords"
+  ],
+  "Electrify": [
+   "swords",
+   "clubs",
+   "axes",
+   "bows",
+   "crossbows"
+  ],
+  "Frost": [
+   "swords",
+   "clubs",
+   "axes",
+   "bows",
+   "crossbows"
+  ],
+  "Reap": [
+   "swords",
+   "clubs",
+   "axes",
+   "bows",
+   "crossbows"
+  ],
+  "Scorch": [
+   "swords",
+   "clubs",
+   "axes",
+   "bows",
+   "crossbows"
+  ],
+  "Venom": [
+   "swords",
+   "clubs",
+   "axes",
+   "bows",
+   "crossbows",
+   "fists"
+  ],
+  "Cloud Fabric": [
+   "armors",
+   "shields",
+   "spellbooks"
+  ],
+  "Demon Presence": [
+   "armors",
+   "shields",
+   "spellbooks"
+  ],
+  "Dragon Hide": [
+   "armors",
+   "shields",
+   "spellbooks"
+  ],
+  "Lich Shroud": [
+   "armors",
+   "shields",
+   "spellbooks"
+  ],
+  "Quara Scale": [
+   "armors",
+   "shields",
+   "spellbooks"
+  ],
+  "Snake Skin": [
+   "armors",
+   "shields",
+   "spellbooks"
+  ],
+  "Featherweight": [
+   "containers"
+  ],
+  "Strike": [
+   "swords",
+   "clubs",
+   "axes",
+   "bows",
+   "crossbows",
+   "rods",
+   "wands"
+  ],
+  "Swiftness": [
+   "boots"
+  ],
+  "Vampirism": [
+   "axes",
+   "clubs",
+   "swords",
+   "wands",
+   "rods",
+   "bows",
+   "armors",
+   "fists"
+  ],
+  "Vibrancy": [
+   "boots"
+  ],
+  "Void": [
+   "helmets",
+   "swords",
+   "clubs",
+   "axes",
+   "bows",
+   "crossbows",
+   "wands",
+   "rods",
+   "fists"
+  ]
+ },
+ "items": [
+  {
+   "tibiaItemId": 39693,
+   "name": "25 years backpack",
+   "wikiTitle": "25 Years Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7414,
+   "name": "abyss hammer",
+   "wikiTitle": "Abyss Hammer",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53074,
+   "name": "adventurer backpack",
+   "wikiTitle": "Adventurer Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 19358,
+   "name": "albino plate",
+   "wikiTitle": "Albino Plate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 40592,
+   "name": "alchemist's boots",
+   "wikiTitle": "Alchemist's Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 40594,
+   "name": "alchemist's notepad",
+   "wikiTitle": "Alchemist's Notepad",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 39149,
+   "name": "alicorn headguard",
+   "wikiTitle": "Alicorn Headguard",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 3394,
+   "name": "amazon armor",
+   "wikiTitle": "Amazon Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 3393,
+   "name": "amazon helmet",
+   "wikiTitle": "Amazon Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3437,
+   "name": "amazon shield",
+   "wikiTitle": "Amazon Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 47375,
+   "name": "amber axe",
+   "wikiTitle": "Amber Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 47370,
+   "name": "amber bludgeon",
+   "wikiTitle": "Amber Bludgeon",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 47371,
+   "name": "amber bow",
+   "wikiTitle": "Amber Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 47377,
+   "name": "amber crossbow",
+   "wikiTitle": "Amber Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 47376,
+   "name": "amber cudgel",
+   "wikiTitle": "Amber Cudgel",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 47369,
+   "name": "amber greataxe",
+   "wikiTitle": "Amber Greataxe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50239,
+   "name": "amber kusarigama",
+   "wikiTitle": "Amber Kusarigama",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 47373,
+   "name": "amber rod",
+   "wikiTitle": "Amber Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 47374,
+   "name": "amber sabre",
+   "wikiTitle": "Amber Sabre",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 47368,
+   "name": "amber slayer",
+   "wikiTitle": "Amber Slayer",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7426,
+   "name": "amber staff",
+   "wikiTitle": "Amber Staff",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 47372,
+   "name": "amber wand",
+   "wikiTitle": "Amber Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3022,
+   "name": "ancient tiara",
+   "wikiTitle": "Ancient Tiara",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 14674,
+   "name": "anniversary backpack",
+   "wikiTitle": "Anniversary Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 40588,
+   "name": "antler-horn helmet",
+   "wikiTitle": "Antler-Horn Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 39153,
+   "name": "arboreal crown",
+   "wikiTitle": "Arboreal Crown",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 39154,
+   "name": "arboreal tome",
+   "wikiTitle": "Arboreal Tome",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 44623,
+   "name": "arcane dragon robe",
+   "wikiTitle": "Arcane Dragon Robe",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3341,
+   "name": "arcane staff",
+   "wikiTitle": "Arcane Staff",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 39152,
+   "name": "arcanomancer folio",
+   "wikiTitle": "Arcanomancer Folio",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 39151,
+   "name": "arcanomancer regalia",
+   "wikiTitle": "Arcanomancer Regalia",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 7404,
+   "name": "assassin dagger",
+   "wikiTitle": "Assassin Dagger",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 27451,
+   "name": "axe of destruction",
+   "wikiTitle": "Axe of Destruction",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 2854,
+   "name": "backpack",
+   "wikiTitle": "Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3253,
+   "name": "backpack of holding",
+   "wikiTitle": "Backpack of Holding",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 22086,
+   "name": "badger boots",
+   "wikiTitle": "Badger Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50270,
+   "name": "bambus jo",
+   "wikiTitle": "Bambus Jo",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 3317,
+   "name": "barbarian axe",
+   "wikiTitle": "Barbarian Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 9103,
+   "name": "batwing hat",
+   "wikiTitle": "Batwing Hat",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 5949,
+   "name": "beach backpack",
+   "wikiTitle": "Beach Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 31578,
+   "name": "bear skin",
+   "wikiTitle": "Bear Skin",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 3344,
+   "name": "beastslayer axe",
+   "wikiTitle": "Beastslayer Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7403,
+   "name": "berserker",
+   "wikiTitle": "Berserker",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 24395,
+   "name": "birthday backpack",
+   "wikiTitle": "Birthday Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 45643,
+   "name": "biscuit barrier",
+   "wikiTitle": "Biscuit Barrier",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7406,
+   "name": "blacksteel sword",
+   "wikiTitle": "Blacksteel Sword",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 11693,
+   "name": "blade of corruption",
+   "wikiTitle": "Blade of Corruption",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 27449,
+   "name": "blade of destruction",
+   "wikiTitle": "Blade of Destruction",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7429,
+   "name": "blessed sceptre",
+   "wikiTitle": "Blessed Sceptre",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7416,
+   "name": "bloody edge",
+   "wikiTitle": "Bloody Edge",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 2869,
+   "name": "blue backpack",
+   "wikiTitle": "Blue Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3567,
+   "name": "blue robe",
+   "wikiTitle": "Blue Robe",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3408,
+   "name": "bonelord helmet",
+   "wikiTitle": "Bonelord Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3418,
+   "name": "bonelord shield",
+   "wikiTitle": "Bonelord Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 28571,
+   "name": "book backpack",
+   "wikiTitle": "Book Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 22755,
+   "name": "book of lies",
+   "wikiTitle": "Book of Lies",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 50267,
+   "name": "boots of enlightenment",
+   "wikiTitle": "Boots of Enlightenment",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 3079,
+   "name": "boots of haste",
+   "wikiTitle": "Boots of Haste",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 31581,
+   "name": "bow of cataclysm",
+   "wikiTitle": "Bow of Cataclysm",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 27455,
+   "name": "bow of destruction",
+   "wikiTitle": "Bow of Destruction",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 29426,
+   "name": "brain in a jar",
+   "wikiTitle": "Brain in a Jar",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 3295,
+   "name": "bright sword",
+   "wikiTitle": "Bright Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "None"
+  },
+  {
+   "tibiaItemId": 3301,
+   "name": "broadsword",
+   "wikiTitle": "Broadsword",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 8860,
+   "name": "brocade backpack",
+   "wikiTitle": "Brocade Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 14249,
+   "name": "buggy backpack",
+   "wikiTitle": "Buggy Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3553,
+   "name": "bunnyslippers",
+   "wikiTitle": "Bunnyslippers",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7412,
+   "name": "butcher's axe",
+   "wikiTitle": "Butcher's Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 20347,
+   "name": "cake backpack",
+   "wikiTitle": "Cake Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 2872,
+   "name": "camouflage backpack",
+   "wikiTitle": "Camouflage Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 14088,
+   "name": "carapace shield",
+   "wikiTitle": "Carapace Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3435,
+   "name": "castle shield",
+   "wikiTitle": "Castle Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3358,
+   "name": "chain armor",
+   "wikiTitle": "Chain Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8022,
+   "name": "chain bolter",
+   "wikiTitle": "Chain Bolter",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 37536,
+   "name": "changing backpack",
+   "wikiTitle": "Changing Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 27452,
+   "name": "chopper of destruction",
+   "wikiTitle": "Chopper of Destruction",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3311,
+   "name": "clerical mace",
+   "wikiTitle": "Clerical Mace",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 30396,
+   "name": "cobra axe",
+   "wikiTitle": "Cobra Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50167,
+   "name": "cobra bo",
+   "wikiTitle": "Cobra Bo",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 30394,
+   "name": "cobra boots",
+   "wikiTitle": "Cobra Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 30395,
+   "name": "cobra club",
+   "wikiTitle": "Cobra Club",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 30393,
+   "name": "cobra crossbow",
+   "wikiTitle": "Cobra Crossbow",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 30397,
+   "name": "cobra hood",
+   "wikiTitle": "Cobra Hood",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 30400,
+   "name": "cobra rod",
+   "wikiTitle": "Cobra Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 30398,
+   "name": "cobra sword",
+   "wikiTitle": "Cobra Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 30399,
+   "name": "cobra wand",
+   "wikiTitle": "Cobra Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 45639,
+   "name": "cocoa grimoire",
+   "wikiTitle": "Cocoa Grimoire",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 9017,
+   "name": "coconut shoes",
+   "wikiTitle": "Coconut Shoes",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8027,
+   "name": "composite hornbow",
+   "wikiTitle": "Composite Hornbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50274,
+   "name": "coned hat of enlightenment",
+   "wikiTitle": "Coned Hat of Enlightenment",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 7415,
+   "name": "cranial basher",
+   "wikiTitle": "Cranial Basher",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 45640,
+   "name": "creamy grimoire",
+   "wikiTitle": "Creamy Grimoire",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 7385,
+   "name": "crimson sword",
+   "wikiTitle": "Crimson Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3556,
+   "name": "crocodile boots",
+   "wikiTitle": "Crocodile Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3349,
+   "name": "crossbow",
+   "wikiTitle": "Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 27456,
+   "name": "crossbow of destruction",
+   "wikiTitle": "Crossbow of Destruction",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 3381,
+   "name": "crown armor",
+   "wikiTitle": "Crown Armor",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 9605,
+   "name": "crown backpack",
+   "wikiTitle": "Crown Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3385,
+   "name": "crown helmet",
+   "wikiTitle": "Crown Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3419,
+   "name": "crown shield",
+   "wikiTitle": "Crown Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3391,
+   "name": "crusader helmet",
+   "wikiTitle": "Crusader Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 52336,
+   "name": "crypt bile",
+   "wikiTitle": "Crypt Bile",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 52334,
+   "name": "crypt breaker",
+   "wikiTitle": "Crypt Breaker",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 52337,
+   "name": "crypt jaw",
+   "wikiTitle": "Crypt Jaw",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 52338,
+   "name": "crypt slicer",
+   "wikiTitle": "Crypt Slicer",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 52332,
+   "name": "crypt spine",
+   "wikiTitle": "Crypt Spine",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 52333,
+   "name": "crypt splitter",
+   "wikiTitle": "Crypt Splitter",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 52335,
+   "name": "crypt strike",
+   "wikiTitle": "Crypt Strike",
+   "slots": 3,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 16100,
+   "name": "crystal backpack",
+   "wikiTitle": "Crystal Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 10200,
+   "name": "crystal boots",
+   "wikiTitle": "Crystal Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 3333,
+   "name": "crystal mace",
+   "wikiTitle": "Crystal Mace",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 16161,
+   "name": "crystalline axe",
+   "wikiTitle": "Crystalline Axe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50190,
+   "name": "dark vision bandana",
+   "wikiTitle": "Dark Vision Bandana",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 29427,
+   "name": "dark whispers",
+   "wikiTitle": "Dark Whispers",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 44621,
+   "name": "dauntless dragon scale armor",
+   "wikiTitle": "Dauntless Dragon Scale Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 39164,
+   "name": "dawnfire sherwani",
+   "wikiTitle": "Dawnfire Sherwani",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 22758,
+   "name": "death gaze",
+   "wikiTitle": "Death Gaze",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50260,
+   "name": "death oyoroi",
+   "wikiTitle": "Death Oyoroi",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 14248,
+   "name": "deepling backpack",
+   "wikiTitle": "Deepling Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 28825,
+   "name": "deepling ceremonial dagger",
+   "wikiTitle": "Deepling Ceremonial Dagger",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 28826,
+   "name": "deepling fork",
+   "wikiTitle": "Deepling Fork",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 14250,
+   "name": "deepling squelcher",
+   "wikiTitle": "Deepling Squelcher",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3388,
+   "name": "demon armor",
+   "wikiTitle": "Demon Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 9601,
+   "name": "demon backpack",
+   "wikiTitle": "Demon Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3387,
+   "name": "demon helmet",
+   "wikiTitle": "Demon Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50189,
+   "name": "demon mengu",
+   "wikiTitle": "Demon Mengu",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 3420,
+   "name": "demon shield",
+   "wikiTitle": "Demon Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7431,
+   "name": "demonbone",
+   "wikiTitle": "Demonbone",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 49534,
+   "name": "demonfang mask",
+   "wikiTitle": "Demonfang Mask",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 7382,
+   "name": "demonrage sword",
+   "wikiTitle": "Demonrage Sword",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 8098,
+   "name": "demonwing axe",
+   "wikiTitle": "Demonwing Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 13997,
+   "name": "depth calcei",
+   "wikiTitle": "Depth Calcei",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50176,
+   "name": "depth claws",
+   "wikiTitle": "Depth Claws",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 13994,
+   "name": "depth lorica",
+   "wikiTitle": "Depth Lorica",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 13998,
+   "name": "depth scutum",
+   "wikiTitle": "Depth Scutum",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 3339,
+   "name": "djinn blade",
+   "wikiTitle": "Djinn Blade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 10391,
+   "name": "drachaku",
+   "wikiTitle": "Drachaku",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 10326,
+   "name": "dragon backpack",
+   "wikiTitle": "Dragon Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3302,
+   "name": "dragon lance",
+   "wikiTitle": "Dragon Lance",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 10201,
+   "name": "dragon scale boots",
+   "wikiTitle": "Dragon Scale Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 3386,
+   "name": "dragon scale mail",
+   "wikiTitle": "Dragon Scale Mail",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 3416,
+   "name": "dragon shield",
+   "wikiTitle": "Dragon Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7402,
+   "name": "dragon slayer",
+   "wikiTitle": "Dragon Slayer",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7430,
+   "name": "dragonbone staff",
+   "wikiTitle": "Dragonbone Staff",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 49862,
+   "name": "draining inferniarch arbalest",
+   "wikiTitle": "Draining Inferniarch Arbalest",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 49865,
+   "name": "draining inferniarch battleaxe",
+   "wikiTitle": "Draining Inferniarch Battleaxe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49877,
+   "name": "draining inferniarch blade",
+   "wikiTitle": "Draining Inferniarch Blade",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49859,
+   "name": "draining inferniarch bow",
+   "wikiTitle": "Draining Inferniarch Bow",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50252,
+   "name": "draining inferniarch claws",
+   "wikiTitle": "Draining Inferniarch Claws",
+   "slots": 1,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 49871,
+   "name": "draining inferniarch flail",
+   "wikiTitle": "Draining Inferniarch Flail",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49868,
+   "name": "draining inferniarch greataxe",
+   "wikiTitle": "Draining Inferniarch Greataxe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49886,
+   "name": "draining inferniarch rod",
+   "wikiTitle": "Draining Inferniarch Rod",
+   "slots": 1,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 49880,
+   "name": "draining inferniarch slayer",
+   "wikiTitle": "Draining Inferniarch Slayer",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49883,
+   "name": "draining inferniarch wand",
+   "wikiTitle": "Draining Inferniarch Wand",
+   "slots": 1,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 49874,
+   "name": "draining inferniarch warhammer",
+   "wikiTitle": "Draining Inferniarch Warhammer",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 4033,
+   "name": "draken boots",
+   "wikiTitle": "Draken Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 10388,
+   "name": "drakinata",
+   "wikiTitle": "Drakinata",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7419,
+   "name": "dreaded cleaver",
+   "wikiTitle": "Dreaded Cleaver",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 49533,
+   "name": "dreadfire headpiece",
+   "wikiTitle": "Dreadfire Headpiece",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 25700,
+   "name": "dream blossom staff",
+   "wikiTitle": "Dream Blossom Staff",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 29423,
+   "name": "dream shroud",
+   "wikiTitle": "Dream Shroud",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 3397,
+   "name": "dwarven armor",
+   "wikiTitle": "Dwarven Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3323,
+   "name": "dwarven axe",
+   "wikiTitle": "Dwarven Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3396,
+   "name": "dwarven helmet",
+   "wikiTitle": "Dwarven Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 29430,
+   "name": "ectoplasmic shield",
+   "wikiTitle": "Ectoplasmic Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 36664,
+   "name": "eldritch bow",
+   "wikiTitle": "Eldritch Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 36657,
+   "name": "eldritch claymore",
+   "wikiTitle": "Eldritch Claymore",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 36670,
+   "name": "eldritch cowl",
+   "wikiTitle": "Eldritch Cowl",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 50169,
+   "name": "eldritch crescent moon spade",
+   "wikiTitle": "Eldritch Crescent Moon Spade",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 36663,
+   "name": "eldritch cuirass",
+   "wikiTitle": "Eldritch Cuirass",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 36672,
+   "name": "eldritch folio",
+   "wikiTitle": "Eldritch Folio",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 36661,
+   "name": "eldritch greataxe",
+   "wikiTitle": "Eldritch Greataxe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 36671,
+   "name": "eldritch hood",
+   "wikiTitle": "Eldritch Hood",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 50266,
+   "name": "eldritch monk boots",
+   "wikiTitle": "Eldritch Monk Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 36674,
+   "name": "eldritch rod",
+   "wikiTitle": "Eldritch Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 36656,
+   "name": "eldritch shield",
+   "wikiTitle": "Eldritch Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 36673,
+   "name": "eldritch tome",
+   "wikiTitle": "Eldritch Tome",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 36668,
+   "name": "eldritch wand",
+   "wikiTitle": "Eldritch Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 36659,
+   "name": "eldritch warmace",
+   "wikiTitle": "Eldritch Warmace",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 11689,
+   "name": "elite draken helmet",
+   "wikiTitle": "Elite Draken Helmet",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 11651,
+   "name": "elite draken mail",
+   "wikiTitle": "Elite Draken Mail",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 3399,
+   "name": "elven mail",
+   "wikiTitle": "Elven Mail",
+   "slots": 3,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7438,
+   "name": "elvish bow",
+   "wikiTitle": "Elvish Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "None"
+  },
+  {
+   "tibiaItemId": 31579,
+   "name": "embrace of nature",
+   "wikiTitle": "Embrace of Nature",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 8102,
+   "name": "emerald sword",
+   "wikiTitle": "Emerald Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 23525,
+   "name": "energetic backpack",
+   "wikiTitle": "Energetic Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 28830,
+   "name": "energized demonbone",
+   "wikiTitle": "Energized Demonbone",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 29425,
+   "name": "energized limb",
+   "wikiTitle": "Energized Limb",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 3326,
+   "name": "epee",
+   "wikiTitle": "Epee",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50188,
+   "name": "ethereal coned hat",
+   "wikiTitle": "Ethereal Coned Hat",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 7453,
+   "name": "executioner",
+   "wikiTitle": "Executioner",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 10324,
+   "name": "expedition backpack",
+   "wikiTitle": "Expedition Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 28724,
+   "name": "falcon battleaxe",
+   "wikiTitle": "Falcon Battleaxe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 28718,
+   "name": "falcon bow",
+   "wikiTitle": "Falcon Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 28714,
+   "name": "falcon circlet",
+   "wikiTitle": "Falcon Circlet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 28715,
+   "name": "falcon coif",
+   "wikiTitle": "Falcon Coif",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 28722,
+   "name": "falcon escutcheon",
+   "wikiTitle": "Falcon Escutcheon",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 28723,
+   "name": "falcon longsword",
+   "wikiTitle": "Falcon Longsword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 28725,
+   "name": "falcon mace",
+   "wikiTitle": "Falcon Mace",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 28719,
+   "name": "falcon plate",
+   "wikiTitle": "Falcon Plate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 28716,
+   "name": "falcon rod",
+   "wikiTitle": "Falcon Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 50161,
+   "name": "falcon sai",
+   "wikiTitle": "Falcon Sai",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 28721,
+   "name": "falcon shield",
+   "wikiTitle": "Falcon Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 28717,
+   "name": "falcon wand",
+   "wikiTitle": "Falcon Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 21292,
+   "name": "feedbag",
+   "wikiTitle": "Feedbag",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 30197,
+   "name": "festive backpack",
+   "wikiTitle": "Festive Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 39161,
+   "name": "feverbloom boots",
+   "wikiTitle": "Feverbloom Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50271,
+   "name": "fists of enlightenment",
+   "wikiTitle": "Fists of Enlightenment",
+   "slots": 1,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 39158,
+   "name": "frostflower boots",
+   "wikiTitle": "Frostflower Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7342,
+   "name": "fur backpack",
+   "wikiTitle": "Fur Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7457,
+   "name": "fur boots",
+   "wikiTitle": "Fur Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7458,
+   "name": "fur cap",
+   "wikiTitle": "Fur Cap",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 31582,
+   "name": "galea mortis",
+   "wikiTitle": "Galea Mortis",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 32620,
+   "name": "ghost backpack",
+   "wikiTitle": "Ghost Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 32628,
+   "name": "ghost chestplate",
+   "wikiTitle": "Ghost Chestplate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 3281,
+   "name": "giant sword",
+   "wikiTitle": "Giant Sword",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 36665,
+   "name": "gilded eldritch bow",
+   "wikiTitle": "Gilded Eldritch Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 36658,
+   "name": "gilded eldritch claymore",
+   "wikiTitle": "Gilded Eldritch Claymore",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50170,
+   "name": "gilded eldritch crescent moon spade",
+   "wikiTitle": "Gilded Eldritch Crescent Moon Spade",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 36662,
+   "name": "gilded eldritch greataxe",
+   "wikiTitle": "Gilded Eldritch Greataxe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 36675,
+   "name": "gilded eldritch rod",
+   "wikiTitle": "Gilded Eldritch Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 36669,
+   "name": "gilded eldritch wand",
+   "wikiTitle": "Gilded Eldritch Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 36660,
+   "name": "gilded eldritch warmace",
+   "wikiTitle": "Gilded Eldritch Warmace",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 819,
+   "name": "glacier shoes",
+   "wikiTitle": "Glacier Shoes",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 21295,
+   "name": "glooth backpack",
+   "wikiTitle": "Glooth Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 21172,
+   "name": "glooth whip",
+   "wikiTitle": "Glooth Whip",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 27648,
+   "name": "gnome armor",
+   "wikiTitle": "Gnome Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 27647,
+   "name": "gnome helmet",
+   "wikiTitle": "Gnome Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 27650,
+   "name": "gnome shield",
+   "wikiTitle": "Gnome Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 27651,
+   "name": "gnome sword",
+   "wikiTitle": "Gnome Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50276,
+   "name": "gnomish cuirass",
+   "wikiTitle": "Gnomish Cuirass",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 50290,
+   "name": "gnomish footwraps",
+   "wikiTitle": "Gnomish Footwraps",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 3360,
+   "name": "golden armor",
+   "wikiTitle": "Golden Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 2871,
+   "name": "golden backpack",
+   "wikiTitle": "Golden Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3555,
+   "name": "golden boots",
+   "wikiTitle": "Golden Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3365,
+   "name": "golden helmet",
+   "wikiTitle": "Golden Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 43875,
+   "name": "grand sanguine battleaxe",
+   "wikiTitle": "Grand Sanguine Battleaxe",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43865,
+   "name": "grand sanguine blade",
+   "wikiTitle": "Grand Sanguine Blade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43873,
+   "name": "grand sanguine bludgeon",
+   "wikiTitle": "Grand Sanguine Bludgeon",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43878,
+   "name": "grand sanguine bow",
+   "wikiTitle": "Grand Sanguine Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50158,
+   "name": "grand sanguine claws",
+   "wikiTitle": "Grand Sanguine Claws",
+   "slots": 3,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 43883,
+   "name": "grand sanguine coil",
+   "wikiTitle": "Grand Sanguine Coil",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 43880,
+   "name": "grand sanguine crossbow",
+   "wikiTitle": "Grand Sanguine Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 43867,
+   "name": "grand sanguine cudgel",
+   "wikiTitle": "Grand Sanguine Cudgel",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43869,
+   "name": "grand sanguine hatchet",
+   "wikiTitle": "Grand Sanguine Hatchet",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43871,
+   "name": "grand sanguine razor",
+   "wikiTitle": "Grand Sanguine Razor",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43886,
+   "name": "grand sanguine rod",
+   "wikiTitle": "Grand Sanguine Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 3303,
+   "name": "great axe",
+   "wikiTitle": "Great Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3422,
+   "name": "great shield",
+   "wikiTitle": "Great Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 2865,
+   "name": "green backpack",
+   "wikiTitle": "Green Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 37608,
+   "name": "green demon armor",
+   "wikiTitle": "Green Demon Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 37609,
+   "name": "green demon helmet",
+   "wikiTitle": "Green Demon Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 37610,
+   "name": "green demon slippers",
+   "wikiTitle": "Green Demon Slippers",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 2870,
+   "name": "grey backpack",
+   "wikiTitle": "Grey Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3433,
+   "name": "griffin shield",
+   "wikiTitle": "Griffin Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 10323,
+   "name": "guardian boots",
+   "wikiTitle": "Guardian Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 3315,
+   "name": "guardian halberd",
+   "wikiTitle": "Guardian Halberd",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 27454,
+   "name": "hammer of destruction",
+   "wikiTitle": "Hammer of Destruction",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3332,
+   "name": "hammer of wrath",
+   "wikiTitle": "Hammer of Wrath",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3210,
+   "name": "hat of the mad",
+   "wikiTitle": "Hat of the Mad",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 7407,
+   "name": "haunted blade",
+   "wikiTitle": "Haunted Blade",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 19373,
+   "name": "haunted mirror piece",
+   "wikiTitle": "Haunted Mirror Piece",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7405,
+   "name": "havoc blade",
+   "wikiTitle": "Havoc Blade",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7380,
+   "name": "headchopper",
+   "wikiTitle": "Headchopper",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 10202,
+   "name": "heart backpack",
+   "wikiTitle": "Heart Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 21167,
+   "name": "heat core",
+   "wikiTitle": "Heat Core",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3340,
+   "name": "heavy mace",
+   "wikiTitle": "Heavy Mace",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 9379,
+   "name": "heavy metal t-shirt",
+   "wikiTitle": "Heavy Metal T-Shirt",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8096,
+   "name": "hellforged axe",
+   "wikiTitle": "Hellforged Axe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 49532,
+   "name": "hellstalker visor",
+   "wikiTitle": "Hellstalker Visor",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 9382,
+   "name": "helmet of nature",
+   "wikiTitle": "Helmet of Nature",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 17852,
+   "name": "helmet of the lost",
+   "wikiTitle": "Helmet of the Lost",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 9381,
+   "name": "helmet of ultimate terror",
+   "wikiTitle": "Helmet of Ultimate Terror",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7389,
+   "name": "heroic axe",
+   "wikiTitle": "Heroic Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 14246,
+   "name": "hive bow",
+   "wikiTitle": "Hive Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 14089,
+   "name": "hive scythe",
+   "wikiTitle": "Hive Scythe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 19362,
+   "name": "icicle bow",
+   "wikiTitle": "Icicle Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50291,
+   "name": "iks footwraps",
+   "wikiTitle": "Iks Footwraps",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 7435,
+   "name": "impaler",
+   "wikiTitle": "Impaler",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 49522,
+   "name": "inferniarch arbalest",
+   "wikiTitle": "Inferniarch Arbalest",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 49523,
+   "name": "inferniarch battleaxe",
+   "wikiTitle": "Inferniarch Battleaxe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49527,
+   "name": "inferniarch blade",
+   "wikiTitle": "Inferniarch Blade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49520,
+   "name": "inferniarch bow",
+   "wikiTitle": "Inferniarch Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50250,
+   "name": "inferniarch claws",
+   "wikiTitle": "Inferniarch Claws",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 49525,
+   "name": "inferniarch flail",
+   "wikiTitle": "Inferniarch Flail",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49524,
+   "name": "inferniarch greataxe",
+   "wikiTitle": "Inferniarch Greataxe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49529,
+   "name": "inferniarch rod",
+   "wikiTitle": "Inferniarch Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 49530,
+   "name": "inferniarch slayer",
+   "wikiTitle": "Inferniarch Slayer",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49528,
+   "name": "inferniarch wand",
+   "wikiTitle": "Inferniarch Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 49526,
+   "name": "inferniarch warhammer",
+   "wikiTitle": "Inferniarch Warhammer",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 51666,
+   "name": "ink sword",
+   "wikiTitle": "Ink Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50193,
+   "name": "jade conical hat",
+   "wikiTitle": "Jade Conical Hat",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 10451,
+   "name": "jade hat",
+   "wikiTitle": "Jade Hat",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 5801,
+   "name": "jewelled backpack",
+   "wikiTitle": "Jewelled Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 35518,
+   "name": "jungle bow",
+   "wikiTitle": "Jungle Bow",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 35514,
+   "name": "jungle flail",
+   "wikiTitle": "Jungle Flail",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 35521,
+   "name": "jungle rod",
+   "wikiTitle": "Jungle Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 35522,
+   "name": "jungle wand",
+   "wikiTitle": "Jungle Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3370,
+   "name": "knight armor",
+   "wikiTitle": "Knight Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 3318,
+   "name": "knight axe",
+   "wikiTitle": "Knight Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3552,
+   "name": "leather boots",
+   "wikiTitle": "Leather Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3404,
+   "name": "leopard armor",
+   "wikiTitle": "Leopard Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 17813,
+   "name": "life preserver",
+   "wikiTitle": "Life Preserver",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 820,
+   "name": "lightning boots",
+   "wikiTitle": "Lightning Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 39754,
+   "name": "lilypad backpack",
+   "wikiTitle": "Lilypad Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 34253,
+   "name": "lion axe",
+   "wikiTitle": "Lion Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50162,
+   "name": "lion claws",
+   "wikiTitle": "Lion Claws",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 34254,
+   "name": "lion hammer",
+   "wikiTitle": "Lion Hammer",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34150,
+   "name": "lion longbow",
+   "wikiTitle": "Lion Longbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 34155,
+   "name": "lion longsword",
+   "wikiTitle": "Lion Longsword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34157,
+   "name": "lion plate",
+   "wikiTitle": "Lion Plate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34151,
+   "name": "lion rod",
+   "wikiTitle": "Lion Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 34154,
+   "name": "lion shield",
+   "wikiTitle": "Lion Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34156,
+   "name": "lion spangenhelm",
+   "wikiTitle": "Lion Spangenhelm",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 34153,
+   "name": "lion spellbook",
+   "wikiTitle": "Lion Spellbook",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 34152,
+   "name": "lion wand",
+   "wikiTitle": "Lion Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 29418,
+   "name": "living armor",
+   "wikiTitle": "Living Armor",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 29417,
+   "name": "living vine bow",
+   "wikiTitle": "Living Vine Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 7424,
+   "name": "lunar staff",
+   "wikiTitle": "Lunar Staff",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 27453,
+   "name": "mace of destruction",
+   "wikiTitle": "Mace of Destruction",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7992,
+   "name": "mage hat",
+   "wikiTitle": "Mage Hat",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 3366,
+   "name": "magic plate armor",
+   "wikiTitle": "Magic Plate Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 3288,
+   "name": "magic sword",
+   "wikiTitle": "Magic Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3573,
+   "name": "magician hat",
+   "wikiTitle": "Magician Hat",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 818,
+   "name": "magma boots",
+   "wikiTitle": "Magma Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 22762,
+   "name": "maimer",
+   "wikiTitle": "Maimer",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 35520,
+   "name": "make-do boots",
+   "wikiTitle": "Make-Do Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 35519,
+   "name": "makeshift boots",
+   "wikiTitle": "Makeshift Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 49531,
+   "name": "maliceforged helmet",
+   "wikiTitle": "Maliceforged Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7463,
+   "name": "mammoth fur cape",
+   "wikiTitle": "Mammoth Fur Cape",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8060,
+   "name": "master archer's armor",
+   "wikiTitle": "Master Archer's Armor",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 3414,
+   "name": "mastermind shield",
+   "wikiTitle": "Mastermind Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 9372,
+   "name": "meat shield",
+   "wikiTitle": "Meat Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3436,
+   "name": "medusa shield",
+   "wikiTitle": "Medusa Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50264,
+   "name": "merudri battle mail",
+   "wikiTitle": "Merudri Battle Mail",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 50261,
+   "name": "merudri nanbando",
+   "wikiTitle": "Merudri Nanbando",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 21169,
+   "name": "metal spats",
+   "wikiTitle": "Metal Spats",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 39165,
+   "name": "midnight tunic",
+   "wikiTitle": "Midnight Tunic",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 10327,
+   "name": "minotaur backpack",
+   "wikiTitle": "Minotaur Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8021,
+   "name": "modified crossbow",
+   "wikiTitle": "Modified Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 21166,
+   "name": "mooh'tah plate",
+   "wikiTitle": "Mooh'tah Plate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 9604,
+   "name": "moon backpack",
+   "wikiTitle": "Moon Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 53211,
+   "name": "moonsilver axe",
+   "wikiTitle": "Moonsilver Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53229,
+   "name": "moonsilver battle visor",
+   "wikiTitle": "Moonsilver Battle Visor",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53225,
+   "name": "moonsilver bow",
+   "wikiTitle": "Moonsilver Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 53219,
+   "name": "moonsilver channeler",
+   "wikiTitle": "Moonsilver Channeler",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 53213,
+   "name": "moonsilver chopper",
+   "wikiTitle": "Moonsilver Chopper",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53209,
+   "name": "moonsilver claymore",
+   "wikiTitle": "Moonsilver Claymore",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53227,
+   "name": "moonsilver crossbow",
+   "wikiTitle": "Moonsilver Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 53215,
+   "name": "moonsilver crusher",
+   "wikiTitle": "Moonsilver Crusher",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53207,
+   "name": "moonsilver epee",
+   "wikiTitle": "Moonsilver Epee",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53223,
+   "name": "moonsilver katar",
+   "wikiTitle": "Moonsilver Katar",
+   "slots": 3,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 53217,
+   "name": "moonsilver mace",
+   "wikiTitle": "Moonsilver Mace",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53231,
+   "name": "moonsilver nimbus hat",
+   "wikiTitle": "Moonsilver Nimbus Hat",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 53221,
+   "name": "moonsilver sceptre",
+   "wikiTitle": "Moonsilver Sceptre",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 53232,
+   "name": "moonsilver spirit mask",
+   "wikiTitle": "Moonsilver Spirit Mask",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 53233,
+   "name": "moonsilver strike helm",
+   "wikiTitle": "Moonsilver Strike Helm",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 53230,
+   "name": "moonsilver trail hood",
+   "wikiTitle": "Moonsilver Trail Hood",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 31580,
+   "name": "mortal mace",
+   "wikiTitle": "Mortal Mace",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 16099,
+   "name": "mushroom backpack",
+   "wikiTitle": "Mushroom Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 9378,
+   "name": "musician's bow",
+   "wikiTitle": "Musician's Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 40593,
+   "name": "mutant bone boots",
+   "wikiTitle": "Mutant Bone Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 40591,
+   "name": "mutated skin armor",
+   "wikiTitle": "Mutated Skin Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 16164,
+   "name": "mycological bow",
+   "wikiTitle": "Mycological Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 16162,
+   "name": "mycological mace",
+   "wikiTitle": "Mycological Mace",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7384,
+   "name": "mystic blade",
+   "wikiTitle": "Mystic Blade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 44624,
+   "name": "mystical dragon robe",
+   "wikiTitle": "Mystical Dragon Robe",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 7455,
+   "name": "mythril axe",
+   "wikiTitle": "Mythril Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 39156,
+   "name": "naga axe",
+   "wikiTitle": "Naga Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 39157,
+   "name": "naga club",
+   "wikiTitle": "Naga Club",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 39159,
+   "name": "naga crossbow",
+   "wikiTitle": "Naga Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50160,
+   "name": "naga katar",
+   "wikiTitle": "Naga Katar",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 39163,
+   "name": "naga rod",
+   "wikiTitle": "Naga Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 39155,
+   "name": "naga sword",
+   "wikiTitle": "Naga Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50262,
+   "name": "naga tanko",
+   "wikiTitle": "Naga Tanko",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 39162,
+   "name": "naga wand",
+   "wikiTitle": "Naga Wand",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 6432,
+   "name": "necromancer shield",
+   "wikiTitle": "Necromancer Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7418,
+   "name": "nightmare blade",
+   "wikiTitle": "Nightmare Blade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 6390,
+   "name": "nightmare shield",
+   "wikiTitle": "Nightmare Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3380,
+   "name": "noble armor",
+   "wikiTitle": "Noble Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7456,
+   "name": "noble axe",
+   "wikiTitle": "Noble Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 51263,
+   "name": "norcferatu bloodhide",
+   "wikiTitle": "Norcferatu Bloodhide",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 51264,
+   "name": "norcferatu bonecloak",
+   "wikiTitle": "Norcferatu Bonecloak",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 51261,
+   "name": "norcferatu bonehood",
+   "wikiTitle": "Norcferatu Bonehood",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 51269,
+   "name": "norcferatu fangstompers",
+   "wikiTitle": "Norcferatu Fangstompers",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 51268,
+   "name": "norcferatu goretrampers",
+   "wikiTitle": "Norcferatu Goretrampers",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 51260,
+   "name": "norcferatu skullguard",
+   "wikiTitle": "Norcferatu Skullguard",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 51262,
+   "name": "norcferatu tuskplate",
+   "wikiTitle": "Norcferatu Tuskplate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7460,
+   "name": "norse shield",
+   "wikiTitle": "Norse Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8083,
+   "name": "northwind rod",
+   "wikiTitle": "Northwind Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 50273,
+   "name": "nunchaku of enlightenment",
+   "wikiTitle": "Nunchaku of Enlightenment",
+   "slots": 1,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 8100,
+   "name": "obsidian truncheon",
+   "wikiTitle": "Obsidian Truncheon",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 9374,
+   "name": "odd hat",
+   "wikiTitle": "Odd Hat",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 22183,
+   "name": "ogre scepta",
+   "wikiTitle": "Ogre Scepta",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 3244,
+   "name": "old and used backpack",
+   "wikiTitle": "Old and Used Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7421,
+   "name": "onyx flail",
+   "wikiTitle": "Onyx Flail",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 9602,
+   "name": "orange backpack",
+   "wikiTitle": "Orange Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7392,
+   "name": "orcish maul",
+   "wikiTitle": "Orcish Maul",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 21981,
+   "name": "oriental shoes",
+   "wikiTitle": "Oriental Shoes",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 3424,
+   "name": "ornamented shield",
+   "wikiTitle": "Ornamented Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 13993,
+   "name": "ornate chestplate",
+   "wikiTitle": "Ornate Chestplate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 14001,
+   "name": "ornate mace",
+   "wikiTitle": "Ornate Mace",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 14000,
+   "name": "ornate shield",
+   "wikiTitle": "Ornate Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 29424,
+   "name": "pair of dreamwalkers",
+   "wikiTitle": "Pair of Dreamwalkers",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 17828,
+   "name": "pair of iron fists",
+   "wikiTitle": "Pair of Iron Fists",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 32619,
+   "name": "pair of nightmare boots",
+   "wikiTitle": "Pair of Nightmare Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 34098,
+   "name": "pair of soulstalkers",
+   "wikiTitle": "Pair of Soulstalkers",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 34097,
+   "name": "pair of soulwalkers",
+   "wikiTitle": "Pair of Soulwalkers",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 8063,
+   "name": "paladin armor",
+   "wikiTitle": "Paladin Armor",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 19159,
+   "name": "pannier backpack",
+   "wikiTitle": "Pannier Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3550,
+   "name": "patched boots",
+   "wikiTitle": "Patched Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 48114,
+   "name": "peppermint backpack",
+   "wikiTitle": "Peppermint Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 32616,
+   "name": "phantasmal axe",
+   "wikiTitle": "Phantasmal Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3439,
+   "name": "phoenix shield",
+   "wikiTitle": "Phoenix Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 24393,
+   "name": "pillow backpack",
+   "wikiTitle": "Pillow Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 5926,
+   "name": "pirate backpack",
+   "wikiTitle": "Pirate Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 5461,
+   "name": "pirate boots",
+   "wikiTitle": "Pirate Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 16110,
+   "name": "prismatic armor",
+   "wikiTitle": "Prismatic Armor",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 16112,
+   "name": "prismatic boots",
+   "wikiTitle": "Prismatic Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 2868,
+   "name": "purple backpack",
+   "wikiTitle": "Purple Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7410,
+   "name": "queen's sceptre",
+   "wikiTitle": "Queen's Sceptre",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 35577,
+   "name": "raccoon backpack",
+   "wikiTitle": "Raccoon Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3331,
+   "name": "ravager's axe",
+   "wikiTitle": "Ravager's Axe",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 2867,
+   "name": "red backpack",
+   "wikiTitle": "Red Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 52649,
+   "name": "refined stag shield",
+   "wikiTitle": "Refined Stag Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7383,
+   "name": "relic sword",
+   "wikiTitle": "Relic Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 49861,
+   "name": "rending inferniarch arbalest",
+   "wikiTitle": "Rending Inferniarch Arbalest",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 49864,
+   "name": "rending inferniarch battleaxe",
+   "wikiTitle": "Rending Inferniarch Battleaxe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49876,
+   "name": "rending inferniarch blade",
+   "wikiTitle": "Rending Inferniarch Blade",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49858,
+   "name": "rending inferniarch bow",
+   "wikiTitle": "Rending Inferniarch Bow",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50251,
+   "name": "rending inferniarch claws",
+   "wikiTitle": "Rending Inferniarch Claws",
+   "slots": 1,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 49870,
+   "name": "rending inferniarch flail",
+   "wikiTitle": "Rending Inferniarch Flail",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49867,
+   "name": "rending inferniarch greataxe",
+   "wikiTitle": "Rending Inferniarch Greataxe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49885,
+   "name": "rending inferniarch rod",
+   "wikiTitle": "Rending Inferniarch Rod",
+   "slots": 1,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 49879,
+   "name": "rending inferniarch slayer",
+   "wikiTitle": "Rending Inferniarch Slayer",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49882,
+   "name": "rending inferniarch wand",
+   "wikiTitle": "Rending Inferniarch Wand",
+   "slots": 1,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 49873,
+   "name": "rending inferniarch warhammer",
+   "wikiTitle": "Rending Inferniarch Warhammer",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 29419,
+   "name": "resizer",
+   "wikiTitle": "Resizer",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 22866,
+   "name": "rift bow",
+   "wikiTitle": "Rift Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 22867,
+   "name": "rift crossbow",
+   "wikiTitle": "Rift Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 22727,
+   "name": "rift lance",
+   "wikiTitle": "Rift Lance",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 22726,
+   "name": "rift shield",
+   "wikiTitle": "Rift Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50268,
+   "name": "robe of enlightenment",
+   "wikiTitle": "Robe of Enlightenment",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 27458,
+   "name": "rod of destruction",
+   "wikiTitle": "Rod of Destruction",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 28829,
+   "name": "rotten demonbone",
+   "wikiTitle": "Rotten Demonbone",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7434,
+   "name": "royal axe",
+   "wikiTitle": "Royal Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8023,
+   "name": "royal crossbow",
+   "wikiTitle": "Royal Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 3392,
+   "name": "royal helmet",
+   "wikiTitle": "Royal Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7417,
+   "name": "runed sword",
+   "wikiTitle": "Runed Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 19363,
+   "name": "runic ice shield",
+   "wikiTitle": "Runic Ice Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 6553,
+   "name": "ruthless axe",
+   "wikiTitle": "Ruthless Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50272,
+   "name": "sai of enlightenment",
+   "wikiTitle": "Sai of Enlightenment",
+   "slots": 1,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 53192,
+   "name": "sailor's backpack",
+   "wikiTitle": "Sailor's Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3551,
+   "name": "sandals",
+   "wikiTitle": "Sandals",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 43874,
+   "name": "sanguine battleaxe",
+   "wikiTitle": "Sanguine Battleaxe",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43864,
+   "name": "sanguine blade",
+   "wikiTitle": "Sanguine Blade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43872,
+   "name": "sanguine bludgeon",
+   "wikiTitle": "Sanguine Bludgeon",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43884,
+   "name": "sanguine boots",
+   "wikiTitle": "Sanguine Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 43877,
+   "name": "sanguine bow",
+   "wikiTitle": "Sanguine Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50157,
+   "name": "sanguine claws",
+   "wikiTitle": "Sanguine Claws",
+   "slots": 3,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 43882,
+   "name": "sanguine coil",
+   "wikiTitle": "Sanguine Coil",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 43879,
+   "name": "sanguine crossbow",
+   "wikiTitle": "Sanguine Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 43866,
+   "name": "sanguine cudgel",
+   "wikiTitle": "Sanguine Cudgel",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43887,
+   "name": "sanguine galoshes",
+   "wikiTitle": "Sanguine Galoshes",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 43868,
+   "name": "sanguine hatchet",
+   "wikiTitle": "Sanguine Hatchet",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43870,
+   "name": "sanguine razor",
+   "wikiTitle": "Sanguine Razor",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 43885,
+   "name": "sanguine rod",
+   "wikiTitle": "Sanguine Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 10346,
+   "name": "santa backpack",
+   "wikiTitle": "Santa Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7437,
+   "name": "sapphire hammer",
+   "wikiTitle": "Sapphire Hammer",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3444,
+   "name": "sentinel shield",
+   "wikiTitle": "Sentinel Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7451,
+   "name": "shadow sceptre",
+   "wikiTitle": "Shadow Sceptre",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 22192,
+   "name": "shamanic mask",
+   "wikiTitle": "Shamanic Mask",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 9380,
+   "name": "shield of care",
+   "wikiTitle": "Shield of Care",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 11688,
+   "name": "shield of corruption",
+   "wikiTitle": "Shield of Corruption",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 9377,
+   "name": "shield of the white knight",
+   "wikiTitle": "Shield of the White Knight",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 16175,
+   "name": "shiny blade",
+   "wikiTitle": "Shiny Blade",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 29420,
+   "name": "shoulder plate",
+   "wikiTitle": "Shoulder Plate",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 8029,
+   "name": "silkweaver bow",
+   "wikiTitle": "Silkweaver Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 3312,
+   "name": "silver mace",
+   "wikiTitle": "Silver Mace",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 49863,
+   "name": "siphoning inferniarch arbalest",
+   "wikiTitle": "Siphoning Inferniarch Arbalest",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 49866,
+   "name": "siphoning inferniarch battleaxe",
+   "wikiTitle": "Siphoning Inferniarch Battleaxe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49878,
+   "name": "siphoning inferniarch blade",
+   "wikiTitle": "Siphoning Inferniarch Blade",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49860,
+   "name": "siphoning inferniarch bow",
+   "wikiTitle": "Siphoning Inferniarch Bow",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 50253,
+   "name": "siphoning inferniarch claws",
+   "wikiTitle": "Siphoning Inferniarch Claws",
+   "slots": 1,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 49872,
+   "name": "siphoning inferniarch flail",
+   "wikiTitle": "Siphoning Inferniarch Flail",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49869,
+   "name": "siphoning inferniarch greataxe",
+   "wikiTitle": "Siphoning Inferniarch Greataxe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49887,
+   "name": "siphoning inferniarch rod",
+   "wikiTitle": "Siphoning Inferniarch Rod",
+   "slots": 1,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 49881,
+   "name": "siphoning inferniarch slayer",
+   "wikiTitle": "Siphoning Inferniarch Slayer",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 49884,
+   "name": "siphoning inferniarch wand",
+   "wikiTitle": "Siphoning Inferniarch Wand",
+   "slots": 1,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 49875,
+   "name": "siphoning inferniarch warhammer",
+   "wikiTitle": "Siphoning Inferniarch Warhammer",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 5741,
+   "name": "skull helmet",
+   "wikiTitle": "Skull Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3324,
+   "name": "skull staff",
+   "wikiTitle": "Skull Staff",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7423,
+   "name": "skullcrusher",
+   "wikiTitle": "Skullcrusher",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 27450,
+   "name": "slayer of destruction",
+   "wikiTitle": "Slayer of Destruction",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 11692,
+   "name": "snake god's sceptre",
+   "wikiTitle": "Snake God's Sceptre",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8097,
+   "name": "solar axe",
+   "wikiTitle": "Solar Axe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 34099,
+   "name": "soulbastion",
+   "wikiTitle": "Soulbastion",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34084,
+   "name": "soulbiter",
+   "wikiTitle": "Soulbiter",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34088,
+   "name": "soulbleeder",
+   "wikiTitle": "Soulbleeder",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 34086,
+   "name": "soulcrusher",
+   "wikiTitle": "Soulcrusher",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34082,
+   "name": "soulcutter",
+   "wikiTitle": "Soulcutter",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34085,
+   "name": "souleater",
+   "wikiTitle": "Souleater (Axe)",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50254,
+   "name": "soulgarb",
+   "wikiTitle": "Soulgarb",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 34091,
+   "name": "soulhexer",
+   "wikiTitle": "Soulhexer",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 50159,
+   "name": "soulkamas",
+   "wikiTitle": "Soulkamas",
+   "slots": 3,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 34087,
+   "name": "soulmaimer",
+   "wikiTitle": "Soulmaimer",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34095,
+   "name": "soulmantle",
+   "wikiTitle": "Soulmantle",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 34089,
+   "name": "soulpiercer",
+   "wikiTitle": "Soulpiercer",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 34094,
+   "name": "soulshell",
+   "wikiTitle": "Soulshell",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 34083,
+   "name": "soulshredder",
+   "wikiTitle": "Soulshredder",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 34096,
+   "name": "soulshroud",
+   "wikiTitle": "Soulshroud",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 50240,
+   "name": "soulsoles",
+   "wikiTitle": "Soulsoles",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 34090,
+   "name": "soultainter",
+   "wikiTitle": "Soultainter",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3059,
+   "name": "spellbook",
+   "wikiTitle": "Spellbook",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 8072,
+   "name": "spellbook of enlightenment",
+   "wikiTitle": "Spellbook of Enlightenment",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 8073,
+   "name": "spellbook of warding",
+   "wikiTitle": "Spellbook of Warding",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 3271,
+   "name": "spike sword",
+   "wikiTitle": "Spike Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 7452,
+   "name": "spiked squelcher",
+   "wikiTitle": "Spiked Squelcher",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 29431,
+   "name": "spirit guide",
+   "wikiTitle": "Spirit Guide",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 39147,
+   "name": "spiritthorn armor",
+   "wikiTitle": "Spiritthorn Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 39148,
+   "name": "spiritthorn helmet",
+   "wikiTitle": "Spiritthorn Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 52353,
+   "name": "stag boots",
+   "wikiTitle": "Stag Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 52354,
+   "name": "stag footwraps",
+   "wikiTitle": "Stag Footwraps",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 52348,
+   "name": "stag helmet",
+   "wikiTitle": "Stag Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 52350,
+   "name": "stag plate",
+   "wikiTitle": "Stag Plate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 52349,
+   "name": "stag robe",
+   "wikiTitle": "Stag Robe",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 52356,
+   "name": "stag scrolls",
+   "wikiTitle": "Stag Scrolls",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 52357,
+   "name": "stag shield",
+   "wikiTitle": "Stag Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 52352,
+   "name": "stag shinguards",
+   "wikiTitle": "Stag Shinguards",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 52355,
+   "name": "stag spellbook",
+   "wikiTitle": "Stag Spellbook",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3554,
+   "name": "steel boots",
+   "wikiTitle": "Steel Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3409,
+   "name": "steel shield",
+   "wikiTitle": "Steel Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 53212,
+   "name": "stellar moonsilver axe",
+   "wikiTitle": "Stellar Moonsilver Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53226,
+   "name": "stellar moonsilver bow",
+   "wikiTitle": "Stellar Moonsilver Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 53220,
+   "name": "stellar moonsilver channeler",
+   "wikiTitle": "Stellar Moonsilver Channeler",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 53214,
+   "name": "stellar moonsilver chopper",
+   "wikiTitle": "Stellar Moonsilver Chopper",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53210,
+   "name": "stellar moonsilver claymore",
+   "wikiTitle": "Stellar Moonsilver Claymore",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53228,
+   "name": "stellar moonsilver crossbow",
+   "wikiTitle": "Stellar Moonsilver Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 53216,
+   "name": "stellar moonsilver crusher",
+   "wikiTitle": "Stellar Moonsilver Crusher",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53208,
+   "name": "stellar moonsilver epee",
+   "wikiTitle": "Stellar Moonsilver Epee",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53224,
+   "name": "stellar moonsilver katar",
+   "wikiTitle": "Stellar Moonsilver Katar",
+   "slots": 3,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 53218,
+   "name": "stellar moonsilver mace",
+   "wikiTitle": "Stellar Moonsilver Mace",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 53222,
+   "name": "stellar moonsilver sceptre",
+   "wikiTitle": "Stellar Moonsilver Sceptre",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 44648,
+   "name": "stoic iks boots",
+   "wikiTitle": "Stoic Iks Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 44636,
+   "name": "stoic iks casque",
+   "wikiTitle": "Stoic Iks Casque",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 44620,
+   "name": "stoic iks chestplate",
+   "wikiTitle": "Stoic Iks Chestplate",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 44619,
+   "name": "stoic iks cuirass",
+   "wikiTitle": "Stoic Iks Cuirass",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 44637,
+   "name": "stoic iks headpiece",
+   "wikiTitle": "Stoic Iks Headpiece",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 50255,
+   "name": "stoic iks robe",
+   "wikiTitle": "Stoic Iks Robe",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 44649,
+   "name": "stoic iks sandals",
+   "wikiTitle": "Stoic Iks Sandals",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3319,
+   "name": "stonecutter axe",
+   "wikiTitle": "Stonecutter Axe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 28832,
+   "name": "sulphurous demonbone",
+   "wikiTitle": "Sulphurous Demonbone",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 29421,
+   "name": "summerblade",
+   "wikiTitle": "Summerblade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3264,
+   "name": "sword",
+   "wikiTitle": "Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 31614,
+   "name": "tagralt blade",
+   "wikiTitle": "Tagralt Blade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3442,
+   "name": "tempest shield",
+   "wikiTitle": "Tempest Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 813,
+   "name": "terra boots",
+   "wikiTitle": "Terra Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 31577,
+   "name": "terra helmet",
+   "wikiTitle": "Terra Helmet",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 7391,
+   "name": "thaian sword",
+   "wikiTitle": "Thaian Sword",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 6527,
+   "name": "the avenger",
+   "wikiTitle": "The Avenger",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 8024,
+   "name": "the devileye",
+   "wikiTitle": "The Devileye",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 8103,
+   "name": "the epiphany",
+   "wikiTitle": "The Epiphany",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8025,
+   "name": "the ironworker",
+   "wikiTitle": "The Ironworker",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 8101,
+   "name": "the stomper",
+   "wikiTitle": "The Stomper",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 14768,
+   "name": "thorn spitter",
+   "wikiTitle": "Thorn Spitter",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 35515,
+   "name": "throwing axe",
+   "wikiTitle": "Throwing Axe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3309,
+   "name": "thunder hammer",
+   "wikiTitle": "Thunder Hammer",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 31583,
+   "name": "toga mortis",
+   "wikiTitle": "Toga Mortis",
+   "slots": 1,
+   "type": "Armors",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3428,
+   "name": "tower shield",
+   "wikiTitle": "Tower Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 10389,
+   "name": "traditional sai",
+   "wikiTitle": "Traditional Sai",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 22756,
+   "name": "treader of torment",
+   "wikiTitle": "Treader of Torment",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 19356,
+   "name": "triple bolt crossbow",
+   "wikiTitle": "Triple Bolt Crossbow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 11657,
+   "name": "twiceslicer",
+   "wikiTitle": "Twiceslicer",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3335,
+   "name": "twin axe",
+   "wikiTitle": "Twin Axe",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 10392,
+   "name": "twin hooks",
+   "wikiTitle": "Twin Hooks",
+   "slots": 3,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20071,
+   "name": "umbral axe",
+   "wikiTitle": "Umbral Axe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20065,
+   "name": "umbral blade",
+   "wikiTitle": "Umbral Blade",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20083,
+   "name": "umbral bow",
+   "wikiTitle": "Umbral Bow",
+   "slots": 1,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 20074,
+   "name": "umbral chopper",
+   "wikiTitle": "Umbral Chopper",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20086,
+   "name": "umbral crossbow",
+   "wikiTitle": "Umbral Crossbow",
+   "slots": 1,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 20080,
+   "name": "umbral hammer",
+   "wikiTitle": "Umbral Hammer",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50164,
+   "name": "umbral katar",
+   "wikiTitle": "Umbral Katar",
+   "slots": 1,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 20077,
+   "name": "umbral mace",
+   "wikiTitle": "Umbral Mace",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20072,
+   "name": "umbral master axe",
+   "wikiTitle": "Umbral Master Axe",
+   "slots": 1,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20084,
+   "name": "umbral master bow",
+   "wikiTitle": "Umbral Master Bow",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 20075,
+   "name": "umbral master chopper",
+   "wikiTitle": "Umbral Master Chopper",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20087,
+   "name": "umbral master crossbow",
+   "wikiTitle": "Umbral Master Crossbow",
+   "slots": 2,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 20081,
+   "name": "umbral master hammer",
+   "wikiTitle": "Umbral Master Hammer",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 50165,
+   "name": "umbral master katar",
+   "wikiTitle": "Umbral Master Katar",
+   "slots": 2,
+   "type": "Fist Fighting Weapons",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 20078,
+   "name": "umbral master mace",
+   "wikiTitle": "Umbral Master Mace",
+   "slots": 1,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20069,
+   "name": "umbral master slayer",
+   "wikiTitle": "Umbral Master Slayer",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20090,
+   "name": "umbral master spellbook",
+   "wikiTitle": "Umbral Master Spellbook",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 20066,
+   "name": "umbral masterblade",
+   "wikiTitle": "Umbral Masterblade",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20068,
+   "name": "umbral slayer",
+   "wikiTitle": "Umbral Slayer",
+   "slots": 1,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 20089,
+   "name": "umbral spellbook",
+   "wikiTitle": "Umbral Spellbook",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 8082,
+   "name": "underworld rod",
+   "wikiTitle": "Underworld Rod",
+   "slots": 2,
+   "type": "Rods",
+   "vocations": "druids"
+  },
+  {
+   "tibiaItemId": 44622,
+   "name": "unerring dragon scale armor",
+   "wikiTitle": "Unerring Dragon Scale Armor",
+   "slots": 2,
+   "type": "Armors",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 28831,
+   "name": "unliving demonbone",
+   "wikiTitle": "Unliving Demonbone",
+   "slots": 2,
+   "type": "Club Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3434,
+   "name": "vampire shield",
+   "wikiTitle": "Vampire Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 19374,
+   "name": "vampire silk slippers",
+   "wikiTitle": "Vampire Silk Slippers",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 3431,
+   "name": "viking shield",
+   "wikiTitle": "Viking Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 22754,
+   "name": "visage of the end days",
+   "wikiTitle": "Visage of the End Days",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 27457,
+   "name": "wand of destruction",
+   "wikiTitle": "Wand of Destruction",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 8093,
+   "name": "wand of draconia",
+   "wikiTitle": "Wand of Draconia",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3075,
+   "name": "wand of dragonbreath",
+   "wikiTitle": "Wand of Dragonbreath",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 8092,
+   "name": "wand of starstorm",
+   "wikiTitle": "Wand of Starstorm",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 8094,
+   "name": "wand of voodoo",
+   "wikiTitle": "Wand of Voodoo",
+   "slots": 2,
+   "type": "Wands",
+   "vocations": "sorcerers"
+  },
+  {
+   "tibiaItemId": 3342,
+   "name": "war axe",
+   "wikiTitle": "War Axe",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3279,
+   "name": "war hammer",
+   "wikiTitle": "War Hammer",
+   "slots": 3,
+   "type": "Club Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 3369,
+   "name": "warrior helmet",
+   "wikiTitle": "Warrior Helmet",
+   "slots": 2,
+   "type": "Helmets",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 14040,
+   "name": "warrior's axe",
+   "wikiTitle": "Warrior's Axe",
+   "slots": 2,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 14042,
+   "name": "warrior's shield",
+   "wikiTitle": "Warrior's Shield",
+   "slots": 1,
+   "type": "Shields",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 8026,
+   "name": "warsinger bow",
+   "wikiTitle": "Warsinger Bow",
+   "slots": 3,
+   "type": "Distance Weapons",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 31625,
+   "name": "winged backpack",
+   "wikiTitle": "Winged Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 31617,
+   "name": "winged boots",
+   "wikiTitle": "Winged Boots",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "paladins"
+  },
+  {
+   "tibiaItemId": 29422,
+   "name": "winterblade",
+   "wikiTitle": "Winterblade",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": "knights"
+  },
+  {
+   "tibiaItemId": 9653,
+   "name": "witch hat",
+   "wikiTitle": "Witch Hat",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 22084,
+   "name": "wolf backpack",
+   "wikiTitle": "Wolf Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 25699,
+   "name": "wooden spellbook",
+   "wikiTitle": "Wooden Spellbook",
+   "slots": 1,
+   "type": "Spellbooks",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 7408,
+   "name": "wyvern fang",
+   "wikiTitle": "Wyvern Fang",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 50289,
+   "name": "yalahari footwraps",
+   "wikiTitle": "Yalahari Footwraps",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": "monks"
+  },
+  {
+   "tibiaItemId": 8864,
+   "name": "yalahari mask",
+   "wikiTitle": "Yalahari Mask",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "sorcerers and druids"
+  },
+  {
+   "tibiaItemId": 2866,
+   "name": "yellow backpack",
+   "wikiTitle": "Yellow Backpack",
+   "slots": 1,
+   "type": "Containers",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 10406,
+   "name": "Zaoan halberd",
+   "wikiTitle": "Zaoan Halberd",
+   "slots": 3,
+   "type": "Axe Weapons",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 10385,
+   "name": "Zaoan helmet",
+   "wikiTitle": "Zaoan Helmet",
+   "slots": 1,
+   "type": "Helmets",
+   "vocations": "knights and paladins"
+  },
+  {
+   "tibiaItemId": 10386,
+   "name": "Zaoan shoes",
+   "wikiTitle": "Zaoan Shoes",
+   "slots": 1,
+   "type": "Boots",
+   "vocations": null
+  },
+  {
+   "tibiaItemId": 10390,
+   "name": "Zaoan sword",
+   "wikiTitle": "Zaoan Sword",
+   "slots": 2,
+   "type": "Sword Weapons",
+   "vocations": null
+  }
+ ]
+}

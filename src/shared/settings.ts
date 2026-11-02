@@ -6,7 +6,16 @@ export interface ImbuedItemBuild {
   id: string
   name: string
   itemId: number | null
-  slots: ({ imbuement: string; tier: ImbuementTier } | null)[]
+  slots: (ImbuedSlot | null)[]
+}
+
+export interface ImbuedSlot {
+  imbuement: string
+  tier: ImbuementTier
+  /** Precios propios de este slot (materiales y Gold Token); mandan sobre los globales. */
+  prices?: Record<string, number>
+  /** Lo que pagaste de verdad por este imbuement, con santuario. Si existe, manda sobre todo cálculo. */
+  paidTotal?: number | null
 }
 
 export interface Settings {

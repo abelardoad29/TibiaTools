@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { rashidLocation, serverWeekday } from '@core/domain/tools/rashid'
 import { canShare, shareRange } from '@core/domain/tools/share-exp'
 import { parsePartySession, splitLoot } from '@core/domain/tools/split-loot'
-import { huntCost, imbuedItemCost, imbuementCost, type ImbuementDef, type ImbuementPricing, type TierDef } from '@core/domain/tools/imbuements'
+import { huntCost, imbuedItemCost, imbuementCost, withPaidTotal, type ImbuementDef, type ImbuementPricing, type TierDef } from '@core/domain/tools/imbuements'
+import { allowedImbuements, duplicateImbuements, slotKeys } from '@core/domain/tools/imbuable'
+import imbuableSeed from '@seed/imbuable_items.json'
 import { detectCharacterEvents } from '@core/domain/tools/characters'
 import { matchScore, normalizeName } from '@core/domain/catalog/names'
 import { groupNpcTrades } from '@core/domain/catalog/npcs'
@@ -148,6 +150,12 @@ describe('imbuements', () => {
     const c = imbuementCost(vamp, powerful, tiers, pricing(P, { scrollPrice: 300_000 }))
     expect(c.best!.kind).toBe('scroll')
   })
+  it('el precio pagado de un slot manda sobre el calculado', () => {
+    const calc = imbuementCost(vamp, powerful, tiers, pricing(P))
+    const paid = withPaidTotal(calc, 500_000)
+    expect(paid.best!.kind).toBe('paid')
+    expect(imbuedItemCost([paid, calc]).perCycle).toBe(500_000 + 330_000)
+  })
   it('item con varios slots y costo por hunt', () => {
     const slot = imbuementCost(vamp, powerful, tiers, pricing(P))
     const item = imbuedItemCost([slot, slot, null])
@@ -189,5 +197,30 @@ describe('NPCs del catálogo', () => {
     expect(g[0]).toMatchObject({ name: 'Rashid', price: 11_000 })
     expect(g[0]!.locations).toHaveLength(7)
     expect(groupNpcTrades(rows, 'sell')[0]!.name).toBe('Tamoril')
+  })
+})
+
+describe('items imbuibles (TibiaWiki EN)', () => {
+  const seed = imbuableSeed as { slotTypes: Record<string, string[]>; items: { name: string; slots: number; type: string | null; vocations: string | null }[] }
+  const find = (n: string) => seed.items.find((i) => i.name === n)!
+  it('trae slots por item (1 a 3)', () => {
+    expect(seed.items.length).toBeGreaterThan(500)
+    expect(new Set(seed.items.map((i) => i.slots))).toEqual(new Set([1, 2, 3]))
+    expect(find('magic plate armor').slots).toBe(2)
+  })
+  it('deduce los imbuements permitidos por tipo y vocación', () => {
+    const mpa = allowedImbuements(find('magic plate armor'), seed.slotTypes)
+    expect(mpa).toContain('Vampirism')
+    expect(mpa).toContain('Lich Shroud')
+    expect(mpa).not.toContain('Strike')
+    expect(allowedImbuements(find('gnome helmet'), seed.slotTypes)).toContain('Epiphany')
+    // Falcon Coif es una excepción que el wiki solo explica en notas: no se deduce.
+    expect(allowedImbuements(find('falcon coif'), seed.slotTypes)).not.toContain('Epiphany')
+    expect(allowedImbuements(find('backpack of holding'), seed.slotTypes)).toEqual(['Featherweight'])
+    expect(slotKeys({ slots: 2, type: 'Distance Weapons', vocations: 'paladins' })).toEqual(['bows', 'crossbows'])
+  })
+  it('detecta imbuements repetidos en un mismo item', () => {
+    expect(duplicateImbuements([{ imbuement: 'Void' }, null, { imbuement: 'Void' }])).toEqual(['Void'])
+    expect(duplicateImbuements([{ imbuement: 'Void' }, { imbuement: 'Vampirism' }])).toEqual([])
   })
 })

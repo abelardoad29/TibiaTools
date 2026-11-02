@@ -102,6 +102,7 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
     'tools.boosted': ({ refresh }) => tools.boosted(ctx, refresh),
     'tools.character': ({ name }) => tibiaData(ctx.http).character(name),
     'tools.imbuements': () => tools.imbuements(),
+    'tools.imbuable': () => tools.imbuable(db),
     'tools.imbuements.prices': ({ world, items }) => tools.imbuementPrices(db, world, items),
 
     'characters.list': () => tools.listCharacters(db),

@@ -33,7 +33,7 @@ export interface MaterialLine extends ImbuementMaterial {
 }
 
 export interface ImbuementOption {
-  kind: 'materials' | 'tokens' | 'scroll'
+  kind: 'materials' | 'tokens' | 'scroll' | 'paid'
   label: string
   /** Gold Tokens usados (0 si no aplica). */
   tokens: number
@@ -128,6 +128,21 @@ export function imbuementCost(def: ImbuementDef, tier: TierDef, tiers: readonly 
   const priced = options.filter((o) => o.total !== null)
   const best = priced.length ? priced.reduce((a, b) => (b.total! < a.total! ? b : a)) : null
   return { imbuement: def.name, tier: tier.tier, lines, shrineFee: tier.shrineFeeGp, options, best, durationHours: IMBUEMENT_DURATION_HOURS }
+}
+
+/** Usa el precio que el usuario pagó de verdad (con santuario) en lugar de calcularlo. */
+export function withPaidTotal(cost: ImbuementCost, paidTotal: Gp): ImbuementCost {
+  const paid: ImbuementOption = {
+    kind: 'paid',
+    label: 'Precio que pagaste',
+    tokens: 0,
+    marketMaterials: [],
+    total: paidTotal,
+    perHour: perHour(paidTotal),
+    missing: [],
+    note: null,
+  }
+  return { ...cost, options: [paid, ...cost.options], best: paid }
 }
 
 export interface ImbuedItemCost {

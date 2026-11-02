@@ -25,4 +25,5 @@ Todas las peticiones usan el User-Agent `TibiaTools/2.0 (personal desktop app; +
 | `economic_rules.json` | Manual oficial (comisión 2.5 %, mín. 20, máx. 2.5M; 30 días) | a mano, con fuente |
 | `transfer_rules.json` | Manual oficial, sección Character World Transfer | a mano, con fuente |
 | `items_physical.json` | tibiawiki-sql | `python scripts/seed-tibiawiki-sql.py tibiawiki.db` |
+| `imbuable_items.json` | API de TibiaWiki EN: `imbueslots`, `primarytype` y `vocrequired` de los items de equipo del catálogo (626 imbuibles: 250 de 1 slot, 278 de 2, 98 de 3) y `slots` de cada imbuement | `npm run seed:imbuable` |
 | `creature_gifs.json` | Tibia Tools v1 | — |
