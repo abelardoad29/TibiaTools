@@ -29,6 +29,7 @@ export function TransfersPage() {
   const [profileId, setProfileId] = useState<number | null>(null)
   const profiles = useApi('transfers.profiles.list', undefined)
   const evaluation = useApi('transfers.evaluate', { origin: origin ?? '', destination: destination ?? '', profileId }, { enabled: !!origin && !!destination })
+  const setLooser = useApiMutation('catalog.worlds.update', ['transfers.evaluate', 'catalog.worlds.list'])
   const e = evaluation.data
 
   return (
@@ -73,7 +74,23 @@ export function TransfersPage() {
                 {e.route.checks.map((c) => (
                   <li key={c.rule + c.reason} className="flex items-start gap-2">
                     <CheckBadge result={c.result} />
-                    <span>{c.reason}</span>
+                    <span>
+                      {c.reason}
+                      {c.rule === 'pvp' && c.result === 'unknown' && destination && (
+                        <span className="mt-1 block text-xs text-muted">
+                          Tibia a veces abre mundos (normalmente nuevos) con «condiciones de transferencia más flexibles»: aceptan personajes de cualquier tipo de PvP por un tiempo. TibiaData no
+                          publica ese dato; revísalo en la página del mundo en tibia.com.
+                          <span className="mt-1 flex gap-2">
+                            <Button variant="secondary" onClick={() => setLooser.mutate({ name: destination, looserTransferConditions: false })}>
+                              {destination} no las tiene
+                            </Button>
+                            <Button variant="ghost" onClick={() => setLooser.mutate({ name: destination, looserTransferConditions: true })}>
+                              Sí las tiene
+                            </Button>
+                          </span>
+                        </span>
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>

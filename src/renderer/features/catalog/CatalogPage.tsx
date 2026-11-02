@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Download, RefreshCw } from 'lucide-react'
+import { Download, RefreshCw, ShieldCheck } from 'lucide-react'
 import type { ItemSummary } from '@shared/api'
 import { groupNpcTrades, TRAVELLING_NPCS } from '@core/domain/catalog/npcs'
 import { rashidLocation } from '@core/domain/tools/rashid'
@@ -7,7 +7,7 @@ import { platform } from '../../platform'
 import { useApi, useApiMutation, useEvent } from '../../lib/api'
 import { formatDateTime, parseIntOrNull } from '../../lib/format'
 import { Gp, ItemIcon, RouteBadge } from '../../components/data'
-import { Badge, Button, Card, DataTable, ErrorBox, Field, Input, Modal, Page, Select, Spinner, Tabs, TriState } from '../../components/ui'
+import { Badge, Button, Card, DataTable, ErrorBox, Field, Input, Modal, Page, Select, Spinner, Tabs } from '../../components/ui'
 
 export function CatalogPage() {
   const [tab, setTab] = useState<'items' | 'worlds'>('items')
@@ -165,14 +165,26 @@ function ItemDetail({ id, onClose }: { id: number; onClose: () => void }) {
   )
 }
 
+/** Escudo de BattlEye como en tibia.com: verde = protegido desde el lanzamiento, amarillo = desde una fecha. */
+function BattlEyeIcon({ date, isProtected }: { date: string | null; isProtected: boolean | null }) {
+  if (!isProtected || !date) return <span className="text-muted" title="Sin protección de BattlEye">—</span>
+  const initial = date === 'release'
+  const label = initial ? 'Protegido por BattlEye desde el lanzamiento' : `Protegido por BattlEye desde ${date}`
+  return (
+    <span title={label} className="inline-flex">
+      <ShieldCheck className={`size-5 ${initial ? 'text-good' : 'text-warn'}`} aria-label={label} />
+    </span>
+  )
+}
+
 function Worlds() {
   const desktop = platform.kind === 'electron'
-  const worlds = useApi('catalog.worlds.list', { activeOnly: false })
+  const worlds = useApi('catalog.worlds.list', { activeOnly: true })
   const sync = useApiMutation('catalog.worlds.sync', ['catalog.worlds.list'])
-  const update = useApiMutation('catalog.worlds.update', ['catalog.worlds.list'])
+  const verifiedAt = worlds.data?.map((w) => w.verifiedAt).filter(Boolean).sort().at(-1) ?? null
   return (
     <Card
-      title={`Mundos (${worlds.data?.filter((w) => w.isActive).length ?? 0} activos)`}
+      title={`Mundos (${worlds.data?.length ?? 0})`}
       actions={
         desktop && (
           <Button onClick={() => sync.mutate(undefined)} busy={sync.isPending}>
@@ -183,25 +195,34 @@ function Worlds() {
     >
       <ErrorBox error={sync.error ?? worlds.error} />
       {sync.data && <p className="mb-2 text-xs text-good">Actualizados {sync.data.updated} mundos ({formatDateTime(sync.data.fetchedAt)}).</p>}
+      <p className="mb-2 flex flex-wrap items-center gap-3 text-xs text-muted">
+        <span className="inline-flex items-center gap-1">
+          <ShieldCheck className="size-4 text-good" aria-hidden /> BattlEye desde el lanzamiento
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <ShieldCheck className="size-4 text-warn" aria-hidden /> BattlEye desde una fecha
+        </span>
+        <span>Datos de TibiaData{verifiedAt ? `, sincronizados ${formatDateTime(verifiedAt)}` : ''}.</span>
+      </p>
       <DataTable
         rows={worlds.data ?? []}
         rowKey={(w) => w.id}
         pageSize={100}
         initialSort={{ key: 'name', dir: 'asc' }}
         columns={[
-          { key: 'name', header: 'Mundo', cell: (w) => (w.isActive ? w.name : <span className="text-muted">{w.name} (inactivo)</span>), sort: (w) => w.name },
+          { key: 'name', header: 'Mundo', cell: (w) => w.name, sort: (w) => w.name },
           { key: 'region', header: 'Región', cell: (w) => w.region ?? '—', sort: (w) => w.region },
           { key: 'pvp', header: 'PvP', cell: (w) => w.pvpType ?? '—', sort: (w) => w.pvpType },
-          { key: 'be', header: 'BattlEye', cell: (w) => (w.battleyeDate === 'release' ? 'desde el lanzamiento' : w.battleyeDate ?? '—'), sort: (w) => w.battleyeDate },
+          {
+            key: 'be',
+            header: 'BattlEye',
+            cell: (w) => <BattlEyeIcon date={w.battleyeDate} isProtected={w.battleyeProtected} />,
+            // Primero los protegidos desde el lanzamiento, luego por fecha.
+            sort: (w) => (w.battleyeDate === 'release' ? '0' : (w.battleyeDate ?? '9')),
+            align: 'center',
+          },
           { key: 'tt', header: 'Transferencia', cell: (w) => (w.transferType === 'blocked' ? <RouteBadge status="blocked" /> : w.transferType ?? '—'), sort: (w) => w.transferType },
           { key: 'type', header: 'Tipo', cell: (w) => w.gameWorldType ?? '—' },
-          {
-            key: 'looser',
-            header: '"Looser conditions"',
-            cell: (w) =>
-              desktop ? <TriState label="" value={w.looserTransferConditions} onChange={(v) => update.mutate({ name: w.name, looserTransferConditions: v })} /> : String(w.looserTransferConditions ?? '?'),
-          },
-          { key: 'src', header: 'Fuente', cell: (w) => <span className="text-xs text-muted">{w.source} · {formatDateTime(w.verifiedAt)}</span> },
         ]}
       />
     </Card>
