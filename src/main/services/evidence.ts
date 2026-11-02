@@ -94,18 +94,25 @@ export interface SaveOptions {
   worldId: number | null
   itemId: number | null
   maxPixels: number
+  /** Hora real de la captura si se conoce (p. ej. del nombre de archivo de Tibia); si no, ahora. */
+  capturedAt?: Date
+  notes?: string
 }
 
 /** Guarda una captura. Si ya existe (mismo SHA-256) devuelve la existente sin duplicar. */
 export function saveEvidence(ctx: AppContext, bytes: Uint8Array, o: SaveOptions): Screenshot {
+  return saveEvidenceDetailed(ctx, bytes, o).shot
+}
+
+export function saveEvidenceDetailed(ctx: AppContext, bytes: Uint8Array, o: SaveOptions): { shot: Screenshot; created: boolean } {
   const size = imageSize(bytes)
   if (!size) throw new Error('Formato de imagen no reconocido (PNG, JPG o BMP)')
   if (size.width * size.height > o.maxPixels) throw new Error(`Imagen demasiado grande: ${size.width}×${size.height}`)
   const sha256 = createHash('sha256').update(bytes).digest('hex')
   const existing = get<{ id: string }>(ctx.db, 'SELECT id FROM screenshots WHERE sha256 = ?', [sha256])
-  if (existing) return getScreenshot(ctx.db, existing.id)!
+  if (existing) return { shot: getScreenshot(ctx.db, existing.id)!, created: false }
 
-  const now = ctx.now()
+  const now = o.capturedAt ?? ctx.now()
   const id = randomUUID()
   const dir = join(ctx.paths.evidence, String(now.getUTCFullYear()), String(now.getUTCMonth() + 1).padStart(2, '0'))
   mkdirSync(dir, { recursive: true })
@@ -113,14 +120,14 @@ export function saveEvidence(ctx: AppContext, bytes: Uint8Array, o: SaveOptions)
   writeFileSync(file, bytes, { flag: 'wx' })
 
   const sessionId = randomUUID()
-  run(ctx.db, 'INSERT INTO capture_sessions (id, source_mode, world_id, item_id, started_at, ended_at) VALUES (?,?,?,?,?,?)', [sessionId, o.mode, o.worldId, o.itemId, now.toISOString(), now.toISOString()])
+  run(ctx.db, 'INSERT INTO capture_sessions (id, source_mode, world_id, item_id, started_at, ended_at, notes) VALUES (?,?,?,?,?,?,?)', [sessionId, o.mode, o.worldId, o.itemId, now.toISOString(), now.toISOString(), o.notes ?? null])
   run(
     ctx.db,
     `INSERT INTO screenshots (id, session_id, original_path, captured_at_utc, captured_at_local, sha256, width, height, region_json, screen_type, world_id, item_id, processing_status, created_at)
      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'new',?)`,
     [id, sessionId, file, now.toISOString(), localIso(now), sha256, size.width, size.height, o.region ? JSON.stringify(o.region) : null, o.screenType, o.worldId, o.itemId, nowIso()],
   )
-  return getScreenshot(ctx.db, id)!
+  return { shot: getScreenshot(ctx.db, id)!, created: true }
 }
 
 export function importFiles(ctx: AppContext, files: string[], maxMb: number, maxPixels: number): { imported: Screenshot[]; errors: string[] } {

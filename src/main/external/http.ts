@@ -73,7 +73,7 @@ export function createHttpClient(db: Db, log: Logger, fetchImpl: typeof fetch = 
         ])
         if (res.status === 429 || res.status >= 500) {
           lastErr = new ExternalError(`${host} respondió ${res.status}`, res.status)
-          await new Promise((r) => setTimeout(r, 1_000 * 2 ** attempt))
+          if (attempt < retries) await new Promise((r) => setTimeout(r, 1_000 * 2 ** attempt))
           continue
         }
         if (!res.ok) throw new ExternalError(`${host} respondió ${res.status}`, res.status)

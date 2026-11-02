@@ -140,6 +140,9 @@ const schemas = {
   'collector.screenshots.update': z.object({ id: uuid, screenType: screenType.nullable(), worldId: id.nullable(), itemId: id.nullable(), region: rect.nullable() }),
   'collector.screenshots.setStatus': z.object({ id: uuid, status: z.enum(['rejected', 'new']) }),
   'collector.hotkey.set': z.object({ accelerator: z.string().max(64).nullable() }),
+  'collector.tibiaFolder.status': v,
+  'collector.tibiaFolder.importExisting': z.object({ sinceDays: z.number().positive().max(3_650).nullable() }),
+  'collector.tibiaFolder.pick': v,
 
   'ocr.profiles.list': v,
   'ocr.profiles.save': ocrProfileSchema,

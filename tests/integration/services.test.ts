@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -9,6 +9,9 @@ import { makePaths, type AppContext } from '../../src/main/context'
 import { createLogger } from '../../src/main/logging'
 import { createHttpClient, USER_AGENT } from '../../src/main/external/http'
 import { itemsByName, searchItems, requireWorld, itemByTibiaId } from '../../src/main/services/catalog'
+import { addCharacter } from '../../src/main/services/tools'
+import { createTibiaFolderWatcher, parseTibiaScreenshot } from '../../src/main/services/tibia-folder'
+import { setSettings, getSettings } from '../../src/main/services/settings'
 import { imageSize, saveEvidence } from '../../src/main/services/evidence'
 import { confirmScan, saveProfile, listProfiles } from '../../src/main/services/scans'
 import { bookView, history, importThirdParty } from '../../src/main/services/market'
@@ -42,6 +45,7 @@ beforeAll(() => {
     if (u.includes('/market_values')) {
       return new Response(JSON.stringify([{ id: 3031, time: 1_792_000_000, buy_offer: 1, sell_offer: 2, month_sold: 300, month_average_sell: 2, month_bought: -1 }]), { status: 200 })
     }
+    if (u.includes('/character/')) return new Response('error code: 502', { status: 502 })
     if (u.includes('/market_board')) {
       return new Response(JSON.stringify({ id: 22118, update_time: 1_792_012_876, sellers: [{ name: 'Anonymous', amount: 150, price: 44_098, time: 1_794_604_679 }], buyers: [{ name: 'Anonymous', amount: 25, price: 42_821, time: 1_794_604_499 }] }), { status: 200 })
     }
@@ -192,6 +196,51 @@ describe('análisis de punta a punta', () => {
 
     const csv = exportRun(ctx, res.runId, 'csv')
     expect(csv.endsWith('.csv')).toBe(true)
+  })
+})
+
+describe('personajes', () => {
+  it('un nombre inexistente (TibiaData responde 502) falla rápido, sin reintentos', async () => {
+    const before = calls.filter((c) => c.includes('/character/')).length
+    const t0 = Date.now()
+    await expect(addCharacter(ctx, 'Zzqx Nadie')).rejects.toThrow(/No existe un personaje/)
+    expect(Date.now() - t0).toBeLessThan(1_500)
+    expect(calls.filter((c) => c.includes('/character/')).length - before).toBe(1)
+  })
+})
+
+describe('carpeta de screenshots de Tibia', () => {
+  it('lee el nombre de archivo del cliente', () => {
+    const n = parseTibiaScreenshot('2026-11-02_094500772_Desperdicio de Barro_Hotkey.png')!
+    expect(n.character).toBe('Desperdicio de Barro')
+    expect(n.type).toBe('Hotkey')
+    expect(n.takenAt.getTime()).toBe(new Date(2026, 10, 2, 9, 45, 0, 772).getTime())
+    expect(parseTibiaScreenshot('captura.png')).toBeNull()
+  })
+
+  it('importa solo las de la tecla de screenshot, sin duplicar, y vigila archivos nuevos', async () => {
+    const folder = join(dir, 'tibia-shots')
+    mkdirSync(folder, { recursive: true })
+    writeFileSync(join(folder, '2026-11-02_094500772_Abe_Hotkey.png'), fakePng(41))
+    writeFileSync(join(folder, '2026-11-02_094600000_Abe_LevelUp.png'), fakePng(42))
+    writeFileSync(join(folder, 'otra.png'), fakePng(43))
+    const c = getSettings(db).collector
+    setSettings(db, { collector: { ...c, tibiaFolder: { enabled: true, path: folder, types: ['Hotkey'] } } })
+    const seen: string[] = []
+    const w = createTibiaFolderWatcher(ctx, (shots) => seen.push(...shots.map((s) => s.id)))
+    expect(w.status()).toMatchObject({ exists: true, matchingFiles: 1 })
+    const first = w.importExisting(null)
+    expect(first.imported).toHaveLength(1)
+    expect(first.imported[0]!.capturedAtUtc).toBe(new Date(2026, 10, 2, 9, 45, 0, 772).toISOString())
+    expect(w.importExisting(null)).toMatchObject({ skipped: 1, imported: [] })
+
+    w.restart()
+    expect(w.status().watching).toBe(true)
+    const before = seen.length
+    writeFileSync(join(folder, '2026-11-02_100000000_Abe_Hotkey.png'), fakePng(44))
+    for (let i = 0; i < 40 && seen.length === before; i++) await new Promise((r) => setTimeout(r, 100))
+    w.stop()
+    expect(seen.length).toBe(before + 1)
   })
 })
 

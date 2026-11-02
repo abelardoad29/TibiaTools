@@ -1,4 +1,13 @@
 import { DEFAULT_SCORE_PARAMS, DEFAULT_WEIGHTS, type ScoreParams, type ScoreWeights } from '@core/domain/arbitrage/scoring'
+import type { ImbuementTier } from '@core/domain/tools/imbuements'
+
+/** Item imbuido creado por el usuario (p. ej. un casco con 2 slots) para calcular su costo de uso. */
+export interface ImbuedItemBuild {
+  id: string
+  name: string
+  itemId: number | null
+  slots: ({ imbuement: string; tier: ImbuementTier } | null)[]
+}
 
 export interface Settings {
   theme: 'dark' | 'light' | 'system'
@@ -21,14 +30,19 @@ export interface Settings {
     assistedAutoSave: boolean
     maxImportMb: number
     maxImagePixels: number
+    /** Carpeta donde el cliente de Tibia guarda sus screenshots; se importan sin capturar la ventana. */
+    tibiaFolder: { enabled: boolean; path: string | null; types: string[] }
   }
   ocr: { acceptThreshold: number; reviewThreshold: number }
   tracker: { pollMinutes: number; notify: boolean }
   network: { tibiaDataEnabled: boolean; thirdPartyEnabled: boolean }
   imbuements: {
     world: string | null
+    /** Override de los tokens por paquete; null = usar el seed (2 / 4 / 6). */
     tokensPerTier: { Basic: number | null; Intricate: number | null; Powerful: number | null }
     manualPrices: Record<string, number>
+    huntHours: number
+    builds: ImbuedItemBuild[]
   }
   notifications: { enabled: boolean }
 }
@@ -46,11 +60,12 @@ export const DEFAULT_SETTINGS: Settings = {
     assistedAutoSave: false,
     maxImportMb: 25,
     maxImagePixels: 7680 * 4320,
+    tibiaFolder: { enabled: false, path: null, types: ['Hotkey'] },
   },
   ocr: { acceptThreshold: 0.98, reviewThreshold: 0.9 },
   tracker: { pollMinutes: 5, notify: true },
   network: { tibiaDataEnabled: true, thirdPartyEnabled: true },
-  imbuements: { world: null, tokensPerTier: { Basic: null, Intricate: null, Powerful: null }, manualPrices: {} },
+  imbuements: { world: null, tokensPerTier: { Basic: null, Intricate: null, Powerful: null }, manualPrices: {}, huntHours: 2, builds: [] },
   notifications: { enabled: true },
 }
 

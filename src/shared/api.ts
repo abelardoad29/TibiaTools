@@ -10,7 +10,7 @@ import type { ChecklistItem, FinalStatus, TransferProfile } from '@core/domain/t
 import type { RouteEvaluation, RouteStatus, TransferRuleSet } from '@core/domain/transfers/rules'
 import type { AlertRule } from '@core/domain/alerts/rules'
 import type { CharacterSnapshot } from '@core/domain/tools/characters'
-import type { ImbuementDef, TierDef } from '@core/domain/tools/imbuements'
+import type { ImbuementDef, ImbuementTier, TierDef } from '@core/domain/tools/imbuements'
 import type { OcrProfile, Rect, ScreenType } from '@core/ocr/types'
 import type { DataSource } from './provenance'
 import type { Settings } from './settings'
@@ -127,6 +127,16 @@ export interface Screenshot {
   worldId: number | null
   itemId: number | null
   status: 'new' | 'processed' | 'confirmed' | 'rejected'
+}
+
+export interface TibiaFolderStatus {
+  path: string
+  exists: boolean
+  watching: boolean
+  imported: number
+  lastFile: string | null
+  matchingFiles: number
+  error: string | null
 }
 
 export interface CaptureSource {
@@ -277,6 +287,16 @@ export interface SavedCartSummary {
   lines: number
 }
 
+export interface ImbuementCatalog {
+  tiers: TierDef[]
+  imbuements: ImbuementDef[]
+  tokenTradeable: string[]
+  tokensPerTier: Record<ImbuementTier, number>
+  durationHours: number
+  source: string
+  notes: string
+}
+
 export interface BoostedInfo {
   creature: { name: string; imageUrl: string | null } | null
   boss: { name: string; imageUrl: string | null } | null
@@ -328,7 +348,7 @@ export interface ApiMap {
 
   'tools.boosted': { in: { refresh: boolean }; out: BoostedInfo }
   'tools.character': { in: { name: string }; out: CharacterSnapshot | null }
-  'tools.imbuements': { in: void; out: { tiers: TierDef[]; imbuements: ImbuementDef[]; tokenTradeable: string[]; source: string } }
+  'tools.imbuements': { in: void; out: ImbuementCatalog }
   'tools.imbuements.prices': { in: { world: string; items: string[] }; out: Record<string, { price: number; observedAt: string; source: DataSource } | null> }
 
   'characters.list': { in: void; out: TrackedCharacter[] }
@@ -362,6 +382,9 @@ export interface ApiMap {
   'collector.screenshots.update': { in: { id: string; screenType: ScreenType | null; worldId: number | null; itemId: number | null; region: Rect | null }; out: Screenshot }
   'collector.screenshots.setStatus': { in: { id: string; status: 'rejected' | 'new' }; out: Screenshot }
   'collector.hotkey.set': { in: { accelerator: string | null }; out: { registered: boolean } }
+  'collector.tibiaFolder.status': { in: void; out: TibiaFolderStatus }
+  'collector.tibiaFolder.importExisting': { in: { sinceDays: number | null }; out: { imported: Screenshot[]; skipped: number; errors: string[] } }
+  'collector.tibiaFolder.pick': { in: void; out: { path: string } | null }
 
   'ocr.profiles.list': { in: void; out: OcrProfile[] }
   'ocr.profiles.save': { in: OcrProfile; out: OcrProfile }
@@ -415,6 +438,7 @@ export interface EventMap {
   'alerts.fired': { count: number; messages: string[] }
   'characters.updated': { events: number }
   'icons.progress': { done: number; total: number }
+  'collector.imported': { count: number }
 }
 export type EventName = keyof EventMap
 

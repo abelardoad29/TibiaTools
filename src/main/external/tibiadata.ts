@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { CharacterSnapshot } from '@core/domain/tools/characters'
-import type { HttpClient, HttpResult } from './http'
+import { ExternalError, type HttpClient, type HttpResult } from './http'
 
 // TibiaData (https://docs.tibiadata.com): solo metadatos públicos. No tiene datos de Market.
 const BASE = 'https://api.tibiadata.com/v4'
@@ -56,8 +56,15 @@ export function tibiaData(http: HttpClient) {
         fetchedAt: creatures.fetchedAt,
       }
     },
+    /** null si el personaje no existe. TibiaData responde 502 (no 404) para nombres inexistentes: no se reintenta. */
     async character(name: string): Promise<CharacterSnapshot | null> {
-      const r = await http.getJson<unknown>(`${BASE}/character/${encodeURIComponent(name.trim())}`, { cacheSeconds: 120, staleOnError: false })
+      let r: HttpResult<unknown>
+      try {
+        r = await http.getJson<unknown>(`${BASE}/character/${encodeURIComponent(name.trim())}`, { cacheSeconds: 120, staleOnError: false, retries: 0 })
+      } catch (e) {
+        if (e instanceof ExternalError && (e.status === 502 || e.status === 404)) return null
+        throw e
+      }
       const parsed = characterSchema.safeParse(r.data)
       const ch = parsed.success ? parsed.data.character : undefined
       if (!ch) return null

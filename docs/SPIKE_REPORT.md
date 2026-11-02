@@ -16,13 +16,13 @@ Fecha: 02-11-2026.
 | Iconos | TibiaWiki BR `Special:FilePath`: 29/30 items normales y 0/5 Soul Cores en una muestra; funciona desde Electron con un User-Agent propio | Prueba con la app real |
 | Imbuements | 24 imbuements con 3 materiales cada uno; los 72 materiales existen en el catálogo | Página de TibiaWiki BR (copia guardada) |
 | TibiaLabs (API de la v1) | No respondió | — |
-| Captura | Elegir ventana → vista en vivo → capturar → evidencia con SHA-256 → aparece en Revisión OCR. Verificado capturando la propia ventana de la app (Electron 45); **todavía no con el cliente de Tibia** | `tests/e2e/smoke.mjs` |
+| Captura | Elegir ventana → vista en vivo → capturar → evidencia con SHA-256 → aparece en Revisión OCR (verificado con la propia ventana de la app). **Con la ventana de Tibia sale en negro** (reportado por el usuario el 02-11-2026): la app ahora lo detecta y la vía principal es importar la carpeta de screenshots del cliente | `tests/e2e/smoke.mjs`, prueba de integración del watcher |
 | SQLite | `node:sqlite` disponible en Electron 45 (Node 24.22, SQLite 3.53): sin módulos nativos | Prueba directa |
 
 ## Pendiente (requiere al usuario)
 
 1. 20–30 capturas reales del Market (Offers, Details y Tibia Coins) para calibrar perfiles y medir con `npm run ocr:eval`. **No se declara ninguna precisión del OCR hasta entonces.** El pipeline está probado con una fuente sintética (tests/ocr).
-2. Probar la captura con el cliente de Tibia abierto, en ventana y en pantalla completa (riesgo: frames negros con aceleración por GPU).
+2. Calibrar un perfil sobre un screenshot `_Hotkey` del cliente (ventana completa) y confirmar que la ventana del Market aparece siempre en la misma posición.
 3. Anotar el *fee* del panel de crear oferta para 2–3 combinaciones de precio × cantidad y fijar base y redondeo en Ajustes.
 4. Copiar los precios de transferencia (regular / express) desde la Store.
 5. Revisar si tibiamarket.top publica condiciones de uso antes de usarla de forma intensiva (hoy solo se consulta bajo demanda, con caché y ≥ 1 s entre llamadas).

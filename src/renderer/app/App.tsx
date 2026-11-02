@@ -94,6 +94,17 @@ function Layout() {
     [qc],
   )
   useEvent('alerts.fired', onAlerts)
+  useEvent(
+    'collector.imported',
+    useCallback(
+      (p: { count: number }) => {
+        setToast(p.count === 1 ? 'Captura de Tibia importada: revísala en Revisión OCR' : `${p.count} capturas de Tibia importadas`)
+        void qc.invalidateQueries({ queryKey: ['collector.screenshots.list'] })
+        void qc.invalidateQueries({ queryKey: ['collector.tibiaFolder.status'] })
+      },
+      [qc],
+    ),
+  )
   useEffect(() => {
     if (!toast) return
     const t = setTimeout(() => setToast(null), 6_000)

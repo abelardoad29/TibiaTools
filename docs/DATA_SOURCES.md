@@ -9,6 +9,9 @@
 | `seed/creature_gifs.json` (v1) | Imagen de respaldo para criaturas | — | Local |
 | tibiawiki-sql | Peso y apilable (`seed/items_physical.json`) | metadatos | Offline: lo genera el usuario |
 | Manual oficial de Tibia | Comisión, duración de ofertas, reglas de transferencia | reglas versionadas | Revisar al cambiar |
+| Noticia oficial del 12-06-2025 | Tarifas de imbuement 7,500 / 60,000 / 250,000 gp con 100 % de éxito | seed de imbuements | — |
+| NabBot (`cogs/tibiawiki.py`) | Paquetes de Yana en Gold Tokens (2 / 4 / 6) y costo por hora = total / 20 h | seed de imbuements | Contrastado el 02-11-2026 |
+| Carpeta de screenshots de Tibia | Capturas del Market tomadas con la tecla del cliente | `own_capture` | Solo lectura; los originales se copian a `evidence\` |
 
 Todas las peticiones usan el User-Agent `TibiaTools/2.0 (personal desktop app; +https://github.com/abelardoad29/TibiaTools)` y quedan en `external_fetch_log`. La app nunca se hace pasar por un navegador. TibiaWiki rechaza a clientes que no son navegadores en su `api.php`: por eso el catálogo de imbuements se genera desde una copia de la página guardada a mano (`npm run seed:imbuements -- <archivo>`).
 

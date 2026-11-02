@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react'
 import { Download, RefreshCw } from 'lucide-react'
 import type { ItemSummary } from '@shared/api'
+import { groupNpcTrades, TRAVELLING_NPCS } from '@core/domain/catalog/npcs'
+import { rashidLocation } from '@core/domain/tools/rashid'
 import { platform } from '../../platform'
 import { useApi, useApiMutation, useEvent } from '../../lib/api'
 import { formatDateTime, parseIntOrNull } from '../../lib/format'
@@ -102,18 +104,28 @@ function ItemDetail({ id, onClose }: { id: number; onClose: () => void }) {
             <div className="text-xs text-muted">Fuente: {item.source}</div>
           </div>
         </div>
-        {[
-          ['NPCs que compran', item.npcSell],
-          ['NPCs que venden', item.npcBuy],
-        ].map(([label, list]) =>
-          (list as typeof item.npcBuy).length ? (
-            <div key={label as string}>
-              <div className="mb-1 text-xs font-medium text-muted">{label as string}</div>
+        {/* npcBuy = NPCs que compran el item (le vendes tú); npcSell = NPCs que lo venden (se lo compras). */}
+        {(
+          [
+            ['NPCs que lo compran (le vendes)', item.npcBuy, 'buy'],
+            ['NPCs que lo venden (le compras)', item.npcSell, 'sell'],
+          ] as const
+        ).map(([label, list, side]) =>
+          list.length ? (
+            <div key={label}>
+              <div className="mb-1 text-xs font-medium text-muted">{label}</div>
               <ul className="flex flex-col gap-0.5">
-                {(list as typeof item.npcBuy).map((n) => (
-                  <li key={n.name + n.location} className="flex justify-between gap-2">
+                {groupNpcTrades(list, side).map((n) => (
+                  <li key={`${n.name}-${n.price}-${n.currencyId}`} className="flex justify-between gap-2">
                     <span>
-                      {n.name} <span className="text-xs text-muted">{n.location}</span>
+                      {n.name}{' '}
+                      <span className="text-xs text-muted" title={n.locations.join(' · ')}>
+                        {TRAVELLING_NPCS.has(n.name)
+                          ? `hoy en ${rashidLocation(new Date()).city} (cambia de ciudad cada día)`
+                          : n.locations.length > 2
+                            ? `${n.locations.length} lugares`
+                            : n.locations.join(' · ')}
+                      </span>
                     </span>
                     <span>
                       <Gp value={n.price} /> {n.currencyId ? <Badge>moneda #{n.currencyId}</Badge> : 'gp'}

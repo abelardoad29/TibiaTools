@@ -1,6 +1,8 @@
 {
  "source": "https://www.tibiawiki.com.br/wiki/Imbuements",
  "parsedAt": "2026-11-02T17:07:20.910Z",
+ "notes": "Tarifas: noticia oficial de Tibia del 12-06-2025 (100 % de éxito). Duración de 20 h: TibiaWiki BR. Gold Tokens por paquete (2/4/6) y fórmula de costo por hora (total/20): NabBot (cogs/tibiawiki.py), contrastado el 02-11-2026.",
+ "durationHours": 20,
  "tiers": [
   {
    "tier": "Basic",
@@ -23,6 +25,11 @@
   "Vampirism",
   "Void"
  ],
+ "tokensPerTier": {
+  "Basic": 2,
+  "Intricate": 4,
+  "Powerful": 6
+ },
  "imbuements": [
   {
    "name": "Bash",

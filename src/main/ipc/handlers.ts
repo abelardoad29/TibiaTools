@@ -19,6 +19,7 @@ import * as backup from '../services/backup'
 import { getSettings, setSettings } from '../services/settings'
 import { tibiaData } from '../external/tibiadata'
 import { tibiaMarket } from '../external/tibiamarket'
+import type { TibiaFolderWatcher } from '../services/tibia-folder'
 import { ocrProfileSchema } from './schemas'
 
 /** Capacidades que dependen de Electron (diálogos, captura, atajos, notificaciones). */
@@ -30,6 +31,8 @@ export interface Host {
   captureSources(): Promise<CaptureSource[]>
   selectSource(id: string): void
   setHotkey(accelerator: string | null): boolean
+  pickFolder(title: string): Promise<string | null>
+  tibiaFolder: TibiaFolderWatcher
   restoreBackup(path: string): Promise<void>
   notify(title: string, body: string): void
 }
@@ -64,7 +67,10 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
     'app.settings.get': () => settings(),
     'app.settings.set': (patch) => {
       const next = setSettings(db, patch)
-      if ('collector' in patch) host.setHotkey(next.collector.hotkey)
+      if ('collector' in patch) {
+        host.setHotkey(next.collector.hotkey)
+        host.tibiaFolder.restart()
+      }
       return next
     },
     'app.backup.create': () => ({ path: backup.createBackup(db, ctx.paths) }),
@@ -130,6 +136,17 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
       const registered = host.setHotkey(accelerator)
       setSettings(db, { collector: { ...settings().collector, hotkey: accelerator } })
       return { registered }
+    },
+
+    'collector.tibiaFolder.status': () => host.tibiaFolder.status(),
+    'collector.tibiaFolder.importExisting': ({ sinceDays }) => host.tibiaFolder.importExisting(sinceDays),
+    'collector.tibiaFolder.pick': async () => {
+      const path = await host.pickFolder('Carpeta de screenshots de Tibia')
+      if (!path) return null
+      const c = settings().collector
+      setSettings(db, { collector: { ...c, tibiaFolder: { ...c.tibiaFolder, path } } })
+      host.tibiaFolder.restart()
+      return { path }
     },
 
     'ocr.profiles.list': () => scans.listProfiles(db),

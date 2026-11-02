@@ -9,9 +9,9 @@ App de escritorio local (Windows) con las herramientas de Tibia Tools v1 y un m�
 | Sección | Qué hace |
 |---|---|
 | Inicio | Rashid (con el día de servidor), boosted creature/boss (TibiaData), estado de los datos, cobertura del Market |
-| Herramientas | Share Exp (corregido), Split Loot, Imbuements (24, con iconos y precios del Market), seguimiento de personajes |
+| Herramientas | Share Exp (corregido), Split Loot, Imbuements (24, la opción más barata entre materiales, Gold Tokens y scrolls; items imbuidos con costo por hora y por hunt), seguimiento de personajes |
 | Catálogo | 5,121 items con ID de cliente, categoría, precios NPC e iconos de TibiaWiki BR (caché local); 90 mundos con PvP/BattlEye/transferencia |
-| Collector | Captura de ventana o pantalla con región, atajo global, importación de imágenes y captura asistida (detecta cambios con debounce) |
+| Collector | Importa sola cada captura de la tecla de screenshot de Tibia (carpeta del cliente); también captura de pantalla con región, atajo global, importación manual y captura asistida |
 | Revisión OCR | OCR por plantillas de glifos en un worker, tabla editable, correcciones auditadas, snapshots inmutables; editor de perfiles y calibración |
 | Market / Histórico | Order books por mundo e item con procedencia y antigüedad; P25/P50/P75, volatilidad y eventos inferidos (nunca "vendido confirmado") |
 | Tibia Coins | Cotizaciones por mundo, spread e histórico, sin mezclar lados del mercado |
@@ -44,6 +44,7 @@ npm run dev
 | `npm run seed:fetch` | Regenera `seed/items.json` y `seed/worlds.json` desde tibiamarket.top y TibiaData |
 | `npm run seed:imbuements -- <pagina-guardada>` | Regenera `seed/imbuements.json` desde una copia guardada de la página de TibiaWiki |
 | `npm run ocr:eval -- --dataset <carpeta>` | Exactitud del OCR contra capturas anotadas |
+| `npm run icon` | Regenera el icono (emblema de Lumbre) desde `resources/brand/logo-lumbre.png` |
 
 ## Datos locales
 

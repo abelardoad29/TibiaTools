@@ -34,6 +34,17 @@ async function toPng(canvas: HTMLCanvasElement): Promise<Uint8Array> {
   return new Uint8Array(await blob.arrayBuffer())
 }
 
+// Juegos con aceleración por GPU (como Tibia) pueden capturarse en negro al elegir su ventana.
+const BLACK_FRAME_MSG =
+  'La captura salió en negro: Windows no entrega la imagen de la ventana de Tibia (aceleración por GPU). Usa la carpeta de screenshots de Tibia (arriba) o elige «Pantalla» como fuente y marca la región del Market.'
+
+function isBlackFrame(canvas: HTMLCanvasElement): boolean {
+  const sig = signature(canvas)
+  let max = 0
+  for (const v of sig.data) if (v > max) max = v
+  return max < 12
+}
+
 function signature(canvas: HTMLCanvasElement): Gray {
   const ctx = canvas.getContext('2d')!
   const img = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -95,7 +106,9 @@ export function CollectorPage() {
     if (!v || !stream || v.videoWidth === 0) return setError(new Error('Primero elige una ventana o pantalla'))
     setError(null)
     try {
-      await save(await toPng(grabFrame(v, region)), 'manual')
+      const frame = grabFrame(v, region)
+      if (isBlackFrame(frame)) return setError(new Error(BLACK_FRAME_MSG))
+      await save(await toPng(frame), 'manual')
     } catch (e) {
       setError(e)
     }
@@ -106,7 +119,7 @@ export function CollectorPage() {
   return (
     <Page
       title="Collector"
-      subtitle="Captura manual o asistida de la ventana del cliente. La app solo lee la imagen: no hace clics ni envía teclas."
+      subtitle="Importa los screenshots del cliente o captura la pantalla. La app solo lee imágenes: no hace clics ni envía teclas."
       actions={
         <>
           <Button onClick={() => importer.mutate(undefined)} busy={importer.isPending}>
@@ -118,6 +131,7 @@ export function CollectorPage() {
         </>
       }
     >
+      <TibiaFolderCard />
       <ErrorBox error={error ?? importer.error} />
       {importer.data && (
         <p className="text-sm text-muted">
@@ -163,7 +177,7 @@ export function CollectorPage() {
           {stream ? (
             <RegionVideo videoRef={videoRef} region={region} selecting={selecting} onRegion={(r) => (setRegion(r), setSelecting(false))} />
           ) : (
-            !sources.data && <Empty>Pulsa «Elegir fuente» y selecciona la ventana del cliente de Tibia (en modo ventana se captura mejor).</Empty>
+            !sources.data && <Empty>Para Tibia usa la carpeta de screenshots (arriba): capturar su ventana suele salir en negro. Aquí puedes elegir «Pantalla» y marcar la región del Market.</Empty>
           )}
           {region && (
             <p className="mt-2 text-xs text-muted">
@@ -289,6 +303,10 @@ function Assisted({ videoRef, region, enabled, onSave }: { videoRef: React.RefOb
       const v = videoRef.current
       if (!v || v.videoWidth === 0 || busy) return
       const frame = grabFrame(v, region)
+      if (isBlackFrame(frame)) {
+        setStatus('La fuente se ve en negro: usa la carpeta de screenshots de Tibia o la pantalla completa')
+        return
+      }
       const sig = signature(frame)
       const diffPrev = prev ? meanAbsDiff(prev, sig) : 0
       prev = sig
@@ -383,6 +401,61 @@ function Assisted({ videoRef, region, enabled, onSave }: { videoRef: React.RefOb
             ))}
           </div>
         )}
+      </div>
+    </Card>
+  )
+}
+
+/** Importa los screenshots que el cliente de Tibia guarda en su carpeta (vía recomendada). */
+function TibiaFolderCard() {
+  const settings = useApi('app.settings.get', undefined)
+  const status = useApi('collector.tibiaFolder.status', undefined, { refetchInterval: 15_000 })
+  const save = useApiMutation('app.settings.set', ['app.settings.get', 'collector.tibiaFolder.status'])
+  const pick = useApiMutation('collector.tibiaFolder.pick', ['app.settings.get', 'collector.tibiaFolder.status'])
+  const importer = useApiMutation('collector.tibiaFolder.importExisting', ['collector.screenshots.list', 'collector.tibiaFolder.status'])
+  const c = settings.data?.collector
+  if (!c) return null
+  const tf = c.tibiaFolder
+  const onlyHotkey = tf.types.length === 1 && tf.types[0] === 'Hotkey'
+  const st = status.data
+  return (
+    <Card
+      title="Capturas del cliente de Tibia (recomendado)"
+      actions={
+        <Button onClick={() => pick.mutate(undefined)} busy={pick.isPending}>
+          <FolderInput className="size-4" /> Cambiar carpeta
+        </Button>
+      }
+    >
+      <div className="flex flex-col gap-2 text-sm">
+        <p className="text-muted">
+          Toma la captura con la tecla de screenshot del propio Tibia: el cliente la guarda en su carpeta y Tibia Tools la importa sola, sin capturar la ventana (que puede salir en negro).
+        </p>
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <span className="font-mono">{st?.path ?? tf.path ?? '…'}</span>
+          {st && (st.exists ? <Badge tone="good">carpeta encontrada</Badge> : <Badge tone="bad">no existe</Badge>)}
+          {st?.watching && <Badge tone="info">vigilando</Badge>}
+          {st && <span className="text-muted">{st.matchingFiles} capturas {onlyHotkey ? 'de la tecla de screenshot' : 'en total'} · {st.imported} importadas en esta sesión</span>}
+          {st?.error && <span className="text-bad">{st.error}</span>}
+        </div>
+        <div className="flex flex-wrap items-center gap-4">
+          <Toggle checked={tf.enabled} onChange={(v) => save.mutate({ collector: { ...c, tibiaFolder: { ...tf, enabled: v } } })} label="Importar automáticamente las nuevas" />
+          <Toggle
+            checked={onlyHotkey}
+            onChange={(v) => save.mutate({ collector: { ...c, tibiaFolder: { ...tf, types: v ? ['Hotkey'] : [] } } })}
+            label="Solo las de la tecla de screenshot (*_Hotkey.png)"
+          />
+          <Button onClick={() => importer.mutate({ sinceDays: 7 })} busy={importer.isPending} disabled={!st?.exists}>
+            Importar las de los últimos 7 días
+          </Button>
+        </div>
+        {importer.data && (
+          <p className="text-xs text-muted">
+            {importer.data.imported.length} importadas, {importer.data.skipped} ya estaban.
+            {importer.data.errors.length > 0 && <span className="text-warn"> Errores: {importer.data.errors.join('; ')}</span>}
+          </p>
+        )}
+        <ErrorBox error={pick.error ?? importer.error ?? save.error} />
       </div>
     </Card>
   )

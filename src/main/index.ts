@@ -15,6 +15,7 @@ import { getSettings } from './services/settings'
 import { refreshCharacters } from './services/tools'
 import { runAlerts } from './services/alerts'
 import { restoreBackup } from './services/backup'
+import { createTibiaFolderWatcher } from './services/tibia-folder'
 
 // Datos en %LOCALAPPDATA%\TibiaTools (no en Roaming: las capturas pueden pesar mucho).
 // La caché de Chromium va en una subcarpeta aparte para no mezclarla con los datos.
@@ -34,6 +35,7 @@ let db: Db | null = null
 let selectedSourceId: string | null = null
 let currentHotkey: string | null = null
 const timers: NodeJS.Timeout[] = []
+let stopTibiaFolder: () => void = () => undefined
 
 const DEV_URL = process.env.ELECTRON_RENDERER_URL
 
@@ -118,6 +120,8 @@ async function boot(): Promise<void> {
   loadSeeds(db)
   const ctx: AppContext = { db, paths, http: createHttpClient(db, log), log, version: app.getVersion(), now: () => new Date() }
   log.info(`Tibia Tools ${ctx.version} iniciado; datos en ${paths.root}`)
+  const tibiaFolder = createTibiaFolderWatcher(ctx, (shots) => emit('collector.imported', { count: shots.length }))
+  stopTibiaFolder = () => tibiaFolder.stop()
 
   const host: Host = {
     emit,
@@ -138,6 +142,11 @@ async function boot(): Promise<void> {
       selectedSourceId = id
     },
     setHotkey,
+    pickFolder: async (title) => {
+      const r = await dialog.showOpenDialog(win!, { title, properties: ['openDirectory'] })
+      return r.canceled ? null : (r.filePaths[0] ?? null)
+    },
+    tibiaFolder,
     restoreBackup: async (file) => {
       const current = ctx.db
       restoreBackup(paths, file, () => current.close(), current)
@@ -196,6 +205,7 @@ async function boot(): Promise<void> {
 
   win = createWindow()
   setHotkey(getSettings(ctx.db).collector.hotkey)
+  tibiaFolder.restart()
 
   const trackerTick = async () => {
     const s = getSettings(ctx.db)
@@ -236,6 +246,7 @@ app.whenReady().then(boot).catch((e) => {
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll()
+  stopTibiaFolder()
   for (const t of timers) clearInterval(t)
   try {
     db?.close()

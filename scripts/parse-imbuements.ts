@@ -48,7 +48,7 @@ writeFileSync(
       source: 'https://www.tibiawiki.com.br/wiki/Imbuements',
       parsedAt: new Date().toISOString(),
       // Basic usa el material 1, Intricate 1+2 y Powerful 1+2+3 (acumulativo).
-      // Las tarifas del santuario salen de la misma página ("Custo de 7 500 / 60 000 / 250 000 gps").
+      // Tarifas del santuario: misma página ("Custo de 7 500 / 60 000 / 250 000 gps") y noticia oficial del 12-06-2025.
       tiers: [
         { tier: 'Basic', materials: 1, shrineFeeGp: 7_500 },
         { tier: 'Intricate', materials: 2, shrineFeeGp: 60_000 },
@@ -56,6 +56,9 @@ writeFileSync(
       ],
       // Según la página, Yana cambia Gold Tokens por materiales solo de estos tres.
       tokenTradeable: ['Strike', 'Vampirism', 'Void'],
+      // Paquete de materiales de cada tier en Gold Tokens (NabBot / TibiaWiki) y duración de 20 h.
+      tokensPerTier: { Basic: 2, Intricate: 4, Powerful: 6 },
+      durationHours: 20,
       imbuements,
     },
     null,

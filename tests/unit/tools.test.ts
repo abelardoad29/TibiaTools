@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest'
 import { rashidLocation, serverWeekday } from '@core/domain/tools/rashid'
 import { canShare, shareRange } from '@core/domain/tools/share-exp'
 import { parsePartySession, splitLoot } from '@core/domain/tools/split-loot'
-import { imbuementCost, type ImbuementDef, type TierDef } from '@core/domain/tools/imbuements'
+import { huntCost, imbuedItemCost, imbuementCost, type ImbuementDef, type ImbuementPricing, type TierDef } from '@core/domain/tools/imbuements'
 import { detectCharacterEvents } from '@core/domain/tools/characters'
 import { matchScore, normalizeName } from '@core/domain/catalog/names'
+import { groupNpcTrades } from '@core/domain/catalog/npcs'
 
 describe('rashid', () => {
   it('usa el día de servidor: antes de las 10:00 CET sigue el día anterior', () => {
@@ -101,21 +102,59 @@ describe('imbuements', () => {
       { qty: 5, item: 'Piece of Dead Brain' },
     ],
   }
-  const powerful: TierDef = { tier: 'Powerful', materials: 3, shrineFeeGp: 250_000 }
-  it('suma materiales + santuario', () => {
-    const c = imbuementCost(vamp, powerful, { 'Vampire Teeth': 1_000, 'Bloody Pincers': 2_000, 'Piece of Dead Brain': 5_000 })
-    expect(c.materialsTotal).toBe(25_000 + 30_000 + 25_000)
-    expect(c.total).toBe(80_000 + 250_000)
+  const tiers: TierDef[] = [
+    { tier: 'Basic', materials: 1, shrineFeeGp: 7_500 },
+    { tier: 'Intricate', materials: 2, shrineFeeGp: 60_000 },
+    { tier: 'Powerful', materials: 3, shrineFeeGp: 250_000 },
+  ]
+  const powerful = tiers[2]!
+  const pricing = (prices: Record<string, number>, extra: Partial<ImbuementPricing> = {}): ImbuementPricing => ({
+    prices,
+    goldTokenPrice: null,
+    tokensPerTier: { Basic: 2, Intricate: 4, Powerful: 6 },
+    tokenTradeable: true,
+    scrollPrice: null,
+    ...extra,
+  })
+  const P = { 'Vampire Teeth': 1_000, 'Bloody Pincers': 2_000, 'Piece of Dead Brain': 5_000 }
+
+  it('materiales + santuario y costo por hora (20 h)', () => {
+    const c = imbuementCost(vamp, powerful, tiers, pricing(P))
+    const mats = c.options.find((o) => o.kind === 'materials')!
+    expect(mats.total).toBe(25_000 + 30_000 + 25_000 + 250_000)
+    expect(mats.perHour).toBe(330_000 / 20)
+    expect(c.best).toBe(mats)
   })
   it('no asume 0 si falta un precio', () => {
-    const c = imbuementCost(vamp, powerful, { 'Vampire Teeth': 1_000 })
-    expect(c.total).toBeNull()
-    expect(c.missingPrices).toEqual(['Bloody Pincers', 'Piece of Dead Brain'])
+    const c = imbuementCost(vamp, powerful, tiers, pricing({ 'Vampire Teeth': 1_000 }))
+    expect(c.options[0]!.total).toBeNull()
+    expect(c.options[0]!.missing).toEqual(['Bloody Pincers', 'Piece of Dead Brain'])
+    expect(c.best).toBeNull()
   })
-  it('compara con Gold Tokens solo si hay datos', () => {
-    const c = imbuementCost(vamp, powerful, { 'Vampire Teeth': 1_000, 'Bloody Pincers': 2_000, 'Piece of Dead Brain': 5_000 }, { tokensForTier: 6, goldTokenPrice: 10_000, tradeable: true })
-    expect(c.tokenAlternative).toEqual({ tokens: 6, tokenPrice: 10_000, total: 310_000, cheaper: 'tokens' })
-    expect(imbuementCost(vamp, powerful, {}, { tokensForTier: null, goldTokenPrice: 1, tradeable: true }).tokenAlternative).toBeNull()
+  it('evalúa todas las mezclas de paquetes de tokens (2/4/6) y elige la más barata', () => {
+    const all = imbuementCost(vamp, powerful, tiers, pricing(P, { goldTokenPrice: 10_000 }))
+    expect(all.options.filter((o) => o.kind === 'tokens').map((o) => o.total)).toEqual([20_000 + 30_000 + 25_000 + 250_000, 40_000 + 25_000 + 250_000, 60_000 + 250_000])
+    expect(all.best!.label).toMatch(/Todo con 6 Gold Tokens/)
+    // Si el último material es barato, conviene el paquete Intricate con tokens + comprar el resto.
+    const mix = imbuementCost(vamp, powerful, tiers, pricing({ ...P, 'Piece of Dead Brain': 100 }, { goldTokenPrice: 10_000 }))
+    expect(mix.best!.total).toBe(40_000 + 500 + 250_000)
+    expect(mix.best!.marketMaterials).toEqual(['Piece of Dead Brain'])
+  })
+  it('sin tokens para imbuements que Yana no vende', () => {
+    const c = imbuementCost({ ...vamp, name: 'Scorch' }, powerful, tiers, pricing(P, { goldTokenPrice: 1, tokenTradeable: false }))
+    expect(c.options.some((o) => o.kind === 'tokens')).toBe(false)
+  })
+  it('considera el scroll del Market como alternativa', () => {
+    const c = imbuementCost(vamp, powerful, tiers, pricing(P, { scrollPrice: 300_000 }))
+    expect(c.best!.kind).toBe('scroll')
+  })
+  it('item con varios slots y costo por hunt', () => {
+    const slot = imbuementCost(vamp, powerful, tiers, pricing(P))
+    const item = imbuedItemCost([slot, slot, null])
+    expect(item.perCycle).toBe(660_000)
+    expect(item.perHour).toBe(33_000)
+    expect(huntCost([item], 2)).toEqual({ perHour: 33_000, perHunt: 66_000 })
+    expect(imbuedItemCost([imbuementCost(vamp, powerful, tiers, pricing({}))]).perCycle).toBeNull()
   })
 })
 
@@ -138,5 +177,17 @@ describe('nombres', () => {
     expect(matchScore('gmp', 'great mana potion')).toBeGreaterThan(0)
     expect(matchScore('mana', 'great mana potion')).toBeGreaterThan(matchScore('mna', 'great mana potion'))
     expect(matchScore('xyz', 'great mana potion')).toBe(0)
+  })
+})
+
+describe('NPCs del catálogo', () => {
+  it('agrupa a Rashid (7 ciudades, mismo precio) en una sola fila', () => {
+    const cities = ['Darashia City', 'Svargrond City', 'Edron Castle', 'Carlin City', 'Ankrahmun City', 'Liberty Bay City', 'Port Hope City']
+    const rows = [...cities.map((location) => ({ name: 'Rashid', location, price: 11_000, currencyId: 0 })), { name: 'Tamoril', location: 'Edron', price: 9_000, currencyId: 0 }]
+    const g = groupNpcTrades(rows, 'buy')
+    expect(g).toHaveLength(2)
+    expect(g[0]).toMatchObject({ name: 'Rashid', price: 11_000 })
+    expect(g[0]!.locations).toHaveLength(7)
+    expect(groupNpcTrades(rows, 'sell')[0]!.name).toBe('Tamoril')
   })
 })

@@ -61,6 +61,12 @@ Componentes 0–100: ROI (100 al llegar al ROI configurado; 50 % por defecto), l
 
 Por nivel de precio: cantidad reducida → `amount_reduced` + `possibly_filled`; nivel que desaparece → `possibly_filled` (si era el mejor precio), `possibly_removed` (si no) o `expired_unknown` (si vencía antes); nivel nuevo → `first_seen`; desaparece y aparece otro con la misma cantidad → `price_changed` (confianza baja). Nunca hay "vendido confirmado".
 
+## Imbuements
+
+- Tarifas del santuario 7,500 / 60,000 / 250,000 gp (100 % de éxito desde el 12-06-2025); duración 20 h de uso (el tiempo corre con el item equipado y fuera de zona de protección).
+- Opciones evaluadas: todos los materiales en el Market; paquetes de Yana con Gold Tokens (Basic 2, Intricate 4, Powerful 6 tokens, solo Strike / Vampirism / Void) combinados con comprar el resto en el Market; y el scroll ya inscrito si tiene precio en el Market. Se elige la más barata con todos los precios.
+- **Mis items imbuidos**: suma los slots de cada item; costo por ciclo (20 h), por hora y por hunt (horas configurables).
+
 ## Tibia Coins
 
 Comprar TC consume sell offers; vender TC consume buy offers. El costo de la transferencia en GP se calcula comprando los TC necesarios en el Market del **origen**. La app advierte que hay que confirmar que esas TC sirven en la Store.

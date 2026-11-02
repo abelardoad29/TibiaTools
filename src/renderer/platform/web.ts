@@ -127,7 +127,7 @@ const handlers: WebHandlers = {
   },
   'tools.imbuements': async () => {
     const s = (await import('@seed/imbuements.json')).default as unknown as Out<'tools.imbuements'>
-    return { tiers: s.tiers, imbuements: s.imbuements, tokenTradeable: s.tokenTradeable, source: s.source }
+    return { tiers: s.tiers, imbuements: s.imbuements, tokenTradeable: s.tokenTradeable, tokensPerTier: s.tokensPerTier, durationHours: s.durationHours, source: s.source, notes: s.notes }
   },
   'tools.imbuements.prices': async ({ items }) => Object.fromEntries(items.map((n) => [n, null])),
 }

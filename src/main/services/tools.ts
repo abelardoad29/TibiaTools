@@ -1,4 +1,4 @@
-import type { BoostedInfo, CharacterEventRow, TrackedCharacter } from '@shared/api'
+import type { BoostedInfo, CharacterEventRow, ImbuementCatalog, TrackedCharacter } from '@shared/api'
 import type { DataSource } from '@shared/provenance'
 import imbuementsSeed from '@seed/imbuements.json'
 import { detectCharacterEvents, deathKey } from '@core/domain/tools/characters'
@@ -19,9 +19,9 @@ export async function boosted(ctx: AppContext, refresh: boolean): Promise<Booste
   }
 }
 
-export function imbuements() {
-  const s = imbuementsSeed as { source: string; tiers: TierDef[]; imbuements: ImbuementDef[]; tokenTradeable: string[] }
-  return { tiers: s.tiers, imbuements: s.imbuements, tokenTradeable: s.tokenTradeable, source: s.source }
+export function imbuements(): ImbuementCatalog {
+  const s = imbuementsSeed as unknown as ImbuementCatalog & { tiers: TierDef[]; imbuements: ImbuementDef[] }
+  return { tiers: s.tiers, imbuements: s.imbuements, tokenTradeable: s.tokenTradeable, tokensPerTier: s.tokensPerTier, durationHours: s.durationHours, source: s.source, notes: s.notes }
 }
 
 /** Mejor sell offer conocida de cada material en un mundo (comprar al instante). */
@@ -57,7 +57,7 @@ export function listCharacters(db: Db): TrackedCharacter[] {
 
 export async function addCharacter(ctx: AppContext, name: string): Promise<TrackedCharacter> {
   const snap = await tibiaData(ctx.http).character(name)
-  if (!snap) throw new Error(`Personaje "${name}" no encontrado en TibiaData`)
+  if (!snap) throw new Error(`No existe un personaje llamado «${name.trim()}» (según TibiaData). Revisa la ortografía.`)
   run(
     ctx.db,
     `INSERT INTO tracked_characters (name, world, level, vocation, known_deaths_json, last_checked_at, created_at) VALUES (?,?,?,?,?,?,?)
