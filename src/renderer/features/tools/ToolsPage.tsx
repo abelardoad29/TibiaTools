@@ -14,7 +14,7 @@ type Tab = 'share' | 'loot' | 'imbuements' | 'characters'
 export function ToolsPage() {
   const [tab, setTab] = useState<Tab>('share')
   return (
-    <Page title="Herramientas" subtitle="Las herramientas de Tibia Tools v1, corregidas.">
+    <Page title="Herramientas" subtitle="Share exp, reparto de loot, costo de imbuements y seguimiento de personajes.">
       <Tabs
         value={tab}
         onChange={setTab}

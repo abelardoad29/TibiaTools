@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { RefreshCw } from 'lucide-react'
+import { Bell, Crosshair, RefreshCw, ScanText } from 'lucide-react'
 import creatureGifs from '@seed/creature_gifs.json'
 import { rashidLocation } from '@core/domain/tools/rashid'
 import { platform } from '../../platform'
 import { useApi } from '../../lib/api'
 import { formatDateTime } from '../../lib/format'
-import { Freshness, ProvenanceBadge } from '../../components/data'
-import { Button, Card, DataTable, Empty, ErrorBox, Page, Spinner, Stat } from '../../components/ui'
+import { Freshness, ProvenanceBadge, useMyWorlds } from '../../components/data'
+import { Badge, Button, Card, DataTable, Empty, Page, Spinner } from '../../components/ui'
 
 // Fallback de imágenes heredado de la v1: GIFs de TibiaWiki BR por nombre de criatura.
 const GIFS = creatureGifs as Record<string, string>
+const nf = new Intl.NumberFormat('es-MX')
 
 function Creature({ title, name, imageUrl }: { title: string; name: string | null; imageUrl: string | null }) {
   const [src, setSrc] = useState(imageUrl ?? (name ? GIFS[name] : null) ?? null)
@@ -25,6 +26,49 @@ function Creature({ title, name, imageUrl }: { title: string; name: string | nul
   )
 }
 
+/** Atajo con contador: lleva a la sección donde hay algo pendiente. */
+function Pending({ to, icon: Icon, label, count, tone }: { to: string; icon: typeof Bell; label: string; count: number | null; tone: 'bad' | 'accent' }) {
+  const active = (count ?? 0) > 0
+  return (
+    <Link to={to} className="flex items-center gap-3 rounded-lg border border-line bg-panel-2 px-3 py-2 hover:border-accent">
+      <Icon className={`size-5 ${active ? (tone === 'bad' ? 'text-bad' : 'text-accent') : 'text-muted'}`} aria-hidden />
+      <span className="text-sm">{label}</span>
+      <span className={`num ml-auto text-lg font-semibold ${active ? '' : 'text-muted'}`}>{count ?? '—'}</span>
+    </Link>
+  )
+}
+
+/** Un mundo propio: conectados ahora y los bosses con más chance hoy. */
+function MyWorld({ world, online }: { world: string; online: number | null }) {
+  const bosses = useApi('bosses.outlook', { world }, { refetchInterval: 15 * 60_000 })
+  const top = (bosses.data?.rows ?? []).filter((r) => r.tier === 'high' || r.tier === 'medium').sort((a, b) => (b.chance ?? 0) - (a.chance ?? 0)).slice(0, 3)
+  return (
+    <div className="flex flex-col gap-2 rounded-lg border border-line bg-panel-2 p-3">
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="font-semibold">{world}</span>
+        <span className="text-xs text-muted">{online !== null ? `${nf.format(online)} online` : ''}</span>
+      </div>
+      {bosses.isLoading ? (
+        <Spinner />
+      ) : top.length ? (
+        <ul className="flex flex-col gap-0.5 text-sm">
+          {top.map((r) => (
+            <li key={r.name} className="flex items-center justify-between gap-2">
+              <span className="truncate">{r.name}</span>
+              <Badge tone={r.tier === 'high' ? 'good' : 'warn'}>{Math.round((r.chance ?? 0) * 100)} %</Badge>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <span className="text-xs text-muted">Ningún boss con chance alta o media hoy.</span>
+      )}
+      <Link to="/bosses" className="mt-auto text-xs text-accent">
+        Todos los bosses →
+      </Link>
+    </div>
+  )
+}
+
 export function OverviewPage() {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
@@ -34,13 +78,19 @@ export function OverviewPage() {
   const rashid = rashidLocation(now)
   const boosted = useApi('tools.boosted', { refresh: false })
   const desktop = platform.kind === 'electron'
-  const info = useApi('app.info', undefined)
+  const mine = useMyWorlds()
+  const live = useApi('catalog.worlds.live', undefined, { enabled: mine.length > 0, refetchInterval: 60_000 })
   const coverage = useApi('market.coverage', undefined, { enabled: desktop })
   const runs = useApi('analysis.runs.list', { limit: 5 }, { enabled: desktop })
   const events = useApi('characters.events', { limit: 8 }, { enabled: desktop })
+  // Mismas consultas que el menú lateral: comparten caché.
+  const online = useApi('watch.online', undefined, { enabled: desktop })
+  const shots = useApi('collector.screenshots.list', { status: null, limit: 100 }, { enabled: desktop })
+  const unread = useApi('alerts.events.list', { unreadOnly: true, limit: 50 }, { enabled: desktop })
+  const onlineByWorld = new Map((live.data?.worlds ?? []).map((w) => [w.name, w.playersOnline]))
 
   return (
-    <Page title="Inicio" subtitle="Resumen del día y estado de tus datos.">
+    <Page title="Inicio" subtitle="Lo de hoy en Tibia y en tus mundos.">
       <div className="grid gap-4 lg:grid-cols-[2fr_3fr]">
         <Card
           title="Hoy en Tibia"
@@ -66,23 +116,32 @@ export function OverviewPage() {
           </div>
         </Card>
 
-        <Card title="Estado de los datos">
-          {info.isLoading ? (
-            <Spinner />
-          ) : info.error ? (
-            <ErrorBox error={info.error} />
-          ) : (
-            <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
-              <Stat label="Mundos activos" value={info.data!.counts.worlds} />
-              <Stat label="Items en catálogo" value={info.data!.counts.items.toLocaleString('es')} />
-              <Stat label="Capturas" value={info.data!.counts.screenshots} />
-              <Stat label="Scans propios" value={info.data!.counts.ownScans} />
-              <Stat label="Scans de terceros" value={info.data!.counts.thirdPartyScans} />
-              <Stat label="Esquema DB" value={`v${info.data!.schemaVersion}`} hint={info.data!.platform === 'web' ? 'companion web' : undefined} />
-            </div>
-          )}
-        </Card>
+        {desktop ? (
+          <Card title="Mis mundos hoy" actions={<Link className="text-xs text-accent" to="/worlds">Elegir mundos →</Link>}>
+            {mine.length ? (
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                {mine.slice(0, 6).map((w) => (
+                  <MyWorld key={w} world={w} online={onlineByWorld.get(w) ?? null} />
+                ))}
+              </div>
+            ) : (
+              <Empty>Marca con ★ en Mundos los mundos en los que juegas: aquí verás sus conectados y los bosses con chance de hoy.</Empty>
+            )}
+          </Card>
+        ) : (
+          <Card title="Mis mundos">
+            <Empty>Los bosses y la vigilancia necesitan la app de escritorio.</Empty>
+          </Card>
+        )}
       </div>
+
+      {desktop && (
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Pending to="/hunted" icon={Crosshair} label="Vigilados conectados" count={online.data?.length ?? null} tone="bad" />
+          <Pending to="/ocr" icon={ScanText} label="Capturas por revisar" count={shots.data ? shots.data.filter((s) => s.status === 'new' || s.status === 'processed').length : null} tone="accent" />
+          <Pending to="/alerts" icon={Bell} label="Alertas sin leer" count={unread.data?.length ?? null} tone="accent" />
+        </div>
+      )}
 
       {desktop && (
         <div className="grid gap-4 lg:grid-cols-2">
@@ -91,12 +150,12 @@ export function OverviewPage() {
               rows={coverage.data ?? []}
               rowKey={(r) => r.world}
               pageSize={8}
-              empty="Todavía no hay datos de Market. Captura una pantalla en Collector o importa datos de terceros en Market."
+              empty="Todavía no hay datos de Market. Toma screenshots del Market con la tecla de Tibia o baja los precios de terceros en Market."
               columns={[
-                { key: 'world', header: 'Mundo', cell: (r) => r.world, sort: (r) => r.world },
-                { key: 'items', header: 'Items', cell: (r) => r.items, sort: (r) => r.items, align: 'right' },
+                { key: 'world', header: 'Mundo', cell: (r) => (mine.includes(r.world) ? `★ ${r.world}` : r.world), sort: (r) => (mine.includes(r.world) ? `0${r.world}` : `1${r.world}`) },
+                { key: 'items', header: 'Items', cell: (r) => nf.format(r.items), sort: (r) => r.items, align: 'right' },
                 { key: 'own', header: 'Propios', cell: (r) => r.ownScans, sort: (r) => r.ownScans, align: 'right' },
-                { key: 'tp', header: 'Terceros', cell: (r) => r.thirdPartyScans, sort: (r) => r.thirdPartyScans, align: 'right' },
+                { key: 'tp', header: 'Terceros', cell: (r) => nf.format(r.thirdPartyScans), sort: (r) => r.thirdPartyScans, align: 'right' },
                 { key: 'last', header: 'Último dato', cell: (r) => <Freshness at={r.lastObservedAt} />, sort: (r) => r.lastObservedAt },
               ]}
             />

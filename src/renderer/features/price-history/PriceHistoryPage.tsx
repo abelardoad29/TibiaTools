@@ -58,7 +58,7 @@ export function PriceHistoryPage() {
   const points = (hist.data?.points ?? []).map((p) => ({ t: new Date(p.observedAt).getTime(), bestSell: p.bestSell, bestBuy: p.bestBuy, source: p.source }))
 
   return (
-    <Page title="Histórico" subtitle="Precios observados por mundo e item. La metodología está en docs/ECONOMIC_MODEL.md." actions={<Toggle checked={thirdParty} onChange={setThirdParty} label="Incluir terceros" />}>
+    <Page title="Histórico" subtitle="Cómo se movió el precio de un item en un mundo: tus capturas y, si quieres, los datos de terceros." actions={<Toggle checked={thirdParty} onChange={setThirdParty} label="Incluir terceros" />}>
       <div className="flex flex-wrap items-end gap-3">
         <Field label="Mundo">
           <WorldPicker value={w} onChange={setWorld} allowEmpty />

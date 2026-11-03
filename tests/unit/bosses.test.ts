@@ -55,9 +55,9 @@ describe('boss hunter', () => {
     expect(late).toMatchObject({ overdue: true, maybeAlive: true, chance: 0.5 })
   })
 
-  it('sin registro: cuenta desde el inicio del historial', () => {
+  it('sin registro (mundo nuevo): no inventa una probabilidad', () => {
     const none = bossOutlook(stats, [], '2026-11-04', '2026-11-01')
-    expect(none).toMatchObject({ lastSeen: null, noRecord: true, daysSince: 3, chance: 0.5 })
+    expect(none).toMatchObject({ lastSeen: null, noRecord: true, daysSince: 3, chance: null, tier: 'unknown', windowOpensIn: null })
   })
 
   it('día de estadística: se actualiza ~3 a. m. de Berlín', () => {

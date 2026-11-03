@@ -45,25 +45,38 @@ interface NavItem {
   icon: typeof Home
   element: ComponentType
   desktopOnly?: boolean
+  /** Sección del menú; sin sección va arriba (Inicio) o abajo (Ajustes). */
+  group?: string
 }
 
+// El menú sigue el flujo de uso: lo del día a día, el Market de un mundo y el comercio entre mundos.
 const NAV: NavItem[] = [
   { path: '/', label: 'Inicio', icon: Home, element: OverviewPage },
-  { path: '/tools', label: 'Herramientas', icon: Wrench, element: ToolsPage },
-  { path: '/hunted', label: 'Hunted', icon: Crosshair, element: HuntedPage, desktopOnly: true },
-  { path: '/bosses', label: 'Bosses', icon: Skull, element: BossesPage, desktopOnly: true },
-  { path: '/worlds', label: 'Mundos', icon: Globe2, element: WorldsPage },
-  { path: '/collector', label: 'Collector', icon: Camera, element: CollectorPage, desktopOnly: true },
-  { path: '/ocr', label: 'Revisión OCR', icon: ScanText, element: OcrReviewPage, desktopOnly: true },
-  { path: '/market', label: 'Market', icon: Store, element: MarketExplorerPage, desktopOnly: true },
-  { path: '/history', label: 'Histórico', icon: ChartLine, element: PriceHistoryPage, desktopOnly: true },
-  { path: '/tc', label: 'Tibia Coins', icon: Coins, element: TcMarketPage, desktopOnly: true },
-  { path: '/arbitrage', label: 'Arbitraje', icon: ArrowLeftRight, element: ArbitragePage, desktopOnly: true },
-  { path: '/transfers', label: 'Transferencias', icon: Plane, element: TransfersPage, desktopOnly: true },
-  { path: '/cart', label: 'Carrito', icon: ShoppingCart, element: CartPage, desktopOnly: true },
-  { path: '/alerts', label: 'Alertas', icon: Bell, element: AlertsPage, desktopOnly: true },
+  { path: '/hunted', label: 'Hunted', icon: Crosshair, element: HuntedPage, desktopOnly: true, group: 'Juego' },
+  { path: '/bosses', label: 'Bosses', icon: Skull, element: BossesPage, desktopOnly: true, group: 'Juego' },
+  { path: '/worlds', label: 'Mundos', icon: Globe2, element: WorldsPage, group: 'Juego' },
+  { path: '/tools', label: 'Herramientas', icon: Wrench, element: ToolsPage, group: 'Juego' },
+  { path: '/collector', label: 'Collector', icon: Camera, element: CollectorPage, desktopOnly: true, group: 'Market' },
+  { path: '/ocr', label: 'Revisión OCR', icon: ScanText, element: OcrReviewPage, desktopOnly: true, group: 'Market' },
+  { path: '/market', label: 'Market', icon: Store, element: MarketExplorerPage, desktopOnly: true, group: 'Market' },
+  { path: '/history', label: 'Histórico', icon: ChartLine, element: PriceHistoryPage, desktopOnly: true, group: 'Market' },
+  { path: '/tc', label: 'Tibia Coins', icon: Coins, element: TcMarketPage, desktopOnly: true, group: 'Market' },
+  { path: '/arbitrage', label: 'Arbitraje', icon: ArrowLeftRight, element: ArbitragePage, desktopOnly: true, group: 'Entre mundos' },
+  { path: '/transfers', label: 'Transferencias', icon: Plane, element: TransfersPage, desktopOnly: true, group: 'Entre mundos' },
+  { path: '/cart', label: 'Carrito', icon: ShoppingCart, element: CartPage, desktopOnly: true, group: 'Entre mundos' },
+  { path: '/alerts', label: 'Alertas', icon: Bell, element: AlertsPage, desktopOnly: true, group: 'Entre mundos' },
   { path: '/settings', label: 'Ajustes', icon: SettingsIcon, element: SettingsPage },
 ]
+
+/** Contador del menú: solo visual (el nombre accesible del enlace no cambia). */
+function NavBadge({ count, tone }: { count: number; tone: 'accent' | 'bad' }) {
+  if (count <= 0) return null
+  return (
+    <span aria-hidden className={clsx('ml-auto rounded-full px-1.5 text-[11px] font-semibold', tone === 'bad' ? 'bg-bad text-white' : 'bg-accent text-accent-ink')}>
+      {count}
+    </span>
+  )
+}
 
 function DesktopOnly({ label }: { label: string }) {
   return (
@@ -93,8 +106,16 @@ function Layout() {
   const qc = useQueryClient()
   const [toast, setToast] = useState<string | null>(null)
   const [urgent, setUrgent] = useState(false)
-  const [watchOnline, setWatchOnline] = useState(0)
-  const { data: unread = [] } = useApi('alerts.events.list', { unreadOnly: true, limit: 50 }, { enabled: platform.kind === 'electron', refetchInterval: 60_000 })
+  const desktop = platform.kind === 'electron'
+  const { data: unread = [] } = useApi('alerts.events.list', { unreadOnly: true, limit: 50 }, { enabled: desktop, refetchInterval: 60_000 })
+  // Mismas consultas que Revisión OCR y Hunted: los contadores comparten su caché.
+  const { data: shots = [] } = useApi('collector.screenshots.list', { status: null, limit: 100 }, { enabled: desktop })
+  const { data: online = [] } = useApi('watch.online', undefined, { enabled: desktop })
+  const badges: Record<string, { count: number; tone: 'accent' | 'bad'; title: string }> = {
+    '/alerts': { count: unread.length, tone: 'accent', title: 'alertas sin leer' },
+    '/hunted': { count: online.length, tone: 'bad', title: 'vigilados conectados' },
+    '/ocr': { count: shots.filter((s) => s.status === 'new' || s.status === 'processed').length, tone: 'accent', title: 'capturas por revisar' },
+  }
   const onAlerts = useCallback(
     (p: { count: number; messages: string[] }) => {
       setToast(p.messages[0] ?? `${p.count} alertas nuevas`)
@@ -107,7 +128,6 @@ function Layout() {
     'watch.update',
     useCallback(
       (p: { online: number; messages: string[]; burst: boolean }) => {
-        setWatchOnline(p.online)
         for (const k of ['watch.status', 'watch.lists', 'watch.entries', 'watch.online', 'watch.events']) void qc.invalidateQueries({ queryKey: [k] })
         if (p.messages.length) {
           setUrgent(p.burst)
@@ -175,19 +195,25 @@ function Layout() {
             <div className="text-[11px] text-muted">{platform.kind === 'web' ? 'companion web' : 'escritorio'}</div>
           </div>
         </div>
-        {NAV.filter((n) => platform.kind === 'electron' || !n.desktopOnly).map((n) => (
-          <NavLink
-            key={n.path}
-            to={n.path}
-            end={n.path === '/'}
-            className={({ isActive }) => clsx('flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm', isActive ? 'bg-accent/15 text-accent' : 'text-muted hover:bg-panel-2 hover:text-ink')}
-          >
-            <n.icon className="size-4" aria-hidden />
-            {n.label}
-            {n.path === '/alerts' && unread.length > 0 && <span className="ml-auto rounded-full bg-accent px-1.5 text-[11px] font-semibold text-accent-ink">{unread.length}</span>}
-            {n.path === '/hunted' && watchOnline > 0 && <span className="ml-auto rounded-full bg-bad px-1.5 text-[11px] font-semibold text-white" title="Vigilados conectados">{watchOnline}</span>}
-          </NavLink>
-        ))}
+        {NAV.filter((n) => desktop || !n.desktopOnly).map((n, i, list) => {
+          const header = n.group && n.group !== list[i - 1]?.group ? n.group : null
+          const b = badges[n.path]
+          return (
+            <div key={n.path} className={clsx('contents md:block', n.path === '/settings' && 'md:mt-auto md:pt-2')}>
+              {header && <div className="hidden px-2.5 pt-3 pb-1 text-[11px] font-semibold tracking-wide text-muted/70 uppercase md:block">{header}</div>}
+              <NavLink
+                to={n.path}
+                end={n.path === '/'}
+                title={b && b.count > 0 ? `${n.label}: ${b.count} ${b.title}` : undefined}
+                className={({ isActive }) => clsx('flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm', isActive ? 'bg-accent/15 text-accent' : 'text-muted hover:bg-panel-2 hover:text-ink')}
+              >
+                <n.icon className="size-4" aria-hidden />
+                {n.label}
+                {b && <NavBadge count={b.count} tone={b.tone} />}
+              </NavLink>
+            </div>
+          )
+        })}
       </nav>
       <main className="min-w-0 flex-1 overflow-auto">
         <Outlet />

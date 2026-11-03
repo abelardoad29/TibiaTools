@@ -80,7 +80,7 @@ export function MarketExplorerPage() {
   return (
     <Page
       title="Market"
-      subtitle="Snapshots por mundo e item. Cada lado muestra de dónde salió y su antigüedad."
+      subtitle="Ofertas de compra y venta de un item en un mundo, con su procedencia y antigüedad."
       actions={<Toggle checked={thirdParty} onChange={setThirdParty} label="Incluir datos de terceros" />}
     >
       <div className="flex flex-wrap items-end gap-3">

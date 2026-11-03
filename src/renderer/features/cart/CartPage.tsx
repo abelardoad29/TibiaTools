@@ -27,7 +27,7 @@ export function CartPage() {
 
   const num = (v: string) => parseIntOrNull(v)
   return (
-    <Page title="Carrito" subtitle="Heurística greedy documentada: propone carritos razonables, no garantiza el óptimo global.">
+    <Page title="Carrito" subtitle="Arma qué comprar con tu presupuesto a partir de un análisis de Arbitraje. Son propuestas razonables, no el óptimo garantizado.">
       <Card title="Restricciones">
         <div className="flex flex-wrap items-end gap-3">
           <Field label="Análisis base">

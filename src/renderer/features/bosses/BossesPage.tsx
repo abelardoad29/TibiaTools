@@ -1,30 +1,39 @@
 import { useState } from 'react'
+import { RefreshCw, Skull } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { BossOutlookRow } from '@shared/api'
 import type { ChanceTier } from '@core/domain/bosses/spawn'
-import { addDays } from '@core/domain/bosses/spawn'
+import { diffDays } from '@core/domain/bosses/spawn'
 import { useApi } from '../../lib/api'
 import { formatDateTime } from '../../lib/format'
 import { useMyWorlds, WorldPicker } from '../../components/data'
-import { Badge, Card, DataTable, Empty, ErrorBox, Field, Input, Modal, Page, Select, Spinner, Toggle, Warnings, type Tone } from '../../components/ui'
+import { Badge, Button, Card, DataTable, Empty, ErrorBox, Field, Input, Modal, Page, Select, Spinner, Toggle, Warnings, type Tone } from '../../components/ui'
 
 const TIER: Record<ChanceTier, { label: string; tone: Tone }> = {
   high: { label: 'Alta', tone: 'good' },
   medium: { label: 'Media', tone: 'warn' },
   low: { label: 'Baja', tone: 'info' },
   none: { label: 'Sin chance', tone: 'neutral' },
+  unknown: { label: 'Sin registro', tone: 'neutral' },
 }
-const TIER_ORDER: Record<ChanceTier, number> = { high: 0, medium: 1, low: 2, none: 3 }
+const TIER_ORDER: Record<ChanceTier, number> = { high: 0, medium: 1, low: 2, none: 3, unknown: 4 }
 
 const pct = (x: number | null) => (x === null ? '—' : `${(x * 100).toFixed(x < 0.1 ? 1 : 0)} %`)
-/** Día de juego aproximado de una estadística: la del día D registra casi todo el día D − 1. */
-const gameDay = (statsDay: string) => new Date(`${addDays(statsDay, -1)}T12:00:00Z`).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: '2-digit', timeZone: 'UTC' })
+/** Fecha de la estadística de tibia.com (se publica ~3 a. m. CET con las muertes de las 24 h anteriores). */
+const statsDate = (day: string) => new Date(`${day}T12:00:00Z`).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: '2-digit', timeZone: 'UTC' })
+const ago = (n: number) => (n === 0 ? 'hoy' : n === 1 ? 'ayer' : `hace ${n} d`)
 const inDays = (n: number | null) => (n === null ? '—' : n === 0 ? 'hoy' : n === 1 ? 'mañana' : `en ${n} días`)
 
 function BossName({ row }: { row: Pick<BossOutlookRow, 'name' | 'imageUrl'> }) {
   return (
     <span className="inline-flex items-center gap-2">
-      {row.imageUrl ? <img src={row.imageUrl} alt="" className="size-8 object-contain [image-rendering:pixelated]" loading="lazy" /> : <span className="size-8" />}
+      {row.imageUrl ? (
+        <img src={row.imageUrl} alt="" className="size-8 object-contain [image-rendering:pixelated]" loading="lazy" />
+      ) : (
+        <span className="inline-flex size-8 items-center justify-center text-muted" aria-hidden>
+          <Skull className="size-4" />
+        </span>
+      )}
       {row.name}
     </span>
   )
@@ -51,12 +60,14 @@ export function BossesPage() {
   const outlook = useApi('bosses.outlook', { world: w ?? '' }, { enabled: !!w, refetchInterval: 15 * 60_000 })
   const o = outlook.data
   const groups = [...new Set((o?.rows ?? []).map((r) => r.group))]
-  const rows = (o?.rows ?? []).filter((r) => (!hideNone || r.tier !== 'none') && (!group || r.group === group) && (!q.trim() || r.name.toLowerCase().includes(q.trim().toLowerCase())))
+  const matches = (o?.rows ?? []).filter((r) => (!group || r.group === group) && (!q.trim() || r.name.toLowerCase().includes(q.trim().toLowerCase())))
+  const rows = hideNone ? matches.filter((r) => r.tier !== 'none' && r.tier !== 'unknown') : matches
+  const hidden = matches.length - rows.length
 
   return (
     <Page
       title="Bosses"
-      subtitle="Probabilidad de que cada boss aparezca hoy según las Kill Statistics oficiales: días desde que se registró por última vez contra los intervalos históricos de todos los mundos. Es una pista, no una garantía."
+      subtitle="Qué tan probable es que cada boss salga hoy, según los días desde que lo mataron por última vez (Kill Statistics de tibia.com). Es una pista, no una garantía."
     >
       <div className="flex flex-wrap items-end gap-3">
         <Field label="Mundo">
@@ -69,6 +80,11 @@ export function BossesPage() {
           <Select value={group} onChange={(e) => setGroup(e.target.value)} options={[{ value: '', label: 'Todos' }, ...groups.map((g) => ({ value: g, label: g }))]} />
         </Field>
         <Toggle checked={hideNone} onChange={setHideNone} label="Ocultar los que no tienen chance" />
+        {w && (
+          <Button className="ml-auto" onClick={() => void outlook.refetch()} busy={outlook.isFetching} title="Baja la estadística más reciente de tibia.com">
+            <RefreshCw className="size-4" /> Actualizar
+          </Button>
+        )}
       </div>
       {mine.length > 1 && <MyWorldsSummary worlds={mine} onPick={setWorld} />}
       <ErrorBox error={outlook.error} />
@@ -80,10 +96,11 @@ export function BossesPage() {
       ) : (
         o && (
           <Card
-            title={`${o.world}: ${rows.length} bosses`}
+            title={`${o.world}: ${rows.length} bosses${hidden ? ` (${hidden} ocultos)` : ''}`}
             actions={
-              <span className="text-xs text-muted" title={o.seed.source}>
-                Estadística del {o.statsDay} · historial del mundo desde {o.historyFrom ?? '—'} · intervalos de todos los mundos hasta {o.seed.dataThrough ?? '—'}
+              <span className="text-xs text-muted" title={`${o.seed.source}. Intervalos de todos los mundos hasta el ${o.seed.dataThrough ?? '—'}.`}>
+                Datos al {statsDate(o.through ?? o.statsDay)}
+                {o.through && o.through < o.statsDay ? ` (la estadística del ${statsDate(o.statsDay)} aún no está disponible)` : ''} · historial de {o.world} desde {o.historyFrom ? statsDate(o.historyFrom) : '—'}
               </span>
             }
           >
@@ -103,11 +120,11 @@ export function BossesPage() {
                   header: 'Última vez',
                   cell: (r) =>
                     r.lastSeen ? (
-                      <span>
-                        {gameDay(r.lastSeen.day)} <span className="text-xs text-muted">· hace {r.daysSince} d</span>
+                      <span title="Fecha de la estadística de tibia.com que lo registró (muertes de las 24 h anteriores)">
+                        {statsDate(r.lastSeen.day)} <span className="text-xs text-muted">· {ago(diffDays(r.lastSeen.day, o.statsDay))}</span>
                       </span>
                     ) : (
-                      <span className="text-xs text-muted">sin registro desde {o.historyFrom ?? '—'}</span>
+                      <span className="text-xs text-muted">nunca desde el {o.historyFrom ? statsDate(o.historyFrom) : '—'}</span>
                     ),
                   sort: (r) => r.daysSince ?? 9_999,
                 },
@@ -177,7 +194,8 @@ function WorldTop({ world, onPick }: { world: string; onPick: (w: string) => voi
 
 function BossDetail({ world, row, onClose }: { world: string; row: BossOutlookRow; onClose: () => void }) {
   const h = useApi('bosses.history', { world, boss: row.name })
-  const d = row.daysSince
+  // Sin una aparición registrada no hay un "hoy" en la curva.
+  const d = row.noRecord ? null : row.daysSince
   const data = (h.data?.hazard ?? []).map((v, i) => ({ day: i + 1, pct: Math.round(v * 1000) / 10 }))
   return (
     <Modal title={row.name} onClose={onClose} wide>
@@ -218,8 +236,7 @@ function BossDetail({ world, row, onClose }: { world: string; row: BossOutlookRo
                 pageSize={20}
                 empty="Sin apariciones en el historial disponible."
                 columns={[
-                  { key: 'day', header: 'Día de juego (aprox.)', cell: (s) => gameDay(s.day) },
-                  { key: 'stats', header: 'Estadística', cell: (s) => <span className="text-xs text-muted">{s.day}</span> },
+                  { key: 'day', header: 'Estadística de tibia.com', cell: (s) => statsDate(s.day) },
                   { key: 'k', header: 'Muertes', cell: (s) => s.killed, align: 'right' },
                   { key: 'p', header: 'Jugadores que mató', cell: (s) => s.playersKilled, align: 'right' },
                 ]}

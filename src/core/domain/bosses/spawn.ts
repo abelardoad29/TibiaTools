@@ -26,7 +26,8 @@ export interface BossSpawnStats {
   tailHazard: number | null
 }
 
-export type ChanceTier = 'high' | 'medium' | 'low' | 'none'
+/** 'unknown': nunca se registró en el historial del mundo (p. ej. un mundo nuevo): no hay desde dónde contar. */
+export type ChanceTier = 'high' | 'medium' | 'low' | 'none' | 'unknown'
 
 export interface BossOutlook {
   name: string
@@ -45,7 +46,7 @@ export interface BossOutlook {
   overdue: boolean
   /** La última aparición solo mató jugadores: puede seguir vivo. */
   maybeAlive: boolean
-  /** No aparece en el historial disponible: los días son un mínimo. */
+  /** No aparece en el historial disponible: daysSince es solo lo que lleva el historial. */
   noRecord: boolean
 }
 
@@ -102,11 +103,12 @@ export function bossOutlook(stats: BossSpawnStats, sightings: Sighting[], nextSt
   const merged = mergeSameSpawn(sightings)
   const last = merged.at(-1) ?? null
   const base = { name: stats.name, group: stats.group, lastSeen: last, maybeAlive: !!last && last.killed === 0 }
-  const from = last?.day ?? historyFrom
-  if (!from || (!stats.hazard.length && stats.tailHazard === null)) {
-    return { ...base, daysSince: null, chance: null, tier: 'none', windowOpensIn: null, expectedIn: null, overdue: false, noRecord: !last }
-  }
-  const d = diffDays(from, nextStatsDay)
+  const empty = { windowOpensIn: null, expectedIn: null, overdue: false }
+  // Sin una aparición registrada no hay desde dónde contar: contar desde el inicio del historial inventaría
+  // probabilidades (en un mundo nuevo todos los bosses saldrían "con chance").
+  if (!last) return { ...base, ...empty, daysSince: historyFrom ? diffDays(historyFrom, nextStatsDay) : null, chance: null, tier: 'unknown', noRecord: true }
+  if (!stats.hazard.length && stats.tailHazard === null) return { ...base, ...empty, daysSince: diffDays(last.day, nextStatsDay), chance: null, tier: 'unknown', noRecord: false }
+  const d = diffDays(last.day, nextStatsDay)
   const chance = hazardAt(stats, d)
   const peak = Math.max(0, ...stats.hazard)
   const tier: ChanceTier = chance === null || chance < ZERO ? 'none' : peak > 0 && chance >= peak * 0.5 ? 'high' : peak > 0 && chance >= peak * 0.2 ? 'medium' : 'low'
@@ -129,6 +131,6 @@ export function bossOutlook(stats: BossSpawnStats, sightings: Sighting[], nextSt
     windowOpensIn,
     expectedIn,
     overdue: !!stats.intervals && d > stats.intervals.p90,
-    noRecord: !last,
+    noRecord: false,
   }
 }

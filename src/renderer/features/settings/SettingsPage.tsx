@@ -6,7 +6,7 @@ import { platform } from '../../platform'
 import { useApi, useApiMutation } from '../../lib/api'
 import { formatDateTime, parseIntOrNull } from '../../lib/format'
 import { WorldPicker } from '../../components/data'
-import { Badge, Button, Card, DataTable, ErrorBox, Field, Input, Page, Select, Tabs, Toggle } from '../../components/ui'
+import { Badge, Button, Card, DataTable, ErrorBox, Field, Input, Page, Select, Stat, Tabs, Toggle } from '../../components/ui'
 
 type Tab = 'general' | 'rules' | 'analysis' | 'data'
 
@@ -36,40 +36,51 @@ export function SettingsPage() {
       />
       <ErrorBox error={set.error} />
       {tab === 'general' && (
-        <Card title="General">
-          <div className="grid max-w-3xl gap-4 md:grid-cols-2">
-            <Field label="Tema">
-              <Select value={s.theme} onChange={(e) => patch({ theme: e.target.value as Settings['theme'] })} options={[{ value: 'dark', label: 'Oscuro' }, { value: 'light', label: 'Claro' }, { value: 'system', label: 'Sistema' }]} />
-            </Field>
-            <Field label="Mundo principal">
-              <WorldPicker value={s.homeWorld} onChange={(w) => patch({ homeWorld: w })} allowEmpty />
-            </Field>
-            <Field label="Mis mundos" hint="Salen primero en todos los selectores de mundo (OCR, Market, Arbitraje…). También puedes marcarlos con ★ en Mundos.">
-              <div className="flex flex-col gap-2">
-                <div className="flex flex-wrap gap-1.5">
-                  {s.favoriteWorlds.map((w) => (
-                    <span key={w} className="inline-flex items-center gap-1 rounded-md border border-line px-1.5 py-0.5 text-sm">
-                      {w}
-                      <button type="button" className="text-muted hover:text-bad" aria-label={`Quitar ${w}`} onClick={() => patch({ favoriteWorlds: s.favoriteWorlds.filter((x) => x !== w) })}>
-                        <X className="size-3.5" />
-                      </button>
-                    </span>
-                  ))}
-                  {s.favoriteWorlds.length === 0 && <span className="text-xs text-muted">Ninguno todavía.</span>}
+        <div className="grid gap-4 xl:grid-cols-2">
+          <Card title="Mis mundos y apariencia">
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Tema">
+                <Select value={s.theme} onChange={(e) => patch({ theme: e.target.value as Settings['theme'] })} options={[{ value: 'dark', label: 'Oscuro' }, { value: 'light', label: 'Claro' }, { value: 'system', label: 'Sistema' }]} />
+              </Field>
+              <Field label="Mundo principal">
+                <WorldPicker value={s.homeWorld} onChange={(w) => patch({ homeWorld: w })} allowEmpty />
+              </Field>
+              <Field label="Mis mundos" hint="Salen primero en todos los selectores de mundo (OCR, Market, Arbitraje…). También puedes marcarlos con ★ en Mundos.">
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-wrap gap-1.5">
+                    {s.favoriteWorlds.map((w) => (
+                      <span key={w} className="inline-flex items-center gap-1 rounded-md border border-line px-1.5 py-0.5 text-sm">
+                        {w}
+                        <button type="button" className="text-muted hover:text-bad" aria-label={`Quitar ${w}`} onClick={() => patch({ favoriteWorlds: s.favoriteWorlds.filter((x) => x !== w) })}>
+                          <X className="size-3.5" />
+                        </button>
+                      </span>
+                    ))}
+                    {s.favoriteWorlds.length === 0 && <span className="text-xs text-muted">Ninguno todavía.</span>}
+                  </div>
+                  <WorldPicker value={null} onChange={(w) => w && !s.favoriteWorlds.includes(w) && patch({ favoriteWorlds: [...s.favoriteWorlds, w] })} label="Agregar mundo…" />
                 </div>
-                <WorldPicker value={null} onChange={(w) => w && !s.favoriteWorlds.includes(w) && patch({ favoriteWorlds: [...s.favoriteWorlds, w] })} label="Agregar mundo…" />
+              </Field>
+            </div>
+          </Card>
+          {desktop && (
+            <Card title="Avisos">
+              <div className="flex flex-col gap-3">
+                <Toggle checked={s.notifications.enabled} onChange={(v) => patch({ notifications: { enabled: v } })} label="Notificaciones de Windows" />
+                <Toggle checked={s.tracker.notify} onChange={(v) => patch({ tracker: { ...s.tracker, notify: v } })} label="Avisar level up y muertes de los personajes seguidos" />
+                <Field label="Consultar personajes seguidos cada (min)" hint="Se aplica al reiniciar. Mínimo 2.">
+                  <Input inputMode="numeric" className="w-24" value={s.tracker.pollMinutes} onChange={(e) => patch({ tracker: { ...s.tracker, pollMinutes: Math.max(2, Number(e.target.value) || 5) } })} />
+                </Field>
+                <p className="text-xs text-muted">La vigilancia de hunted se configura en Hunted; las reglas de precios, en Alertas.</p>
               </div>
-            </Field>
-            {desktop && (
-              <>
-                <Field label="Atajo de captura" hint="Formato Electron, p. ej. CommandOrControl+Shift+F12. Solo dispara una captura en esta app.">
+            </Card>
+          )}
+          {desktop && (
+            <Card title="Captura y datos externos">
+              <div className="flex flex-col gap-3">
+                <Field label="Atajo de captura" hint="Formato Electron, p. ej. CommandOrControl+Shift+F12. Solo dispara una captura en esta app; para el Market es mejor la tecla de screenshot de Tibia (Collector).">
                   <Input value={s.collector.hotkey ?? ''} onChange={(e) => patch({ collector: { ...s.collector, hotkey: e.target.value || null } })} />
                 </Field>
-                <Field label="Consultar personajes cada (min)" hint="Se aplica al reiniciar. Mínimo 2.">
-                  <Input inputMode="numeric" value={s.tracker.pollMinutes} onChange={(e) => patch({ tracker: { ...s.tracker, pollMinutes: Math.max(2, Number(e.target.value) || 5) } })} />
-                </Field>
-                <Toggle checked={s.notifications.enabled} onChange={(v) => patch({ notifications: { enabled: v } })} label="Notificaciones de Windows" />
-                <Toggle checked={s.tracker.notify} onChange={(v) => patch({ tracker: { ...s.tracker, notify: v } })} label="Notificar level up / muertes" />
                 <Toggle checked={s.network.thirdPartyEnabled} onChange={(v) => patch({ network: { ...s.network, thirdPartyEnabled: v } })} label="Permitir datos de terceros (tibiamarket.top)" />
                 {s.network.thirdPartyEnabled && (
                   <div className="flex flex-wrap items-end gap-3">
@@ -89,10 +100,10 @@ export function SettingsPage() {
                     </Field>
                   </div>
                 )}
-              </>
-            )}
-          </div>
-        </Card>
+              </div>
+            </Card>
+          )}
+        </div>
       )}
       {tab === 'rules' && <Rules />}
       {tab === 'analysis' && (
@@ -239,6 +250,14 @@ function DataTab() {
             <div className="text-xs text-muted">{info.data.dataDir}</div>
             <div className="text-xs text-muted">
               Seeds: items {formatDateTime(info.data.seeds.items)} · mundos {formatDateTime(info.data.seeds.worlds)} · imbuements {formatDateTime(info.data.seeds.imbuements)}
+            </div>
+            <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-3">
+              <Stat label="Mundos activos" value={info.data.counts.worlds} />
+              <Stat label="Items en catálogo" value={info.data.counts.items.toLocaleString('es')} />
+              <Stat label="Capturas" value={info.data.counts.screenshots} />
+              <Stat label="Scans propios" value={info.data.counts.ownScans} />
+              <Stat label="Scans de terceros" value={info.data.counts.thirdPartyScans.toLocaleString('es')} />
+              <Stat label="Esquema DB" value={`v${info.data.schemaVersion}`} />
             </div>
           </div>
         )}

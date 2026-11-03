@@ -72,7 +72,7 @@ export function WorldsPage() {
   const mineOnline = rows.filter((w) => mine.includes(w.name)).reduce((s, w) => s + (w.online ?? 0), 0)
 
   return (
-    <Page title="Mundos" subtitle="Datos de tibia.com vía TibiaData (se actualizan cada minuto). Marca con la estrella los mundos en los que juegas: salen primero en todos los selectores.">
+    <Page title="Mundos" subtitle="Conectados en vivo de tibia.com. Marca con ★ los mundos en los que juegas: salen primero en toda la app.">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Jugadores online (todos los mundos)" value={live.data?.totalOnline != null ? nf.format(live.data.totalOnline) : '—'} hint={live.data ? `actualizado ${formatAge(live.data.fetchedAt)}` : undefined} />
         <Stat label="En mis mundos" value={mine.length ? nf.format(mineOnline) : '—'} hint={mine.length ? mine.join(', ') : 'Marca tus mundos con ★'} />

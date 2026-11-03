@@ -5,7 +5,7 @@ import type { AnalysisRequest, AnalysisResult } from '@shared/api'
 import { rankOpportunities, type Opportunity, type Ranking, type Strategy } from '@core/domain/arbitrage/opportunity'
 import { call, useApi, useApiMutation } from '../../lib/api'
 import { formatDateTime, formatPct, parseIntOrNull } from '../../lib/format'
-import { CheckBadge, Freshness, Gp, ItemIcon, ProvenanceBadge, RouteBadge, WorldPicker } from '../../components/data'
+import { CheckBadge, Freshness, Gp, ItemIcon, ProvenanceBadge, RouteBadge, useMyWorlds, WorldPicker } from '../../components/data'
 import { Badge, Button, Card, DataTable, Empty, ErrorBox, Field, Input, Modal, Page, Select, Stat, Tabs, Toggle, Warnings } from '../../components/ui'
 
 const STRATEGY_LABEL: Record<Strategy, string> = { instant: 'Instant', historical: 'Historical', hybrid: 'Hybrid' }
@@ -20,7 +20,10 @@ const oldest = (o: Opportunity) => o.evidence.map((e) => e.observedAt).sort()[0]
 
 export function ArbitragePage() {
   const [tab, setTab] = useState<'run' | 'matrix'>('run')
-  const [req, setReq] = useState<AnalysisRequest>({ origin: '', destination: '', strategy: 'hybrid', budgetGp: null, maxQuantityPerItem: null, includeThirdParty: true, maxAgeHours: null })
+  const [form, setReq] = useState<AnalysisRequest>({ origin: '', destination: '', strategy: 'hybrid', budgetGp: null, maxQuantityPerItem: null, includeThirdParty: true, maxAgeHours: null })
+  // Mientras no elijas otro, el origen es tu mundo principal (o el primero de tus mundos).
+  const mine = useMyWorlds()
+  const req = form.origin ? form : { ...form, origin: mine[0] ?? '' }
   const [result, setResult] = useState<AnalysisResult | null>(null)
   const run = useApiMutation('analysis.run', ['analysis.runs.list'])
   const runs = useApi('analysis.runs.list', { limit: 15 })
