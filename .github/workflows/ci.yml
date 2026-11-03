@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+  # Las ramas de trabajo se validan por su PR; el push solo se revisa en master.
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # La app es solo para Windows; las pruebas de integración usan rutas y SQLite reales.
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      # `npm run check` no lanza Electron ni navegadores: no hace falta descargarlos.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # node:sqlite (usado en main y en las pruebas) requiere Node 24, el mismo que trae Electron 45.
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check

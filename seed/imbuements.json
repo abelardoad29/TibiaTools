@@ -1,0 +1,467 @@
+{
+ "source": "https://www.tibiawiki.com.br/wiki/Imbuements",
+ "parsedAt": "2026-11-02T22:12:54.651Z",
+ "notes": "Tarifas: noticia oficial de Tibia del 12-06-2025 (100 % de éxito). Duración de 20 h: TibiaWiki BR. Gold Tokens por paquete (2/4/6) y costo por hora (total/20): NabBot. Efectos en inglés: tibiawiki-sql (TibiaWiki EN).",
+ "tiers": [
+  {
+   "tier": "Basic",
+   "materials": 1,
+   "shrineFeeGp": 7500
+  },
+  {
+   "tier": "Intricate",
+   "materials": 2,
+   "shrineFeeGp": 60000
+  },
+  {
+   "tier": "Powerful",
+   "materials": 3,
+   "shrineFeeGp": 250000
+  }
+ ],
+ "tokenTradeable": [
+  "Strike",
+  "Vampirism",
+  "Void"
+ ],
+ "tokensPerTier": {
+  "Basic": 2,
+  "Intricate": 4,
+  "Powerful": 6
+ },
+ "durationHours": 20,
+ "imbuements": [
+  {
+   "name": "Bash",
+   "effect": "Club Fighting",
+   "materials": [
+    {
+     "qty": 20,
+     "item": "Cyclops Toe"
+    },
+    {
+     "qty": 15,
+     "item": "Ogre Nose Ring"
+    },
+    {
+     "qty": 10,
+     "item": "Warmaster's Wristguards"
+    }
+   ]
+  },
+  {
+   "name": "Blockade",
+   "effect": "Shielding",
+   "materials": [
+    {
+     "qty": 20,
+     "item": "Piece of Scarab Shell"
+    },
+    {
+     "qty": 25,
+     "item": "Brimstone Shell"
+    },
+    {
+     "qty": 25,
+     "item": "Frazzle Skin"
+    }
+   ]
+  },
+  {
+   "name": "Chop",
+   "effect": "Axe Fighting",
+   "materials": [
+    {
+     "qty": 20,
+     "item": "Orc Tooth"
+    },
+    {
+     "qty": 25,
+     "item": "Battle Stone"
+    },
+    {
+     "qty": 20,
+     "item": "Moohtant Horn"
+    }
+   ]
+  },
+  {
+   "name": "Epiphany",
+   "effect": "Magic Level",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Elvish Talisman"
+    },
+    {
+     "qty": 15,
+     "item": "Broken Shamanic Staff"
+    },
+    {
+     "qty": 15,
+     "item": "Strand of Medusa Hair"
+    }
+   ]
+  },
+  {
+   "name": "Precision",
+   "effect": "Distance Fighting",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Elven Scouting Glass"
+    },
+    {
+     "qty": 20,
+     "item": "Elven Hoof"
+    },
+    {
+     "qty": 10,
+     "item": "Metal Spike"
+    }
+   ]
+  },
+  {
+   "name": "Punch",
+   "effect": "Fist Fighting",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Tarantula Egg"
+    },
+    {
+     "qty": 20,
+     "item": "Mantassin Tail"
+    },
+    {
+     "qty": 15,
+     "item": "Gold-Brocaded Cloth"
+    }
+   ]
+  },
+  {
+   "name": "Slash",
+   "effect": "Sword Fighting",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Lion's Mane"
+    },
+    {
+     "qty": 25,
+     "item": "Mooh'tah Shell"
+    },
+    {
+     "qty": 5,
+     "item": "War Crystal"
+    }
+   ]
+  },
+  {
+   "name": "Electrify",
+   "effect": "Energy Damage",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Rorc Feather"
+    },
+    {
+     "qty": 5,
+     "item": "Peacock Feather Fan"
+    },
+    {
+     "qty": 1,
+     "item": "Energy Vein"
+    }
+   ]
+  },
+  {
+   "name": "Frost",
+   "effect": "Ice Damage",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Frosty Heart"
+    },
+    {
+     "qty": 10,
+     "item": "Seacrest Hair"
+    },
+    {
+     "qty": 5,
+     "item": "Polar Bear Paw"
+    }
+   ]
+  },
+  {
+   "name": "Reap",
+   "effect": "Death Damage",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Pile of Grave Earth"
+    },
+    {
+     "qty": 20,
+     "item": "Demonic Skeletal Hand"
+    },
+    {
+     "qty": 5,
+     "item": "Petrified Scream"
+    }
+   ]
+  },
+  {
+   "name": "Scorch",
+   "effect": "Fire Damage",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Fiery Heart"
+    },
+    {
+     "qty": 5,
+     "item": "Green Dragon Scale"
+    },
+    {
+     "qty": 5,
+     "item": "Demon Horn"
+    }
+   ]
+  },
+  {
+   "name": "Venom",
+   "effect": "Earth Damage",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Swamp Grass"
+    },
+    {
+     "qty": 20,
+     "item": "Poisonous Slime"
+    },
+    {
+     "qty": 2,
+     "item": "Slime Heart"
+    }
+   ]
+  },
+  {
+   "name": "Cloud Fabric",
+   "effect": "Energy Protection",
+   "materials": [
+    {
+     "qty": 20,
+     "item": "Wyvern Talisman"
+    },
+    {
+     "qty": 15,
+     "item": "Crawler Head Plating"
+    },
+    {
+     "qty": 10,
+     "item": "Wyrm Scale"
+    }
+   ]
+  },
+  {
+   "name": "Demon Presence",
+   "effect": "Holy Protection",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Cultish Robe"
+    },
+    {
+     "qty": 25,
+     "item": "Cultish Mask"
+    },
+    {
+     "qty": 20,
+     "item": "Hellspawn Tail"
+    }
+   ]
+  },
+  {
+   "name": "Dragon Hide",
+   "effect": "Fire Protection",
+   "materials": [
+    {
+     "qty": 20,
+     "item": "Green Dragon Leather"
+    },
+    {
+     "qty": 10,
+     "item": "Blazing Bone"
+    },
+    {
+     "qty": 5,
+     "item": "Draken Sulphur"
+    }
+   ]
+  },
+  {
+   "name": "Lich Shroud",
+   "effect": "Death Protection",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Flask of Embalming Fluid"
+    },
+    {
+     "qty": 20,
+     "item": "Gloom Wolf Fur"
+    },
+    {
+     "qty": 5,
+     "item": "Mystical Hourglass"
+    }
+   ]
+  },
+  {
+   "name": "Quara Scale",
+   "effect": "Ice Protection",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Winter Wolf Fur"
+    },
+    {
+     "qty": 15,
+     "item": "Thick Fur"
+    },
+    {
+     "qty": 10,
+     "item": "Deepling Warts"
+    }
+   ]
+  },
+  {
+   "name": "Snake Skin",
+   "effect": "Earth Protection",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Piece of Swampling Wood"
+    },
+    {
+     "qty": 20,
+     "item": "Snake Skin"
+    },
+    {
+     "qty": 10,
+     "item": "Brimstone Fangs"
+    }
+   ]
+  },
+  {
+   "name": "Featherweight",
+   "effect": "Capacity",
+   "materials": [
+    {
+     "qty": 20,
+     "item": "Fairy Wings"
+    },
+    {
+     "qty": 10,
+     "item": "Little Bowl of Myrrh"
+    },
+    {
+     "qty": 5,
+     "item": "Goosebump Leather"
+    }
+   ]
+  },
+  {
+   "name": "Strike",
+   "effect": "Critical Hit",
+   "materials": [
+    {
+     "qty": 20,
+     "item": "Protective Charm"
+    },
+    {
+     "qty": 25,
+     "item": "Sabretooth"
+    },
+    {
+     "qty": 5,
+     "item": "Vexclaw Talon"
+    }
+   ]
+  },
+  {
+   "name": "Swiftness",
+   "effect": "Speed",
+   "materials": [
+    {
+     "qty": 15,
+     "item": "Damselfly Wing"
+    },
+    {
+     "qty": 25,
+     "item": "Compass"
+    },
+    {
+     "qty": 20,
+     "item": "Waspoid Wing"
+    }
+   ]
+  },
+  {
+   "name": "Vampirism",
+   "effect": "Life Leech",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Vampire Teeth"
+    },
+    {
+     "qty": 15,
+     "item": "Bloody Pincers"
+    },
+    {
+     "qty": 5,
+     "item": "Piece of Dead Brain"
+    }
+   ]
+  },
+  {
+   "name": "Vibrancy",
+   "effect": "Paralysis Removal",
+   "materials": [
+    {
+     "qty": 20,
+     "item": "Wereboar Hooves"
+    },
+    {
+     "qty": 15,
+     "item": "Crystallized Anger"
+    },
+    {
+     "qty": 5,
+     "item": "Quill"
+    }
+   ]
+  },
+  {
+   "name": "Void",
+   "effect": "Mana Leech",
+   "materials": [
+    {
+     "qty": 25,
+     "item": "Rope Belt"
+    },
+    {
+     "qty": 25,
+     "item": "Silencer Claws"
+    },
+    {
+     "qty": 5,
+     "item": "Some Grimeleech Wings"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+  "version": "2026-11-02",
+  "sourceUrl": "https://www.tibia.com/gameguides/?subtopic=manual&section=products",
+  "verifiedAt": "2026-11-02",
+  "validityDays": 180,
+  "notes": "Manual oficial, sección Character World Transfer: 'A character may only be transferred to worlds of the same type or to worlds with more limited PvP possibilities'. Optional → Optional; Open y Retro Open → su tipo u Optional; Hardcore y Retro Hardcore → cualquiera. A mundos 'locked' puede ir cualquiera; desde 'locked' solo a otros 'locked'. A mundos 'blocked' no se puede ir. A un mundo protegido por BattlEye desde el lanzamiento solo desde otro protegido desde el lanzamiento (los experimentales son excepción). Banco, depot, stash e inbox viajan con el personaje. Las ofertas de Market abiertas se cancelan. Los precios en Tibia Coins no figuran en el manual: se configuran a mano desde la Store.",
+  "pvpAllowedDestinations": {
+    "Optional PvP": ["Optional PvP"],
+    "Open PvP": ["Open PvP", "Optional PvP"],
+    "Retro Open PvP": ["Retro Open PvP", "Optional PvP"],
+    "Hardcore PvP": ["Optional PvP", "Open PvP", "Retro Open PvP", "Hardcore PvP", "Retro Hardcore PvP"],
+    "Retro Hardcore PvP": ["Optional PvP", "Open PvP", "Retro Open PvP", "Hardcore PvP", "Retro Hardcore PvP"]
+  }
+}
