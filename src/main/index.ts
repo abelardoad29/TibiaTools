@@ -17,6 +17,10 @@ import { runAlerts } from './services/alerts'
 import { restoreBackup } from './services/backup'
 import { createTibiaFolderWatcher } from './services/tibia-folder'
 import { createWatcher, type ScanResult } from './services/watch'
+import { createThirdPartySync } from './services/third-party-sync'
+import { createMarketAnalyzer } from './services/market-ocr'
+import { ensureDefaultProfiles } from './services/scans'
+import { tibiaData } from './external/tibiadata'
 
 // Datos en %LOCALAPPDATA%\TibiaTools (no en Roaming: las capturas pueden pesar mucho).
 // La caché de Chromium va en una subcarpeta aparte para no mezclarla con los datos.
@@ -41,6 +45,7 @@ let currentHotkey: string | null = null
 const timers: NodeJS.Timeout[] = []
 let stopTibiaFolder: () => void = () => undefined
 let stopWatcher: () => void = () => undefined
+let stopThirdPartySync: () => void = () => undefined
 
 const DEV_URL = process.env.ELECTRON_RENDERER_URL
 
@@ -123,9 +128,22 @@ async function boot(): Promise<void> {
 
   db = openDatabase(paths.db)
   loadSeeds(db)
+  ensureDefaultProfiles(db)
   const ctx: AppContext = { db, paths, http: createHttpClient(db, log), log, version: app.getVersion(), now: () => new Date() }
   log.info(`Tibia Tools ${ctx.version} iniciado; datos en ${paths.root}`)
-  const tibiaFolder = createTibiaFolderWatcher(ctx, (shots) => emit('collector.imported', { count: shots.length }))
+  // Las capturas del Market que llegan de la carpeta de Tibia se analizan solas (item, mundo y ofertas).
+  const marketOcr = createMarketAnalyzer(ctx, {
+    lookupWorld: async (character) => (await tibiaData(ctx.http).character(character))?.world ?? null,
+    onAnalyzed: (screenshotId, a) => emit('collector.analyzed', { screenshotId, decision: a.decision, item: a.item?.name ?? null, world: a.world, reasons: a.reasons }),
+    onConfirmed: () => {
+      const fired = runAlerts(ctx)
+      if (fired.length) emit('alerts.fired', { count: fired.length, messages: fired })
+    },
+  })
+  const tibiaFolder = createTibiaFolderWatcher(ctx, (shots) => {
+    emit('collector.imported', { count: shots.length })
+    if (getSettings(ctx.db).collector.autoAnalyze.enabled) void marketOcr.analyze(shots.map((s) => s.id)).catch((e) => log.warn('Análisis automático', e))
+  })
   stopTibiaFolder = () => tibiaFolder.stop()
   // Vigilancia: cada lectura empuja el estado a la ventana y avisa con notificaciones de Windows.
   const onWatchResult = (r: ScanResult) => {
@@ -136,6 +154,10 @@ async function boot(): Promise<void> {
   }
   const watcher = createWatcher(ctx, onWatchResult)
   stopWatcher = () => watcher.stop()
+  // Precios de tibiamarket.top de todos los mundos, en segundo plano y solo los que cambiaron.
+  const thirdPartySync = createThirdPartySync(ctx, (s) => emit('thirdParty.progress', s))
+  thirdPartySync.reschedule()
+  stopThirdPartySync = () => thirdPartySync.stop()
 
   const host: Host = {
     emit,
@@ -161,8 +183,10 @@ async function boot(): Promise<void> {
       return r.canceled ? null : (r.filePaths[0] ?? null)
     },
     tibiaFolder,
+    marketOcr,
     watcher,
     onWatchResult,
+    thirdPartySync,
     restoreBackup: async (file) => {
       const current = ctx.db
       restoreBackup(paths, file, () => current.close(), current)
@@ -265,6 +289,7 @@ app.on('will-quit', () => {
   globalShortcut.unregisterAll()
   stopTibiaFolder()
   stopWatcher()
+  stopThirdPartySync()
   for (const t of timers) clearInterval(t)
   try {
     db?.close()

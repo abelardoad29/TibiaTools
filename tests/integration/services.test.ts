@@ -51,7 +51,7 @@ beforeAll(() => {
     }
     return new Response('{}', { status: 404 })
   }) as typeof fetch
-  ctx = { db, paths, http: createHttpClient(db, createLogger(null), fakeFetch), log: createLogger(null), version: 'test', now: () => new Date() }
+  ctx = { db, paths, http: createHttpClient(db, createLogger(null), fakeFetch, { 'api.tibiamarket.top': 0, 'api.tibiadata.com': 0 }), log: createLogger(null), version: 'test', now: () => new Date() }
 })
 
 afterAll(() => {

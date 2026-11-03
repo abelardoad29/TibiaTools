@@ -57,6 +57,7 @@
     "test:watch": "vitest",
     "test:e2e": "npm run build && node tests/e2e/smoke.mjs",
     "depcruise": "depcruise src --config .dependency-cruiser.cjs",
+    "ocr:calibrate": "tsx scripts/calibrate-market.ts",
     "check": "npm run typecheck && npm run lint && npm run depcruise && npm run test",
     "seed:fetch": "node scripts/fetch-seeds.ts",
     "seed:imbuements": "node scripts/parse-imbuements.ts",
@@ -64,6 +65,7 @@
     "dist": "npm run build && electron-builder --win --x64",
     "dist:dir": "npm run build && electron-builder --win --x64 --dir",
     "icon": "tsx scripts/make-icon.ts",
-    "seed:imbuable": "node scripts/fetch-imbuable.ts"
+    "seed:imbuable": "node scripts/fetch-imbuable.ts",
+    "seed:bosses": "node scripts/build-boss-stats.ts"
   }
 }

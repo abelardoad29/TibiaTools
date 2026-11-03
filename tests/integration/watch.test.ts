@@ -38,7 +38,7 @@ beforeAll(() => {
   dir = mkdtempSync(join(tmpdir(), 'tt-watch-'))
   db = openDatabase(':memory:')
   loadSeeds(db)
-  ctx = { db, paths: makePaths(dir), http: createHttpClient(db, createLogger(null), fakeFetch), log: createLogger(null), version: 'test', now: () => new Date() }
+  ctx = { db, paths: makePaths(dir), http: createHttpClient(db, createLogger(null), fakeFetch, { 'api.tibiamarket.top': 0, 'api.tibiadata.com': 0 }), log: createLogger(null), version: 'test', now: () => new Date() }
 })
 afterAll(() => {
   db.close()

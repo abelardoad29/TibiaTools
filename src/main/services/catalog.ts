@@ -1,9 +1,10 @@
-import type { ItemDetail, ItemSummary, NpcTrade, World } from '@shared/api'
+import type { ItemDetail, ItemSummary, NpcTrade, World, WorldDetail, WorldsLive } from '@shared/api'
 import { matchScore, normalizeName } from '@core/domain/catalog/names'
+import { summarizeOnline } from '@core/domain/catalog/worlds'
 import type { WorldTransferInfo } from '@core/domain/transfers/rules'
 import { all, bool, get, nowIso, parseJson, run, tx, type Db } from '../db/database'
 import { upsertTibiaDataWorld } from '../db/seed'
-import { tibiaData } from '../external/tibiadata'
+import { tibiaData, type TibiaDataWorld } from '../external/tibiadata'
 import type { AppContext } from '../context'
 
 interface WorldRow {
@@ -67,8 +68,47 @@ export function worldTransferInfo(w: World): WorldTransferInfo {
   }
 }
 
-export async function syncWorlds(ctx: AppContext): Promise<{ updated: number; fetchedAt: string }> {
-  const r = await tibiaData(ctx.http).worlds()
+export async function syncWorlds(ctx: AppContext, cacheSeconds = 3_600): Promise<{ updated: number; fetchedAt: string }> {
+  const r = await tibiaData(ctx.http).worlds(cacheSeconds)
+  return storeTibiaDataWorlds(ctx, r)
+}
+
+/** Conectados por mundo en vivo. De paso actualiza el catálogo (mundos nuevos, fusionados o cambiados). */
+export async function liveWorlds(ctx: AppContext): Promise<WorldsLive> {
+  const r = await tibiaData(ctx.http).worldsOverview(60)
+  storeTibiaDataWorlds(ctx, { ...r, data: r.data.regular_worlds })
+  return {
+    fetchedAt: r.fetchedAt,
+    totalOnline: r.data.players_online ?? null,
+    record: r.data.record_players && r.data.record_date ? { players: r.data.record_players, date: r.data.record_date } : null,
+    worlds: r.data.regular_worlds.map((w) => ({ name: w.name, status: w.status ?? null, playersOnline: w.players_online ?? null })),
+  }
+}
+
+export async function worldDetail(ctx: AppContext, name: string): Promise<WorldDetail> {
+  const r = await tibiaData(ctx.http).worldDetail(name)
+  const w = r.data
+  return {
+    name: w.name,
+    status: w.status ?? null,
+    playersOnline: w.players_online ?? w.online_players?.length ?? 0,
+    recordPlayers: w.record_players ?? null,
+    recordDate: w.record_date ?? null,
+    creationDate: w.creation_date ?? null,
+    location: w.location ?? null,
+    pvpType: w.pvp_type ?? null,
+    premiumOnly: w.premium_only ?? null,
+    transferType: w.transfer_type ?? null,
+    battleyeProtected: w.battleye_protected ?? null,
+    battleyeDate: w.battleye_date ?? null,
+    gameWorldType: w.game_world_type ?? null,
+    questTitles: w.world_quest_titles ?? [],
+    summary: summarizeOnline(w.online_players ?? []),
+    fetchedAt: r.fetchedAt,
+  }
+}
+
+function storeTibiaDataWorlds(ctx: AppContext, r: { data: TibiaDataWorld[]; fetchedAt: string }): { updated: number; fetchedAt: string } {
   tx(ctx.db, () => {
     for (const w of r.data) {
       upsertTibiaDataWorld(
@@ -89,7 +129,9 @@ export async function syncWorlds(ctx: AppContext): Promise<{ updated: number; fe
       )
     }
     // Los mundos que TibiaData ya no lista quedan inactivos (fusionados o cerrados), no se borran.
+    // Una lista casi vacía es una falla de TibiaData, no un cierre masivo de mundos.
     const names = r.data.map((w) => w.name)
+    if (names.length < 10) return
     run(ctx.db, `UPDATE worlds SET is_active = 0, updated_at = ? WHERE name NOT IN (${names.map(() => '?').join(',')})`, [nowIso(), ...names])
   })
   return { updated: r.data.length, fetchedAt: r.fetchedAt }

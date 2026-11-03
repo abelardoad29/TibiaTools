@@ -73,6 +73,46 @@ export function binarize(g: Gray, threshold: number | 'otsu', darkText: boolean)
   return { width: g.width, height: g.height, data: out }
 }
 
+/**
+ * Umbral adaptativo por línea de píxeles: el fondo es el tono dominante de cada línea y el texto es lo que se
+ * aparta de él más de `delta`. El Market de Tibia pinta cada fila con dos tonos exactos (fondo y texto) que
+ * cambian según la fila (resaltada, atenuada, rojiza…), así que un umbral fijo funde filas o pierde texto.
+ * Si en una línea el texto ocupa más que el fondo (nombres largos en un recorte estrecho), el fondo es el
+ * segundo tono más frecuente cuando es más oscuro (o más claro, con texto oscuro) y ocupa al menos un 25 %.
+ */
+export function binarizeAdaptive(g: Gray, delta: number, darkText: boolean): Binary {
+  const out = new Uint8Array(g.data.length)
+  const hist = new Uint32Array(256)
+  for (let y = 0; y < g.height; y++) {
+    hist.fill(0)
+    const row = y * g.width
+    for (let x = 0; x < g.width; x++) hist[g.data[row + x]!]!++
+    let mode = 0
+    for (let v = 1; v < 256; v++) if (hist[v]! > hist[mode]!) mode = v
+    let second = mode === 0 ? 1 : 0
+    for (let v = 0; v < 256; v++) if (v !== mode && hist[v]! > hist[second]!) second = v
+    const bg = hist[second]! >= g.width * 0.25 && (darkText ? second > mode : second < mode) ? second : mode
+    for (let x = 0; x < g.width; x++) {
+      const v = g.data[row + x]!
+      out[row + x] = darkText ? (v < bg - delta ? 1 : 0) : v > bg + delta ? 1 : 0
+    }
+  }
+  return { width: g.width, height: g.height, data: out }
+}
+
+/** Binariza según el preproceso del perfil: umbral fijo, Otsu o adaptativo por línea. */
+export function toBinary(g: Gray, p: { threshold: number | 'otsu' | 'auto'; darkText: boolean; delta?: number }): Binary {
+  return p.threshold === 'auto' ? binarizeAdaptive(g, p.delta ?? 10, p.darkText) : binarize(g, p.threshold, p.darkText)
+}
+
+/** Brillo medio de una región (para detectar la entrada seleccionada de una lista). */
+export function meanLuma(g: Gray, r: Rect): number {
+  const c = crop(g, r)
+  let s = 0
+  for (const v of c.data) s += v
+  return s / Math.max(1, c.data.length)
+}
+
 /** Escala un rectángulo del perfil (resolución de referencia) a la imagen real. */
 export function scaleRect(r: Rect, sx: number, sy: number): Rect {
   return { x: Math.round(r.x * sx), y: Math.round(r.y * sy), w: Math.max(1, Math.round(r.w * sx)), h: Math.max(1, Math.round(r.h * sy)) }

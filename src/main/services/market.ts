@@ -4,11 +4,62 @@ import type { DataSource } from '@shared/provenance'
 import type { BookSide, OfferLevel } from '@core/domain/market/order-book'
 import { priceStats } from '@core/domain/pricing/stats'
 import { all, get, nowIso, run, tx, type Db } from '../db/database'
-import { tibiaMarket, unixToIso } from '../external/tibiamarket'
+import { tibiaMarket, unixToIso, type MarketValues } from '../external/tibiamarket'
 import type { AppContext } from '../context'
 import { iconUrl, itemByTibiaId, requireWorld } from './catalog'
 
 // ---------- Importación de terceros (tibiamarket) ----------
+
+// tibiamarket usa -1 / 0 como "sin dato".
+const positive = (x: number | null | undefined) => (x === null || x === undefined || x <= 0 ? null : x)
+const nonNegative = (x: number | null | undefined) => (x === null || x === undefined || x < 0 ? null : x)
+
+/**
+ * Guarda una respuesta de /market_values (mejor precio, nº de ofertas y estadísticas día/mes) como
+ * source = 'third_party'. Los items que no cambiaron desde la última importación tienen la misma hora del
+ * dato y se ignoran por las claves únicas, así que reimportar un mundo solo agrega lo nuevo.
+ */
+export function storeMarketValues(db: Db, worldId: number, values: MarketValues[]): { quotes: number; stats: number; skipped: number; items: number } {
+  const ids = new Map(all<{ id: number; tibia_item_id: number }>(db, 'SELECT id, tibia_item_id FROM items WHERE tibia_item_id IS NOT NULL').map((r) => [r.tibia_item_id, r.id]))
+  const quote = db.prepare(
+    `INSERT OR IGNORE INTO market_quotes (world_id, item_id, best_buy_gp, best_sell_gp, buy_offers, sell_offers, source, observed_at_utc, created_at)
+     VALUES (?,?,?,?,?,?,'third_party',?,?)`,
+  )
+  const stat = db.prepare(
+    `INSERT OR IGNORE INTO market_stats (world_id, item_id, stat_window, side, transactions, avg_price_gp, min_price_gp, max_price_gp, source, observed_at_utc, created_at)
+     VALUES (?,?,?,?,?,?,?,?,'third_party',?,?)`,
+  )
+  const out = { quotes: 0, stats: 0, skipped: 0, items: 0 }
+  const createdAt = nowIso()
+  tx(db, () => {
+    for (const v of values) {
+      const itemId = ids.get(v.id)
+      if (itemId === undefined) {
+        out.skipped++
+        continue
+      }
+      out.items++
+      const observedAt = unixToIso(v.time)
+      const buy = positive(v.buy_offer)
+      const sell = positive(v.sell_offer)
+      if (buy !== null || sell !== null) {
+        const r = quote.run(worldId, itemId, buy, sell, nonNegative(v.buy_offers), nonNegative(v.sell_offers), observedAt, createdAt)
+        if (Number(r.changes) === 0) out.skipped++
+        else out.quotes++
+      }
+      const add = (window: '30d' | '1d', side: 'buy' | 'sell', count: number | null | undefined, avg: number | null | undefined, min: number | null | undefined, max: number | null | undefined) => {
+        // Sin transacciones ni precio medio no hay estadística útil (la mayoría de los items en "1d").
+        if (positive(count) === null && positive(avg) === null) return
+        out.stats += Number(stat.run(worldId, itemId, window, side, nonNegative(count), positive(avg), positive(min), positive(max), observedAt, createdAt).changes)
+      }
+      add('30d', 'sell', v.month_sold, v.month_average_sell, v.month_lowest_sell, v.month_highest_sell)
+      add('30d', 'buy', v.month_bought, v.month_average_buy, v.month_lowest_buy, v.month_highest_buy)
+      add('1d', 'sell', v.day_sold, v.day_average_sell, v.day_lowest_sell, v.day_highest_sell)
+      add('1d', 'buy', v.day_bought, v.day_average_buy, v.day_lowest_buy, v.day_highest_buy)
+    }
+  })
+  return out
+}
 
 /**
  * Importa /market_values de un mundo (mejor precio + estadísticas día/mes) y, si se piden ids,
@@ -19,42 +70,9 @@ export async function importThirdParty(ctx: AppContext, worldName: string, itemI
   const world = requireWorld(ctx.db, worldName)
   const api = tibiaMarket(ctx.http)
   const result: ImportResult = { scans: 0, offers: 0, stats: 0, skipped: 0, errors: [] }
-  const values = await api.marketValues(world.name, itemIds)
-  const createdAt = nowIso()
-
-  tx(ctx.db, () => {
-    for (const v of values) {
-      const item = itemByTibiaId(ctx.db, v.id)
-      if (!item) {
-        result.skipped++
-        continue
-      }
-      const observedAt = unixToIso(v.time)
-      const q = run(
-        ctx.db,
-        `INSERT OR IGNORE INTO market_quotes (world_id, item_id, best_buy_gp, best_sell_gp, buy_offers, sell_offers, source, observed_at_utc, created_at)
-         VALUES (?,?,?,?,NULL,NULL,'third_party',?,?)`,
-        [world.id, item.id, v.buy_offer && v.buy_offer > 0 ? v.buy_offer : null, v.sell_offer && v.sell_offer > 0 ? v.sell_offer : null, observedAt, createdAt],
-      )
-      if (Number(q.changes) === 0) result.skipped++
-      const stat = (window: '30d' | '1d', side: 'buy' | 'sell', tx: number | null | undefined, avg: number | null | undefined, min: number | null | undefined, max: number | null | undefined) => {
-        // tibiamarket usa -1 / 0 como "sin dato"
-        const clean = (x: number | null | undefined) => (x === null || x === undefined || x < 0 ? null : x)
-        if ([tx, avg, min, max].every((x) => clean(x) === null)) return
-        const r = run(
-          ctx.db,
-          `INSERT OR IGNORE INTO market_stats (world_id, item_id, stat_window, side, transactions, avg_price_gp, min_price_gp, max_price_gp, source, observed_at_utc, created_at)
-           VALUES (?,?,?,?,?,?,?,?,'third_party',?,?)`,
-          [world.id, item.id, window, side, clean(tx), clean(avg), clean(min) || null, clean(max) || null, observedAt, createdAt],
-        )
-        result.stats += Number(r.changes)
-      }
-      stat('30d', 'sell', v.month_sold, v.month_average_sell, v.month_lowest_sell, v.month_highest_sell)
-      stat('30d', 'buy', v.month_bought, v.month_average_buy, v.month_lowest_buy, v.month_highest_buy)
-      stat('1d', 'sell', v.day_sold, v.day_average_sell, v.day_lowest_sell, v.day_highest_sell)
-      stat('1d', 'buy', v.day_bought, v.day_average_buy, v.day_lowest_buy, v.day_highest_buy)
-    }
-  })
+  const stored = storeMarketValues(ctx.db, world.id, await api.marketValues(world.name, itemIds))
+  result.stats = stored.stats
+  result.skipped = stored.skipped
 
   for (const tibiaId of itemIds ?? []) {
     const item = itemByTibiaId(ctx.db, tibiaId)

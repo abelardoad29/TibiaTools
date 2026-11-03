@@ -69,14 +69,36 @@ export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={clsx(inputCls, props.className)} />
 }
 
-export function Select({ options, ...props }: SelectHTMLAttributes<HTMLSelectElement> & { options: { value: string; label: string }[] }) {
+export interface SelectOption {
+  value: string
+  label: string
+  /** Si alguna opción trae grupo, se agrupan con <optgroup> en el orden en que aparecen. */
+  group?: string
+}
+
+export function Select({ options, ...props }: SelectHTMLAttributes<HTMLSelectElement> & { options: SelectOption[] }) {
+  const opt = (o: SelectOption) => (
+    <option key={o.value} value={o.value}>
+      {o.label}
+    </option>
+  )
+  const groups: { label: string | undefined; options: SelectOption[] }[] = []
+  for (const o of options) {
+    const last = groups.at(-1)
+    if (last && last.label === o.group) last.options.push(o)
+    else groups.push({ label: o.group, options: [o] })
+  }
   return (
     <select {...props} className={clsx(inputCls, props.className)}>
-      {options.map((o) => (
-        <option key={o.value} value={o.value}>
-          {o.label}
-        </option>
-      ))}
+      {groups.map((g, i) =>
+        g.label ? (
+          <optgroup key={`${g.label}-${i}`} label={g.label}>
+            {g.options.map(opt)}
+          </optgroup>
+        ) : (
+          g.options.map(opt)
+        ),
+      )}
     </select>
   )
 }

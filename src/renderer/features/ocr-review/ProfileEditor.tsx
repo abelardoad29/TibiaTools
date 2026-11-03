@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { binarize, crop, toGray, type Binary } from '@core/ocr/image'
+import { crop, toBinary, toGray, type Binary } from '@core/ocr/image'
 import { learnGlyphs, mergeAtlas, readLine } from '@core/ocr/glyphs'
 import type { DetailsField, OcrProfile, OfferColumnKey, Rect, RgbaImage, ScreenType } from '@core/ocr/types'
 import { useApiMutation } from '../../lib/api'
@@ -16,7 +16,8 @@ export function emptyProfile(screenType: ScreenType, width: number, height: numb
     refHeight: height,
     tables: [],
     detailsFields: [],
-    preprocess: { threshold: 'otsu', darkText: false, spaceGap: 3 },
+    // "auto": el Market pinta cada fila con su propio par de tonos (resaltada, atenuada, rojiza).
+    preprocess: { threshold: 'auto', delta: 20, darkText: false, spaceGap: 4 },
     atlas: { glyphs: [] },
     version: 0,
     updatedAt: null,
@@ -50,9 +51,24 @@ function BinaryPreview({ bin }: { bin: Binary }) {
  * Editor visual de perfiles OCR. Las regiones se dibujan sobre una captura real; la calibración
  * aprende los glifos a partir de líneas que el usuario etiqueta. No hay coordenadas universales.
  */
-export function ProfileEditor({ initial, imageUrl, onClose, onSaved }: { initial: OcrProfile; imageUrl: string; onClose: () => void; onSaved: (p: OcrProfile) => void }) {
+export function ProfileEditor({
+  initial,
+  imageUrl,
+  onClose,
+  onSaved,
+  calibrate = false,
+}: {
+  initial: OcrProfile
+  imageUrl: string
+  onClose: () => void
+  onSaved: (p: OcrProfile) => void
+  /** Abrir directamente en la calibración de glifos. */
+  calibrate?: boolean
+}) {
   const [p, setP] = useState<OcrProfile>(initial)
-  const [tool, setTool] = useState<Tool>({ kind: initial.screenType === 'offers' ? 'table' : 'detail', side: 'sell', ...(initial.screenType === 'details' ? { field: 'transactions' as const } : {}) } as Tool)
+  const [tool, setTool] = useState<Tool>(
+    calibrate ? { kind: 'calibrate' } : ({ kind: initial.screenType === 'offers' ? 'table' : 'detail', side: 'sell', ...(initial.screenType === 'details' ? { field: 'transactions' as const } : {}) } as Tool),
+  )
   const [image, setImage] = useState<RgbaImage | null>(null)
   const [sample, setSample] = useState<{ rect: Rect; bin: Binary; read: string } | null>(null)
   const [label, setLabel] = useState('')
@@ -67,7 +83,7 @@ export function ProfileEditor({ initial, imageUrl, onClose, onSaved }: { initial
     })
   }, [imageUrl])
 
-  const binOf = (r: Rect) => binarize(crop(toGray(image!), r), p.preprocess.threshold, p.preprocess.darkText)
+  const binOf = (r: Rect) => toBinary(crop(toGray(image!), r), p.preprocess)
 
   const onDraw = (r: Rect) => {
     if (tool.kind === 'table') {
@@ -104,6 +120,8 @@ export function ProfileEditor({ initial, imageUrl, onClose, onSaved }: { initial
       ...t.columns.map((c) => ({ rect: { x: c.x, y: t.rect.y, w: c.w, h: t.rect.h }, label: `${t.side}: ${COL_LABEL[c.key]}`, tone: 'accent' as const })),
     ]),
     ...p.detailsFields.map((f) => ({ rect: f.rect, label: `${f.side}: ${FIELD_LABEL[f.field]}`, tone: 'accent' as const })),
+    ...(p.anchor ? [{ rect: p.anchor, label: `ancla «${p.anchor.label}»`, tone: 'warn' as const }] : []),
+    ...(p.itemList ? [{ rect: p.itemList.rect, label: 'lista de items', tone: 'info' as const }] : []),
     ...(sample ? [{ rect: sample.rect, label: 'muestra', tone: 'good' as const }] : []),
   ]
 
@@ -157,12 +175,12 @@ export function ProfileEditor({ initial, imageUrl, onClose, onSaved }: { initial
               </Field>
             ))}
           <div className="grid grid-cols-2 gap-2">
-            <Field label="Umbral" hint="otsu o 0–255">
+            <Field label="Umbral" hint="auto (por fila), otsu o 0–255">
               <Input
                 value={String(p.preprocess.threshold)}
                 onChange={(e) => {
                   const v = e.target.value.trim()
-                  setP({ ...p, preprocess: { ...p.preprocess, threshold: v === 'otsu' || v === '' ? 'otsu' : Math.max(0, Math.min(255, Number(v) || 0)) } })
+                  setP({ ...p, preprocess: { ...p.preprocess, threshold: v === 'auto' || v === '' ? 'auto' : v === 'otsu' ? 'otsu' : Math.max(0, Math.min(255, Number(v) || 0)) } })
                 }}
               />
             </Field>
@@ -175,7 +193,8 @@ export function ProfileEditor({ initial, imageUrl, onClose, onSaved }: { initial
           <div className="rounded-lg border border-line p-2">
             <div className="mb-1 text-xs font-medium text-muted">Calibración de glifos</div>
             <p className="text-xs text-muted">
-              Elige «Calibrar glifos», dibuja un rectángulo ajustado a UNA línea (p. ej. un precio) y escribe exactamente lo que dice. Repite hasta cubrir los dígitos 0–9 y la coma.
+              {tool.kind === 'calibrate' ? 'Dibuja' : 'Elige «Calibrar glifos» y dibuja'} un rectángulo ajustado a UNA línea de la tabla (p. ej. un total como 1,255,740) y escribe exactamente lo que dice. Repite con
+              otras filas hasta cubrir los dígitos 0–9 y la coma; una fecha de «Ends At» agrega «-» y «:».
             </p>
             {sample && (
               <div className="mt-2 flex flex-col gap-2">

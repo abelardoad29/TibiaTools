@@ -1,29 +1,31 @@
-import { useCallback, useEffect, useState, type ComponentType } from 'react'
+import { useCallback, useEffect, useRef, useState, type ComponentType } from 'react'
 import { createHashRouter, NavLink, Outlet, RouterProvider } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
 import {
   ArrowLeftRight,
   Bell,
-  BookOpen,
   Camera,
   ChartLine,
   Coins,
   Crosshair,
+  Globe2,
   Home,
   Plane,
   ScanText,
   Settings as SettingsIcon,
+  Skull,
   ShoppingCart,
   Store,
   Wrench,
 } from 'lucide-react'
+import type { EventMap, ThirdPartySyncStatus } from '@shared/api'
 import { platform } from '../platform'
 import { useApi, useEvent } from '../lib/api'
 import { Empty, Page } from '../components/ui'
 import { OverviewPage } from '../features/overview/OverviewPage'
 import { ToolsPage } from '../features/tools/ToolsPage'
-import { CatalogPage } from '../features/catalog/CatalogPage'
+import { WorldsPage } from '../features/worlds/WorldsPage'
 import { CollectorPage } from '../features/collector/CollectorPage'
 import { OcrReviewPage } from '../features/ocr-review/OcrReviewPage'
 import { MarketExplorerPage } from '../features/market-explorer/MarketExplorerPage'
@@ -35,6 +37,7 @@ import { CartPage } from '../features/cart/CartPage'
 import { AlertsPage } from '../features/alerts/AlertsPage'
 import { SettingsPage } from '../features/settings/SettingsPage'
 import { HuntedPage } from '../features/hunted/HuntedPage'
+import { BossesPage } from '../features/bosses/BossesPage'
 
 interface NavItem {
   path: string
@@ -48,7 +51,8 @@ const NAV: NavItem[] = [
   { path: '/', label: 'Inicio', icon: Home, element: OverviewPage },
   { path: '/tools', label: 'Herramientas', icon: Wrench, element: ToolsPage },
   { path: '/hunted', label: 'Hunted', icon: Crosshair, element: HuntedPage, desktopOnly: true },
-  { path: '/catalog', label: 'Catálogo', icon: BookOpen, element: CatalogPage },
+  { path: '/bosses', label: 'Bosses', icon: Skull, element: BossesPage, desktopOnly: true },
+  { path: '/worlds', label: 'Mundos', icon: Globe2, element: WorldsPage },
   { path: '/collector', label: 'Collector', icon: Camera, element: CollectorPage, desktopOnly: true },
   { path: '/ocr', label: 'Revisión OCR', icon: ScanText, element: OcrReviewPage, desktopOnly: true },
   { path: '/market', label: 'Market', icon: Store, element: MarketExplorerPage, desktopOnly: true },
@@ -117,9 +121,40 @@ function Layout() {
     'collector.imported',
     useCallback(
       (p: { count: number }) => {
-        setToast(p.count === 1 ? 'Captura de Tibia importada: revísala en Revisión OCR' : `${p.count} capturas de Tibia importadas`)
+        setToast(p.count === 1 ? 'Captura de Tibia importada: analizando…' : `${p.count} capturas de Tibia importadas: analizando…`)
         void qc.invalidateQueries({ queryKey: ['collector.screenshots.list'] })
         void qc.invalidateQueries({ queryKey: ['collector.tibiaFolder.status'] })
+      },
+      [qc],
+    ),
+  )
+  // Resultado del análisis automático de cada captura del Market.
+  useEvent(
+    'collector.analyzed',
+    useCallback(
+      (p: EventMap['collector.analyzed']) => {
+        if (p.decision === 'confirmed') setToast(`Guardado: ${p.item ?? 'item'}${p.world ? ` en ${p.world}` : ''}`)
+        else if (p.decision === 'review') setToast(`Para revisar${p.item ? ` (${p.item})` : ''}: ${p.reasons[0] ?? 'revisa en Revisión OCR'}`)
+        void qc.invalidateQueries({ queryKey: ['collector.screenshots.list'] })
+        if (p.decision === 'confirmed') {
+          for (const c of ['market.coverage', 'market.itemsWithData', 'market.scans.list', 'market.book', 'market.history', 'app.info']) void qc.invalidateQueries({ queryKey: [c] })
+        }
+      },
+      [qc],
+    ),
+  )
+  // Descarga de precios de terceros: el estado se refresca en cada mundo; los datos, cuando entra uno nuevo.
+  const lastImported = useRef(-1)
+  useEvent(
+    'thirdParty.progress',
+    useCallback(
+      (s: ThirdPartySyncStatus) => {
+        void qc.invalidateQueries({ queryKey: ['market.thirdParty.status'] })
+        if (s.imported !== lastImported.current || !s.running) {
+          lastImported.current = s.imported
+          for (const k of ['market.itemsWithData', 'market.book', 'market.coverage', 'app.info']) void qc.invalidateQueries({ queryKey: [k] })
+        }
+        if (!s.running && s.finishedAt && s.imported > 0) setToast(`Precios de terceros: ${s.imported} mundos actualizados${s.failed ? `, ${s.failed} con error` : ''}`)
       },
       [qc],
     ),

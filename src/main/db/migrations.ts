@@ -448,4 +448,53 @@ CREATE TABLE watch_events (
 CREATE INDEX idx_watch_events ON watch_events(detected_at);
 `,
   },
+  {
+    version: 3,
+    name: 'third_party_sync',
+    sql: `
+-- Última importación de tibiamarket.top por mundo: evita bajar de nuevo un mundo que no cambió.
+-- remote_updated_at: last_update de tibiamarket del último import correcto; checked_at: última vez que se revisó.
+CREATE TABLE third_party_sync (
+  world_id INTEGER PRIMARY KEY REFERENCES worlds(id),
+  remote_updated_at TEXT,
+  imported_at TEXT,
+  items INTEGER NOT NULL DEFAULT 0,
+  error TEXT,
+  checked_at TEXT NOT NULL
+);
+`,
+  },
+  {
+    version: 4,
+    name: 'screenshot_analysis',
+    sql: `
+-- Resultado del análisis automático de cada captura (item y mundo detectados, decisión y motivos).
+ALTER TABLE screenshots ADD COLUMN analysis_json TEXT;
+`,
+  },
+  {
+    version: 5,
+    name: 'boss_sightings',
+    sql: `
+-- Apariciones de bosses en las Kill Statistics de cada mundo (día de la estadística, ~3 a. m. CET).
+-- Se guarda el nombre del mundo (no FK): el historial incluye mundos fusionados o cerrados.
+CREATE TABLE boss_sightings (
+  world TEXT NOT NULL COLLATE NOCASE,
+  boss TEXT NOT NULL,
+  stats_day TEXT NOT NULL,
+  killed INTEGER NOT NULL,
+  players_killed INTEGER NOT NULL,
+  source TEXT NOT NULL CHECK (source IN ('seed','tibiamaps','tibiadata')),
+  PRIMARY KEY (world, boss, stats_day)
+);
+
+-- Rango de días de estadística ya revisados por mundo: lo que falte se baja al abrir el mundo.
+CREATE TABLE boss_coverage (
+  world TEXT PRIMARY KEY COLLATE NOCASE,
+  history_from TEXT NOT NULL,
+  through TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+`,
+  },
 ]

@@ -1,98 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { binarize, crop, otsu, scaleRect, toGray, downsample, meanAbsDiff } from '@core/ocr/image'
-import { learnGlyphs, mergeAtlas, readLine, rowSpans } from '@core/ocr/glyphs'
+import { binarize, binarizeAdaptive, crop, otsu, scaleRect, toGray, downsample, meanAbsDiff } from '@core/ocr/image'
+import { learnFromCell, learnFromItemEntry } from '@core/ocr/calibrate'
+import { learnGlyphs, readLine, rowSpans } from '@core/ocr/glyphs'
 import { reviewLevel, runOcr } from '@core/ocr/pipeline'
-import type { OcrProfile, Rect, RgbaImage } from '@core/ocr/types'
-
-// Fuente sintética 5×7 (no es la fuente de Tibia: solo valida el pipeline). La coma es 2×3 y baja.
-const FONT: Record<string, string[]> = {
-  '0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
-  '1': ['00100', '01100', '00100', '00100', '00100', '00100', '01110'],
-  '2': ['01110', '10001', '00001', '00010', '00100', '01000', '11111'],
-  '3': ['11110', '00001', '00001', '01110', '00001', '00001', '11110'],
-  '4': ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
-  '5': ['11111', '10000', '11110', '00001', '00001', '10001', '01110'],
-  '6': ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
-  '7': ['11111', '00001', '00010', '00100', '01000', '01000', '01000'],
-  '8': ['01110', '10001', '10001', '01110', '10001', '10001', '01110'],
-  '9': ['01110', '10001', '10001', '01111', '00001', '00010', '01100'],
-  ',': ['00', '00', '00', '00', '00', '01', '01', '10'],
-}
-
-const BG = [52, 46, 40]
-const FG = [208, 208, 208]
-
-function blank(w: number, h: number): RgbaImage {
-  const data = new Uint8ClampedArray(w * h * 4)
-  for (let i = 0; i < w * h; i++) {
-    // ruido leve de fondo
-    const n = (i * 7919) % 9
-    data.set([BG[0]! + n, BG[1]! + n, BG[2]! + n, 255], i * 4)
-  }
-  return { width: w, height: h, data }
-}
-
-/** Dibuja texto alineado a la derecha dentro de `rect` (como las columnas numéricas del Market). */
-function draw(img: RgbaImage, text: string, rect: Rect): void {
-  const widths = [...text].map((c) => FONT[c]![0]!.length)
-  const total = widths.reduce((a, b) => a + b + 1, -1)
-  let x = rect.x + rect.w - total - 2
-  for (const c of text) {
-    const g = FONT[c]!
-    g.forEach((row, dy) => {
-      ;[...row].forEach((bit, dx) => {
-        if (bit === '1') img.data.set([FG[0]!, FG[1]!, FG[2]!, 255], ((rect.y + 2 + dy) * img.width + x + dx) * 4)
-      })
-    })
-    x += g[0]!.length + 1
-  }
-}
-
-const ROW_H = 14
-const COLS = { amount: { x: 10, w: 60 }, unitPrice: { x: 80, w: 100 }, totalPrice: { x: 190, w: 120 } }
-
-function marketImage(rows: { amount: string; price: string; total: string }[], top = 20): RgbaImage {
-  const img = blank(330, top + rows.length * ROW_H + 10)
-  rows.forEach((r, i) => {
-    const y = top + i * ROW_H
-    draw(img, r.amount, { x: COLS.amount.x, y, w: COLS.amount.w, h: ROW_H })
-    draw(img, r.price, { x: COLS.unitPrice.x, y, w: COLS.unitPrice.w, h: ROW_H })
-    draw(img, r.total, { x: COLS.totalPrice.x, y, w: COLS.totalPrice.w, h: ROW_H })
-  })
-  return img
-}
-
-function calibratedProfile(): OcrProfile {
-  // Calibración: una línea etiquetada que contiene todos los dígitos y la coma.
-  const sample = blank(200, 16)
-  draw(sample, '1,234,567,890', { x: 0, y: 0, w: 200, h: 16 })
-  const learned = learnGlyphs(binarize(toGray(sample), 'otsu', false), '1,234,567,890')
-  if ('error' in learned) throw new Error(learned.error)
-  return {
-    id: 1,
-    name: 'sintético',
-    screenType: 'offers',
-    refWidth: 330,
-    refHeight: 20 + 3 * ROW_H + 10,
-    tables: [
-      {
-        side: 'sell',
-        rect: { x: 0, y: 20, w: 330, h: 3 * ROW_H },
-        columns: [
-          { key: 'amount', ...COLS.amount },
-          { key: 'unitPrice', ...COLS.unitPrice },
-          { key: 'totalPrice', ...COLS.totalPrice },
-        ],
-        rowHeight: null,
-      },
-    ],
-    detailsFields: [],
-    preprocess: { threshold: 'otsu', darkText: false, spaceGap: 3 },
-    atlas: mergeAtlas({ glyphs: [] }, learned.glyphs),
-    version: 1,
-    updatedAt: null,
-  }
-}
+import { anchoredProfile, AUTO, blank, calibratedProfile, COLS, draw, FONT, marketImage, marketWindow, ROW_H, ROWS3 } from './synthetic'
 
 describe('OCR: primitivas', () => {
   it('Otsu separa texto claro de fondo oscuro', () => {
@@ -181,5 +92,55 @@ describe('OCR: pipeline completo con fuente sintética', () => {
     draw(img, '34', { x: 40, y: 0, w: 60, h: 12 })
     const line = readLine(binarize(crop(toGray(img), { x: 0, y: 0, w: 120, h: 12 }), 'otsu', false), profile.atlas, 3)
     expect(line.text).toBe('12 34')
+  })
+})
+
+
+describe('OCR: Market real (umbral por fila, ancla, lista de items)', () => {
+  it('el umbral adaptativo toma como fondo el tono oscuro aunque el texto ocupe más de media línea', () => {
+    const g = { width: 10, height: 1, data: new Uint8Array([64, 192, 192, 192, 64, 192, 192, 192, 64, 64]) }
+    expect([...binarizeAdaptive(g, 20, false).data]).toEqual([0, 1, 1, 1, 0, 1, 1, 1, 0, 0])
+  })
+
+  it('lee filas con fondos y textos de distinto tono, salta las vacías y ubica la ventana desplazada', () => {
+    const r = runOcr(marketWindow(37, 11, ROWS3, [{ name: ['12'], bg: 64 }]), anchoredProfile())
+    expect(r.marketFound).toBe(true)
+    expect(r.offset).toMatchObject({ dx: 37, dy: 11 })
+    expect(r.rows.map((x) => [x.amount.value, x.unitPrice.value, x.totalPrice?.value])).toEqual([
+      [25, 1_000, 25_000],
+      [3, 1_005, 3_015],
+      [10, 1_010, 10_100],
+    ])
+    expect(r.rows.every((x) => x.issues.length === 0)).toBe(true)
+    // Con un umbral fijo de 150 la fila atenuada (128) y la rojiza (147) desaparecen.
+    const fixed = runOcr(marketWindow(37, 11, ROWS3, []), { ...anchoredProfile(), preprocess: { threshold: 150, darkText: false, spaceGap: 3 } })
+    expect(fixed.rows).toHaveLength(1)
+  })
+
+  it('sin la etiqueta ancla avisa que no encontró el Market en vez de leer basura', () => {
+    const img = blank(480, 170)
+    const r = runOcr(img, anchoredProfile())
+    expect(r.marketFound).toBe(false)
+    expect(r.rows).toEqual([])
+    expect(r.warnings.join()).toMatch(/ventana del Market/)
+  })
+
+  it('elige la entrada seleccionada de la lista (fondo más claro) y une nombres en dos líneas', () => {
+    const r = runOcr(marketWindow(0, 0, ROWS3, [{ name: ['12', '56'], bg: 64 }, { name: ['34'], bg: 88 }]), anchoredProfile())
+    expect(r.item?.entries.map((e) => e.raw)).toEqual(['12 56', '34'])
+    expect(r.item?.selected).toMatchObject({ index: 1, raw: '34' })
+    // Dos entradas con el mismo fondo: no se adivina.
+    const tie = runOcr(marketWindow(0, 0, ROWS3, [{ name: ['12'], bg: 64 }, { name: ['34'], bg: 64 }]), anchoredProfile())
+    expect(tie.item?.selected).toBeNull()
+  })
+
+  it('aprende glifos de un nombre en dos líneas y de una celda', () => {
+    const img = marketWindow(0, 0, ROWS3, [{ name: ['12', '56'], bg: 64 }])
+    const g = toGray(img)
+    const entry = learnFromItemEntry(g, { x: 13, y: 20, w: 62, h: 24 }, AUTO, '12 56')
+    expect('glyphs' in entry && entry.glyphs.map((x) => x.ch).join('')).toBe('1256')
+    expect('error' in learnFromItemEntry(g, { x: 13, y: 20, w: 62, h: 24 }, AUTO, '125')).toBe(true)
+    const cell = learnFromCell(g, { x: 90 + COLS.unitPrice.x, y: 20 + ROW_H, w: COLS.unitPrice.w, h: ROW_H }, AUTO, '1,005')
+    expect('glyphs' in cell && cell.glyphs.map((x) => x.ch).join('')).toBe('1,005')
   })
 })

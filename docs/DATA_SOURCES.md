@@ -11,6 +11,8 @@
 | Manual oficial de Tibia | Comisión, duración de ofertas, reglas de transferencia | reglas versionadas | Revisar al cambiar |
 | Noticia oficial del 12-06-2025 | Tarifas de imbuement 7,500 / 60,000 / 250,000 gp con 100 % de éxito | seed de imbuements | — |
 | NabBot (`cogs/tibiawiki.py`) | Paquetes de Yana en Gold Tokens (2 / 4 / 6) y costo por hora = total / 20 h | seed de imbuements | Contrastado el 02-11-2026 |
+| Kill Statistics de tibia.com vía TibiaData (`/v4/killstatistics/<mundo>`) | Boss hunter: apariciones del día más reciente | apariciones de bosses | Caché 15 min; solo al abrir un mundo en Bosses |
+| [tibiamaps/tibia-kill-stats](https://github.com/tibiamaps/tibia-kill-stats) | Historial diario de Kill Statistics por mundo (desde el 06-12-2025): intervalos entre apariciones y días que falten desde el seed | apariciones de bosses | Seed offline; en la app, como mucho 45 archivos por mundo y solo los días que falten. tibia-statistic.com no se usa: está detrás de un desafío de Cloudflare |
 | Carpeta de screenshots de Tibia | Capturas del Market tomadas con la tecla del cliente | `own_capture` | Solo lectura; los originales se copian a `evidence\` |
 
 Todas las peticiones usan el User-Agent `TibiaTools/2.0 (personal desktop app; +https://github.com/abelardoad29/TibiaTools)` y quedan en `external_fetch_log`. La app nunca se hace pasar por un navegador. TibiaWiki rechaza a clientes que no son navegadores en su `api.php`: por eso el catálogo de imbuements se genera desde una copia de la página guardada a mano (`npm run seed:imbuements -- <archivo>`).
@@ -27,3 +29,4 @@ Todas las peticiones usan el User-Agent `TibiaTools/2.0 (personal desktop app; +
 | `items_physical.json` | tibiawiki-sql | `python scripts/seed-tibiawiki-sql.py tibiawiki.db` |
 | `imbuable_items.json` | API de TibiaWiki EN: `imbueslots`, `primarytype` y `vocrequired` de los items de equipo del catálogo (626 imbuibles: 250 de 1 slot, 278 de 2, 98 de 3) y `slots` de cada imbuement | `npm run seed:imbuable` |
 | `creature_gifs.json` | Tibia Tools v1 | — |
+| `boss_spawns.json` | Historial de Kill Statistics de tibiamaps/tibia-kill-stats: por boss, probabilidad diaria de aparecer según los días sin aparecer (todos los mundos juntos, con intervalos abiertos censurados; método de TibiaWiki:Bosses Spawn Frequency) y las 3 últimas apariciones por mundo | `npm run seed:bosses` (clona sin blobs y procesa un mundo a la vez) |

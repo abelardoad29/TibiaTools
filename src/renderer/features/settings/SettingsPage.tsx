@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FolderOpen } from 'lucide-react'
+import { FolderOpen, X } from 'lucide-react'
 import type { MarketFeeRule } from '@core/domain/money/market-fee'
 import type { Settings } from '@shared/settings'
 import { platform } from '../../platform'
@@ -44,6 +44,22 @@ export function SettingsPage() {
             <Field label="Mundo principal">
               <WorldPicker value={s.homeWorld} onChange={(w) => patch({ homeWorld: w })} allowEmpty />
             </Field>
+            <Field label="Mis mundos" hint="Salen primero en todos los selectores de mundo (OCR, Market, Arbitraje…). También puedes marcarlos con ★ en Mundos.">
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-wrap gap-1.5">
+                  {s.favoriteWorlds.map((w) => (
+                    <span key={w} className="inline-flex items-center gap-1 rounded-md border border-line px-1.5 py-0.5 text-sm">
+                      {w}
+                      <button type="button" className="text-muted hover:text-bad" aria-label={`Quitar ${w}`} onClick={() => patch({ favoriteWorlds: s.favoriteWorlds.filter((x) => x !== w) })}>
+                        <X className="size-3.5" />
+                      </button>
+                    </span>
+                  ))}
+                  {s.favoriteWorlds.length === 0 && <span className="text-xs text-muted">Ninguno todavía.</span>}
+                </div>
+                <WorldPicker value={null} onChange={(w) => w && !s.favoriteWorlds.includes(w) && patch({ favoriteWorlds: [...s.favoriteWorlds, w] })} label="Agregar mundo…" />
+              </div>
+            </Field>
             {desktop && (
               <>
                 <Field label="Atajo de captura" hint="Formato Electron, p. ej. CommandOrControl+Shift+F12. Solo dispara una captura en esta app.">
@@ -55,6 +71,24 @@ export function SettingsPage() {
                 <Toggle checked={s.notifications.enabled} onChange={(v) => patch({ notifications: { enabled: v } })} label="Notificaciones de Windows" />
                 <Toggle checked={s.tracker.notify} onChange={(v) => patch({ tracker: { ...s.tracker, notify: v } })} label="Notificar level up / muertes" />
                 <Toggle checked={s.network.thirdPartyEnabled} onChange={(v) => patch({ network: { ...s.network, thirdPartyEnabled: v } })} label="Permitir datos de terceros (tibiamarket.top)" />
+                {s.network.thirdPartyEnabled && (
+                  <div className="flex flex-wrap items-end gap-3">
+                    <Toggle
+                      checked={s.network.thirdPartyAutoSync}
+                      onChange={(v) => patch({ network: { ...s.network, thirdPartyAutoSync: v } })}
+                      label="Bajar los precios de todos los mundos automáticamente (solo los que cambiaron)"
+                    />
+                    <Field label="Revisar cada (horas)">
+                      <Input
+                        inputMode="numeric"
+                        className="w-20"
+                        disabled={!s.network.thirdPartyAutoSync}
+                        value={s.network.thirdPartySyncHours}
+                        onChange={(e) => patch({ network: { ...s.network, thirdPartySyncHours: Math.min(168, Math.max(1, Number(e.target.value) || 1)) } })}
+                      />
+                    </Field>
+                  </div>
+                )}
               </>
             )}
           </div>

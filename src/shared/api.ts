@@ -10,6 +10,8 @@ import type { ChecklistItem, FinalStatus, TransferProfile } from '@core/domain/t
 import type { RouteEvaluation, RouteStatus, TransferRuleSet } from '@core/domain/transfers/rules'
 import type { AlertRule } from '@core/domain/alerts/rules'
 import type { CharacterSnapshot } from '@core/domain/tools/characters'
+import type { WorldOnlineSummary } from '@core/domain/catalog/worlds'
+import type { BossOutlook, BossSpawnStats, Sighting } from '@core/domain/bosses/spawn'
 import type { ImbuementDef, ImbuementTier, TierDef } from '@core/domain/tools/imbuements'
 import type { OcrProfile, Rect, ScreenType } from '@core/ocr/types'
 import type { DataSource } from './provenance'
@@ -32,6 +34,68 @@ export interface World {
   source: string | null
   verifiedAt: string | null
   updatedAt: string
+}
+
+/** Estado en vivo de los mundos (tibia.com vía TibiaData, ~1 min de retraso). */
+export interface WorldsLive {
+  fetchedAt: string
+  /** Total de conectados en todos los mundos. */
+  totalOnline: number | null
+  record: { players: number; date: string } | null
+  worlds: { name: string; status: string | null; playersOnline: number | null }[]
+}
+
+export interface BossOutlookRow extends BossOutlook {
+  intervals: BossSpawnStats['intervals']
+  /** Apariciones usadas para la estadística (todos los mundos). */
+  appearances: number
+  /** GIF de TibiaWiki BR. */
+  imageUrl: string | null
+}
+
+export interface BossesOutlook {
+  world: string
+  /** Última estadística publicada (~3 a. m. CET); cubre el día de juego anterior. */
+  statsDay: string
+  /** Próxima estadística: la que registrará el día de juego en curso. */
+  nextStatsDay: string
+  /** Desde cuándo hay historial de este mundo (null = sin datos). */
+  historyFrom: string | null
+  through: string | null
+  syncError: string | null
+  seed: { generatedAt: string; dataFrom: string | null; dataThrough: string | null; source: string }
+  rows: BossOutlookRow[]
+}
+
+export interface BossHistory {
+  world: string
+  boss: string
+  group: string
+  /** Más reciente primero. */
+  sightings: Sighting[]
+  hazard: number[]
+  tailHazard: number | null
+  intervals: BossSpawnStats['intervals']
+}
+
+export interface WorldDetail {
+  name: string
+  status: string | null
+  playersOnline: number
+  recordPlayers: number | null
+  recordDate: string | null
+  /** "YYYY-MM" según tibia.com. */
+  creationDate: string | null
+  location: string | null
+  pvpType: string | null
+  premiumOnly: boolean | null
+  transferType: string | null
+  battleyeProtected: boolean | null
+  battleyeDate: string | null
+  gameWorldType: string | null
+  questTitles: string[]
+  summary: WorldOnlineSummary
+  fetchedAt: string
 }
 
 export interface ItemSummary {
@@ -127,6 +191,30 @@ export interface Screenshot {
   worldId: number | null
   itemId: number | null
   status: 'new' | 'processed' | 'confirmed' | 'rejected'
+  /** Resultado del análisis automático (null si no se analizó). */
+  analysis: ScreenshotAnalysis | null
+}
+
+/** Qué hizo el análisis automático con una captura y por qué. */
+export interface ScreenshotAnalysis {
+  at: string
+  decision: 'confirmed' | 'review' | 'not_market' | 'error'
+  /** Motivos por los que no se confirmó sola (o el error). */
+  reasons: string[]
+  profileId: number | null
+  /** Nombre leído en la lista de items ('?' = letra aún no aprendida). */
+  itemRead: string | null
+  item: { id: number; name: string; score: number; confident: boolean } | null
+  character: string | null
+  world: string | null
+  rows: number
+  offset: { dx: number; dy: number } | null
+}
+
+export interface ItemIdentificationResult {
+  best: { id: number; name: string; score: number } | null
+  candidates: { id: number; name: string; score: number }[]
+  confident: boolean
 }
 
 export interface WatchList {
@@ -285,6 +373,8 @@ export interface ConfirmScanInput {
   parserVersion: string
   offers: ConfirmOfferInput[]
   stats: ConfirmStatsInput[]
+  /** Entrada de la lista de items que leyó el OCR: al confirmar, sus letras se aprenden con el nombre real. */
+  itemRead?: { rect: Rect; raw: string } | null
 }
 
 export interface AnalysisRequest {
@@ -398,6 +488,36 @@ export interface ImportResult {
   errors: string[]
 }
 
+/** Estado de la descarga masiva de precios de tibiamarket.top (corrida actual o la última). */
+export interface ThirdPartySyncStatus {
+  running: boolean
+  /** Mundos revisados / total de la corrida (los que no cambiaron cuentan como revisados). */
+  done: number
+  total: number
+  current: string | null
+  imported: number
+  unchanged: number
+  failed: number
+  startedAt: string | null
+  finishedAt: string | null
+  /** Próxima revisión automática; null = desactivada. */
+  nextAutoAt: string | null
+  error: string | null
+}
+
+export interface ThirdPartyWorldRow {
+  world: string
+  /** null = aún no se consultó la lista de mundos de tibiamarket en esta sesión. */
+  tracked: boolean | null
+  /** Último escaneo publicado por tibiamarket (de la última consulta). */
+  latestRemoteAt: string | null
+  /** Escaneo de tibiamarket que tenemos importado. */
+  dataAt: string | null
+  importedAt: string | null
+  items: number
+  error: string | null
+}
+
 // ---------- Mapa de canales ----------
 
 export interface ApiMap {
@@ -413,6 +533,10 @@ export interface ApiMap {
   'catalog.worlds.list': { in: { activeOnly: boolean }; out: World[] }
   'catalog.worlds.sync': { in: void; out: { updated: number; fetchedAt: string } }
   'catalog.worlds.update': { in: { name: string; looserTransferConditions: boolean | null }; out: World }
+  'catalog.worlds.live': { in: void; out: WorldsLive }
+  'catalog.worlds.detail': { in: { name: string }; out: WorldDetail }
+  'bosses.outlook': { in: { world: string }; out: BossesOutlook }
+  'bosses.history': { in: { world: string; boss: string }; out: BossHistory }
   'catalog.items.search': { in: { q: string; category: string | null; limit: number }; out: ItemSummary[] }
   'catalog.items.get': { in: { id: number }; out: ItemDetail | null }
   'catalog.items.byName': { in: { names: string[] }; out: ItemSummary[] }
@@ -435,6 +559,9 @@ export interface ApiMap {
 
   'market.thirdParty.import': { in: { world: string; itemIds: number[] | null }; out: ImportResult }
   'market.thirdParty.worlds': { in: void; out: { world: string; lastUpdate: string }[] }
+  'market.thirdParty.sync': { in: { worlds: string[] | null; force: boolean }; out: ThirdPartySyncStatus }
+  'market.thirdParty.cancel': { in: void; out: ThirdPartySyncStatus }
+  'market.thirdParty.status': { in: void; out: { status: ThirdPartySyncStatus; worlds: ThirdPartyWorldRow[] } }
   'market.scans.list': { in: { world: string | null; itemId: number | null; source: DataSource | null; limit: number }; out: ScanSummary[] }
   'market.book': { in: { world: string; itemId: number; includeThirdParty: boolean }; out: { sell: BookView | null; buy: BookView | null; stats: StatsRow[] } }
   'market.history': {
@@ -461,6 +588,8 @@ export interface ApiMap {
   'collector.tibiaFolder.status': { in: void; out: TibiaFolderStatus }
   'collector.tibiaFolder.importExisting': { in: { sinceDays: number | null }; out: { imported: Screenshot[]; skipped: number; errors: string[] } }
   'collector.tibiaFolder.pick': { in: void; out: { path: string } | null }
+  /** Analiza (o vuelve a analizar) capturas: las indicadas o todas las pendientes. */
+  'collector.analyze': { in: { ids: string[] | null }; out: { analyzed: number; confirmed: number; review: number; notMarket: number } }
 
   'watch.status': { in: void; out: WatchStatus }
   'watch.lists': { in: void; out: WatchList[] }
@@ -479,6 +608,7 @@ export interface ApiMap {
   'ocr.profiles.export': { in: { id: number }; out: { path: string } | null }
   'ocr.profiles.import': { in: void; out: OcrProfile | null }
   'ocr.confirmScan': { in: ConfirmScanInput; out: { scanIds: string[]; events: number } }
+  'ocr.identifyItem': { in: { raw: string }; out: ItemIdentificationResult }
 
   'analysis.rules': { in: void; out: { marketFee: RuleVersion<MarketFeeRule>; offerDurationDays: RuleVersion<number>; transferCostTc: RuleVersion<{ regular: number | null; express: number | null }>; transferRules: TransferRuleSet } }
   'analysis.rules.history': { in: { key: string }; out: RuleVersion[] }
@@ -526,7 +656,9 @@ export interface EventMap {
   'characters.updated': { events: number }
   'icons.progress': { done: number; total: number }
   'collector.imported': { count: number }
+  'collector.analyzed': { screenshotId: string; decision: ScreenshotAnalysis['decision']; item: string | null; world: string | null; reasons: string[] }
   'watch.update': { online: number; messages: string[]; burst: boolean }
+  'thirdParty.progress': ThirdPartySyncStatus
 }
 export type EventName = keyof EventMap
 

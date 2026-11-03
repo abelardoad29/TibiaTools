@@ -1,6 +1,7 @@
 import type { Channel, In, ItemSummary, Out, World } from '@shared/api'
 import { DEFAULT_SETTINGS, mergeSettings, type Settings } from '@shared/settings'
 import { matchScore, normalizeName, wikiFileName } from '@core/domain/catalog/names'
+import { summarizeOnline, type OnlinePlayerLite } from '@core/domain/catalog/worlds'
 import { PlatformError, type PlatformApi } from './types'
 
 // Implementación para la PWA companion: herramientas, catálogo (desde seeds) y TibiaData directo.
@@ -107,6 +108,41 @@ const handlers: WebHandlers = {
         updatedAt: seed.fetchedAt,
       }),
     )
+  },
+  'catalog.worlds.live': async () => {
+    const d = await tibiaData<{ worlds: { players_online?: number; record_players?: number; record_date?: string; regular_worlds: { name: string; status?: string; players_online?: number }[] }; information?: { timestamp?: string } }>('/worlds')
+    return {
+      fetchedAt: d.information?.timestamp ?? new Date().toISOString(),
+      totalOnline: d.worlds.players_online ?? null,
+      record: d.worlds.record_players && d.worlds.record_date ? { players: d.worlds.record_players, date: d.worlds.record_date } : null,
+      worlds: d.worlds.regular_worlds.map((w) => ({ name: w.name, status: w.status ?? null, playersOnline: w.players_online ?? null })),
+    }
+  },
+  'catalog.worlds.detail': async ({ name }) => {
+    type W = Record<string, unknown> & { name: string; online_players?: OnlinePlayerLite[] | null; world_quest_titles?: string[] | null }
+    const d = await tibiaData<{ world: W; information?: { timestamp?: string } }>(`/world/${encodeURIComponent(name)}`)
+    const w = d.world
+    const str = (k: string) => (typeof w[k] === 'string' ? (w[k] as string) : null)
+    const num = (k: string) => (typeof w[k] === 'number' ? (w[k] as number) : null)
+    const flag = (k: string) => (typeof w[k] === 'boolean' ? (w[k] as boolean) : null)
+    return {
+      name: w.name,
+      status: str('status'),
+      playersOnline: num('players_online') ?? w.online_players?.length ?? 0,
+      recordPlayers: num('record_players'),
+      recordDate: str('record_date'),
+      creationDate: str('creation_date'),
+      location: str('location'),
+      pvpType: str('pvp_type'),
+      premiumOnly: flag('premium_only'),
+      transferType: str('transfer_type'),
+      battleyeProtected: flag('battleye_protected'),
+      battleyeDate: str('battleye_date'),
+      gameWorldType: str('game_world_type'),
+      questTitles: w.world_quest_titles ?? [],
+      summary: summarizeOnline(w.online_players ?? []),
+      fetchedAt: d.information?.timestamp ?? new Date().toISOString(),
+    }
   },
   'tools.boosted': async () => {
     try {

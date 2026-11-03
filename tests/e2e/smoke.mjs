@@ -19,7 +19,7 @@ try {
   page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))
   await page.waitForSelector('nav[aria-label="Secciones"]', { timeout: 30_000 })
-  const sections = ['Inicio', 'Herramientas', 'Hunted', 'Catálogo', 'Collector', 'Revisión OCR', 'Market', 'Histórico', 'Tibia Coins', 'Arbitraje', 'Transferencias', 'Carrito', 'Alertas', 'Ajustes']
+  const sections = ['Inicio', 'Herramientas', 'Hunted', 'Bosses', 'Mundos', 'Collector', 'Revisión OCR', 'Market', 'Histórico', 'Tibia Coins', 'Arbitraje', 'Transferencias', 'Carrito', 'Alertas', 'Ajustes']
   for (const name of sections) {
     await page.getByRole('link', { name, exact: true }).click()
     await page.waitForTimeout(700)
@@ -27,18 +27,36 @@ try {
     console.log(`✓ ${name} → h1="${title}"`)
     await page.screenshot({ path: join(shots, `${name.replace(/\s+/g, '_')}.png`) })
   }
-  // Interacciones básicas sin red: búsqueda de items y Share Exp por nivel.
-  await page.getByRole('link', { name: 'Catálogo', exact: true }).click()
-  await page.getByPlaceholder('nombre, iniciales (gmp)…').fill('vampire teeth')
-  await page.waitForSelector('text=Vampire Teeth', { timeout: 10_000 })
-  console.log('✓ búsqueda de catálogo')
-  // Icono real desde TibiaWiki BR vía tt-img:// (depende de la red: no es fatal).
-  const iconOk = await page
-    .waitForFunction(() => [...document.querySelectorAll('img')].some((i) => i.alt.toLowerCase() === 'vampire teeth' && i.complete && i.naturalWidth > 0), null, { timeout: 45_000 })
+  // Mundos: la estrella agrega el mundo a "Mis mundos" y lo pone primero en todos los selectores.
+  await page.getByRole('link', { name: 'Mundos', exact: true }).click()
+  await page.getByPlaceholder('Nombre del mundo').fill('Antica')
+  await page.getByRole('button', { name: 'Agregar Antica a mis mundos' }).click()
+  await page.getByRole('button', { name: 'Quitar Antica de mis mundos' }).waitFor({ timeout: 5_000 })
+  await page.getByRole('link', { name: 'Ajustes', exact: true }).click()
+  await page.waitForSelector('optgroup[label="Mis mundos"] > option[value="Antica"]', { state: 'attached', timeout: 5_000 })
+  console.log('✓ mis mundos: Antica sale primero en los selectores')
+  // Boss hunter: el primer mundo propio se abre solo; la tabla sale aunque no haya red (usa el seed).
+  await page.getByRole('link', { name: 'Bosses', exact: true }).click()
+  await page.waitForSelector('text=/Antica: [0-9]+ bosses/', { timeout: 60_000 })
+  await page.getByRole('checkbox', { name: 'Ocultar los que no tienen chance' }).uncheck()
+  await page.getByRole('cell', { name: 'Ferumbras', exact: true }).click()
+  await page.waitForSelector('text=Probabilidad diaria según días sin aparecer', { timeout: 10_000 })
+  console.log('✓ bosses: probabilidades de Antica y ficha de Ferumbras')
+  await page.screenshot({ path: join(shots, 'boss-detail.png') })
+  await page.getByRole('button', { name: 'Cerrar' }).click()
+  // Datos en vivo de tibia.com vía TibiaData (dependen de la red: no son fatales).
+  await page.getByRole('link', { name: 'Mundos', exact: true }).click()
+  const liveOk = await page
+    .waitForFunction(() => document.body.innerText.includes('actualizado'), null, { timeout: 20_000 })
     .then(() => true)
     .catch(() => false)
-  console.log(iconOk ? '✓ icono de item descargado y cacheado' : '⚠ icono de item no cargó (¿sin red?)')
-  await page.screenshot({ path: join(shots, 'catalog-search.png') })
+  if (liveOk) {
+    await page.getByRole('cell', { name: 'Antica', exact: true }).click()
+    const detailOk = await page.waitForSelector('text=Online ahora', { timeout: 20_000 }).then(() => true).catch(() => false)
+    console.log(detailOk ? '✓ ficha del mundo con datos en vivo' : '⚠ la ficha del mundo no cargó (¿sin red?)')
+    await page.screenshot({ path: join(shots, 'world-detail.png') })
+    await page.getByRole('button', { name: 'Cerrar' }).click()
+  } else console.log('⚠ conectados en vivo no cargaron (¿sin red?)')
   await page.getByRole('link', { name: 'Herramientas', exact: true }).click()
   await page.locator('input[inputmode="numeric"]').first().fill('100')
   await page.getByRole('button', { name: 'Calcular' }).click()
@@ -48,16 +66,14 @@ try {
   await page.waitForSelector('text=Cómo conseguirlo', { timeout: 10_000 })
   await page.waitForSelector('text=Mis items imbuidos', { timeout: 10_000 })
   console.log('✓ imbuements: opciones de compra e items imbuidos')
-  await page.getByRole('link', { name: 'Catálogo', exact: true }).click()
-  await page.getByPlaceholder('nombre, iniciales (gmp)…').fill('terra mantle')
-  await page.getByRole('button', { name: /terra mantle/i }).first().click()
-  await page.waitForSelector('text=NPCs que lo compran (le vendes)', { timeout: 10_000 })
-  const rashidRows = await page.locator('li', { hasText: 'Rashid' }).count()
-  if (rashidRows !== 1) throw new Error(`Rashid aparece ${rashidRows} veces en la ficha`)
-  console.log('✓ ficha del item: Rashid en una sola fila')
-  await page.keyboard.press('Escape')
-  await page.getByRole('button', { name: 'Cerrar' }).click()
   await page.screenshot({ path: join(shots, 'share-exp.png') })
+
+  // Market: la descarga masiva de tibiamarket.top está disponible y su estado se puede leer (sin descargar).
+  await page.getByRole('link', { name: 'Market', exact: true }).click()
+  await page.getByRole('button', { name: 'Actualizar todos los mundos' }).waitFor({ timeout: 10_000 })
+  const tp = await page.evaluate(() => window.tibia.invoke('market.thirdParty.status', undefined))
+  if (!tp.ok || tp.data.status.running || !tp.data.status.nextAutoAt || tp.data.worlds.length < 50) throw new Error(`estado de terceros inesperado: ${JSON.stringify(tp).slice(0, 300)}`)
+  console.log(`✓ precios de terceros: ${tp.data.worlds.length} mundos, revisión automática programada`)
 
   // Captura real: se elige la ventana de la propia app (no el escritorio del usuario).
   await page.getByRole('link', { name: 'Collector', exact: true }).click()

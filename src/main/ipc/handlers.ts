@@ -16,12 +16,16 @@ import * as analysis from '../services/analysis'
 import * as tools from '../services/tools'
 import * as alerts from '../services/alerts'
 import * as backup from '../services/backup'
+import * as bosses from '../services/bosses'
 import { getSettings, setSettings } from '../services/settings'
 import { tibiaData } from '../external/tibiadata'
 import { tibiaMarket } from '../external/tibiamarket'
 import type { TibiaFolderWatcher } from '../services/tibia-folder'
+import * as marketOcr from '../services/market-ocr'
+import type { MarketAnalyzer } from '../services/market-ocr'
 import * as watch from '../services/watch'
 import type { ScanResult, Watcher } from '../services/watch'
+import type { ThirdPartySync } from '../services/third-party-sync'
 import { ocrProfileSchema } from './schemas'
 
 /** Capacidades que dependen de Electron (diálogos, captura, atajos, notificaciones). */
@@ -35,8 +39,10 @@ export interface Host {
   setHotkey(accelerator: string | null): boolean
   pickFolder(title: string): Promise<string | null>
   tibiaFolder: TibiaFolderWatcher
+  marketOcr: MarketAnalyzer
   watcher: Watcher
   onWatchResult(r: ScanResult): void
+  thirdPartySync: ThirdPartySync
   restoreBackup(path: string): Promise<void>
   notify(title: string, body: string): void
 }
@@ -76,6 +82,7 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
         host.tibiaFolder.restart()
       }
       if ('watch' in patch) host.watcher.restart()
+      if ('network' in patch) host.thirdPartySync.reschedule()
       return next
     },
     'app.backup.create': () => ({ path: backup.createBackup(db, ctx.paths) }),
@@ -91,6 +98,10 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
     'catalog.worlds.list': ({ activeOnly }) => catalog.listWorlds(db, activeOnly),
     'catalog.worlds.sync': () => catalog.syncWorlds(ctx),
     'catalog.worlds.update': ({ name, looserTransferConditions }) => catalog.setLooserConditions(db, name, looserTransferConditions),
+    'catalog.worlds.live': () => catalog.liveWorlds(ctx),
+    'catalog.worlds.detail': ({ name }) => catalog.worldDetail(ctx, name),
+    'bosses.outlook': ({ world }) => bosses.bossesOutlook(ctx, world),
+    'bosses.history': ({ world, boss }) => bosses.bossHistory(ctx, world, boss),
     'catalog.items.search': ({ q, category, limit }) => catalog.searchItems(db, q, category, limit),
     'catalog.items.get': ({ id }) => catalog.getItem(db, id),
     'catalog.items.byName': ({ names }) => catalog.itemsByName(db, names),
@@ -120,6 +131,12 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
       return market.importThirdParty(ctx, world, itemIds)
     },
     'market.thirdParty.worlds': () => tibiaMarket(ctx.http).worlds(),
+    'market.thirdParty.sync': ({ worlds, force }) => {
+      if (!settings().network.thirdPartyEnabled) throw new Error('Los datos de terceros están desactivados en Ajustes')
+      return host.thirdPartySync.start({ worlds, force })
+    },
+    'market.thirdParty.cancel': () => host.thirdPartySync.cancel(),
+    'market.thirdParty.status': () => ({ status: host.thirdPartySync.status(), worlds: host.thirdPartySync.worlds() }),
     'market.scans.list': (f) => market.listScans(db, f),
     'market.book': ({ world, itemId, includeThirdParty }) => market.bookView(db, world, itemId, includeThirdParty),
     'market.history': ({ world, itemId, days, includeThirdParty }) => market.history(db, world, itemId, days, includeThirdParty),
@@ -146,6 +163,7 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
 
     'collector.tibiaFolder.status': () => host.tibiaFolder.status(),
     'collector.tibiaFolder.importExisting': ({ sinceDays }) => host.tibiaFolder.importExisting(sinceDays),
+    'collector.analyze': ({ ids }) => host.marketOcr.analyze(ids),
     'collector.tibiaFolder.pick': async () => {
       const path = await host.pickFolder('Carpeta de screenshots de Tibia')
       if (!path) return null
@@ -196,6 +214,17 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
       const profile = input.profileId ? scans.getProfile(db, input.profileId) : null
       const sides = profile ? [...new Set(profile.tables.map((t) => t.side))] : [...new Set(input.offers.map((o) => o.side))]
       const r = scans.confirmScan(db, input, sides.length ? sides : ['sell'])
+      // El usuario confirmó el item: si el OCR no leyó bien su nombre, se aprenden esas letras para la próxima.
+      if (input.itemRead && input.profileId) {
+        const name = get<{ name: string }>(db, 'SELECT name FROM items WHERE id = ?', [input.itemId])?.name
+        if (name && name !== input.itemRead.raw) {
+          try {
+            marketOcr.learnItemName(db, input.profileId, input.screenshotId, input.itemRead.rect, name)
+          } catch (e) {
+            ctx.log.warn('No se pudieron aprender letras del item', e)
+          }
+        }
+      }
       const fired = alerts.runAlerts(ctx)
       if (fired.length) {
         host.emit('alerts.fired', { count: fired.length, messages: fired })
@@ -203,6 +232,8 @@ export function createHandlers(ctx: AppContext, host: Host): Handlers {
       }
       return r
     },
+
+    'ocr.identifyItem': ({ raw }) => marketOcr.identify(db, raw),
 
     'analysis.rules': () => analysis.rulesBundle(db),
     'analysis.rules.history': ({ key }) => analysis.ruleHistory(db, key),

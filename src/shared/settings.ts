@@ -41,10 +41,23 @@ export interface Settings {
     maxImagePixels: number
     /** Carpeta donde el cliente de Tibia guarda sus screenshots; se importan sin capturar la ventana. */
     tibiaFolder: { enabled: boolean; path: string | null; types: string[] }
+    /**
+     * Analiza solo las capturas del Market al importarlas: ubica la ventana, lee el item, el mundo (por el
+     * personaje del nombre de archivo) y las ofertas. Si todo cuadra y supera el umbral de aceptación,
+     * `autoConfirm` guarda el snapshot sin pasar por Revisión OCR.
+     */
+    autoAnalyze: { enabled: boolean; autoConfirm: boolean }
   }
   ocr: { acceptThreshold: number; reviewThreshold: number }
   tracker: { pollMinutes: number; notify: boolean }
-  network: { tibiaDataEnabled: boolean; thirdPartyEnabled: boolean }
+  network: {
+    tibiaDataEnabled: boolean
+    thirdPartyEnabled: boolean
+    /** Bajar en segundo plano los precios de tibiamarket.top de todos los mundos (solo los que cambiaron). */
+    thirdPartyAutoSync: boolean
+    /** Cada cuántas horas revisar tibiamarket.top (1–168). */
+    thirdPartySyncHours: number
+  }
   imbuements: {
     world: string | null
     /** Override de los tokens por paquete; null = usar el seed (2 / 4 / 6). */
@@ -72,10 +85,11 @@ export const DEFAULT_SETTINGS: Settings = {
     maxImportMb: 25,
     maxImagePixels: 7680 * 4320,
     tibiaFolder: { enabled: false, path: null, types: ['Hotkey'] },
+    autoAnalyze: { enabled: true, autoConfirm: true },
   },
   ocr: { acceptThreshold: 0.98, reviewThreshold: 0.9 },
   tracker: { pollMinutes: 5, notify: true },
-  network: { tibiaDataEnabled: true, thirdPartyEnabled: true },
+  network: { tibiaDataEnabled: true, thirdPartyEnabled: true, thirdPartyAutoSync: true, thirdPartySyncHours: 6 },
   imbuements: { world: null, tokensPerTier: { Basic: null, Intricate: null, Powerful: null }, manualPrices: {}, huntHours: 2, builds: [] },
   notifications: { enabled: true },
   watch: { enabled: true, intervalSec: 60, sound: true },

@@ -30,8 +30,21 @@ export const ocrProfileSchema = z.object({
     }),
   ).max(2),
   detailsFields: z.array(z.object({ side: z.enum(['buy', 'sell']), field: z.enum(['transactions', 'highest', 'average', 'lowest']), rect })).max(8),
-  preprocess: z.object({ threshold: z.union([z.number().int().min(0).max(255), z.literal('otsu')]), darkText: z.boolean(), spaceGap: z.number().int().min(1).max(20) }),
+  preprocess: z.object({
+    threshold: z.union([z.number().int().min(0).max(255), z.literal('otsu'), z.literal('auto')]),
+    delta: z.number().int().min(1).max(128).optional(),
+    darkText: z.boolean(),
+    spaceGap: z.number().int().min(1).max(20),
+  }),
   atlas: z.object({ glyphs: z.array(glyph).max(2_000) }),
+  anchor: z
+    .object({ x: z.number().int().min(0), y: z.number().int().min(0), w: z.number().int().positive().max(400), h: z.number().int().positive().max(100), threshold: z.number().int().min(0).max(255), bits: z.string().regex(/^[01]+$/), label: z.string().max(40) })
+    .nullable()
+    .optional(),
+  itemList: z
+    .object({ rect, entryHeight: z.number().int().positive().max(200), iconWidth: z.number().int().min(0).max(200), atlas: z.object({ glyphs: z.array(glyph).max(2_000) }), spaceGap: z.number().int().min(1).max(20) })
+    .nullable()
+    .optional(),
   version: z.number().int().min(0),
   updatedAt: z.string().nullable(),
 })
@@ -98,6 +111,10 @@ const schemas = {
   'catalog.worlds.list': z.object({ activeOnly: z.boolean() }),
   'catalog.worlds.sync': v,
   'catalog.worlds.update': z.object({ name, looserTransferConditions: nullableBool }),
+  'catalog.worlds.live': v,
+  'catalog.worlds.detail': z.object({ name }),
+  'bosses.outlook': z.object({ world: name }),
+  'bosses.history': z.object({ world: name, boss: z.string().min(1).max(64) }),
   'catalog.items.search': z.object({ q: z.string().max(100), category: z.string().max(64).nullable(), limit: z.number().int().min(1).max(500) }),
   'catalog.items.get': z.object({ id }),
   'catalog.items.byName': z.object({ names: z.array(z.string().max(100)).max(200) }),
@@ -120,6 +137,9 @@ const schemas = {
 
   'market.thirdParty.import': z.object({ world: name, itemIds: z.array(z.number().int().positive()).max(50).nullable() }),
   'market.thirdParty.worlds': v,
+  'market.thirdParty.sync': z.object({ worlds: z.array(name).max(200).nullable(), force: z.boolean() }),
+  'market.thirdParty.cancel': v,
+  'market.thirdParty.status': v,
   'market.scans.list': z.object({ world: name.nullable(), itemId: id.nullable(), source: dataSource.nullable(), limit: z.number().int().min(1).max(1_000) }),
   'market.book': z.object({ world: name, itemId: id, includeThirdParty: z.boolean() }),
   'market.history': z.object({ world: name, itemId: id, days: z.number().int().min(1).max(365), includeThirdParty: z.boolean() }),
@@ -144,6 +164,7 @@ const schemas = {
   'collector.tibiaFolder.status': v,
   'collector.tibiaFolder.importExisting': z.object({ sinceDays: z.number().positive().max(3_650).nullable() }),
   'collector.tibiaFolder.pick': v,
+  'collector.analyze': z.object({ ids: z.array(uuid).max(1_000).nullable() }),
 
   'watch.status': v,
   'watch.lists': v,
@@ -173,7 +194,9 @@ const schemas = {
     stats: z.array(
       z.object({ side: z.enum(['buy', 'sell']), transactions: gp.nullable(), avgPrice: gp.nullable(), minPrice: gp.nullable(), maxPrice: gp.nullable(), confidence: z.number().min(0).max(1), corrections: z.array(correction).max(10) }),
     ).max(2),
+    itemRead: z.object({ rect, raw: z.string().max(200) }).nullable().optional(),
   }),
+  'ocr.identifyItem': z.object({ raw: z.string().max(200) }),
 
   'analysis.rules': v,
   'analysis.rules.history': z.object({ key: z.string().max(64) }),

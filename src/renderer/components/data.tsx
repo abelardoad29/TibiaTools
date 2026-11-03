@@ -153,13 +153,30 @@ export function ItemPicker({ value, onChange, placeholder = 'Buscar item…', au
   )
 }
 
+/** Mis mundos (Ajustes): el principal primero y luego los marcados con estrella, en ese orden. */
+export function useMyWorlds(): string[] {
+  const { data } = useApi('app.settings.get', undefined)
+  if (!data) return []
+  return [...new Set([...(data.homeWorld ? [data.homeWorld] : []), ...data.favoriteWorlds])]
+}
+
+/** Selector de mundo: "Mis mundos" arriba y el resto debajo, para no buscar entre los 90 cada vez. */
 export function WorldPicker({ value, onChange, allowEmpty, activeOnly = true, label = 'Mundo…' }: { value: string | null; onChange: (w: string | null) => void; allowEmpty?: boolean; activeOnly?: boolean; label?: string }) {
   const { data = [] } = useApi('catalog.worlds.list', { activeOnly })
+  const mine = useMyWorlds()
+  const byName = new Map(data.map((w: World) => [w.name, w]))
+  const opt = (w: World, group?: string) => ({ value: w.name, label: `${w.name} · ${w.region ?? '?'} · ${w.pvpType ?? '?'}`, group })
+  const mineWorlds = mine.map((n) => byName.get(n)).filter((w): w is World => !!w)
+  const rest = data.filter((w: World) => !mine.includes(w.name))
   return (
     <Select
       value={value ?? ''}
       onChange={(e) => onChange(e.target.value || null)}
-      options={[...(allowEmpty || !value ? [{ value: '', label }] : []), ...data.map((w: World) => ({ value: w.name, label: `${w.name} · ${w.region ?? '?'} · ${w.pvpType ?? '?'}` }))]}
+      options={[
+        ...(allowEmpty || !value ? [{ value: '', label }] : []),
+        ...mineWorlds.map((w) => opt(w, 'Mis mundos')),
+        ...rest.map((w: World) => opt(w, mineWorlds.length ? 'Todos los mundos' : undefined)),
+      ]}
     />
   )
 }

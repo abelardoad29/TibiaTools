@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto'
 import { mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { extname, join } from 'node:path'
-import type { Screenshot } from '@shared/api'
+import type { Screenshot, ScreenshotAnalysis } from '@shared/api'
 import type { Rect, ScreenType } from '@core/ocr/types'
 import { all, get, nowIso, parseJson, run, type Db } from '../db/database'
 import type { AppContext } from '../context'
@@ -49,9 +49,11 @@ interface ScreenshotRow {
   item_id: number | null
   processing_status: Screenshot['status']
   source_mode: Screenshot['sourceMode'] | null
+  analysis_json: string | null
+  notes: string | null
 }
 
-const SELECT = `SELECT sc.*, cs.source_mode FROM screenshots sc LEFT JOIN capture_sessions cs ON cs.id = sc.session_id`
+const SELECT = `SELECT sc.*, cs.source_mode, cs.notes FROM screenshots sc LEFT JOIN capture_sessions cs ON cs.id = sc.session_id`
 
 const toScreenshot = (r: ScreenshotRow): Screenshot => ({
   id: r.id,
@@ -67,11 +69,26 @@ const toScreenshot = (r: ScreenshotRow): Screenshot => ({
   worldId: r.world_id,
   itemId: r.item_id,
   status: r.processing_status,
+  analysis: parseJson<ScreenshotAnalysis | null>(r.analysis_json, null),
 })
 
 export function getScreenshot(db: Db, id: string): Screenshot | null {
   const r = get<ScreenshotRow>(db, `${SELECT} WHERE sc.id = ?`, [id])
   return r ? toScreenshot(r) : null
+}
+
+/** Notas de la sesión de captura (p. ej. «Tibia: Personaje · Hotkey · archivo.png»). */
+export function screenshotNotes(db: Db, id: string): string | null {
+  return get<{ notes: string | null }>(db, `${SELECT} WHERE sc.id = ?`, [id])?.notes ?? null
+}
+
+export function setScreenshotAnalysis(db: Db, id: string, analysis: ScreenshotAnalysis, status: 'processed' | 'rejected' | null): void {
+  // Una captura confirmada no cambia de estado; el análisis sí se guarda (dice que se confirmó sola).
+  run(db, `UPDATE screenshots SET analysis_json = ?, processing_status = CASE WHEN processing_status = 'confirmed' THEN processing_status ELSE COALESCE(?, processing_status) END WHERE id = ?`, [
+    JSON.stringify(analysis),
+    status,
+    id,
+  ])
 }
 
 export function screenshotPath(db: Db, id: string): string | null {

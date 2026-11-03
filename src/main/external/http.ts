@@ -38,31 +38,51 @@ export class ExternalError extends Error {
 
 const MIN_INTERVAL_MS: Record<string, number> = {
   'api.tibiadata.com': 250,
-  'api.tibiamarket.top': 1_000,
+  // tibiamarket.top anuncia X-Ratelimit-Limit: 1 y Retry-After: 5 → una consulta cada 5 s.
+  'api.tibiamarket.top': 5_100,
   // Iconos: ~8 req/s como máximo; cada icono se descarga una sola vez y queda en caché.
   'www.tibiawiki.com.br': 120,
 }
 
-export function createHttpClient(db: Db, log: Logger, fetchImpl: typeof fetch = fetch): HttpClient {
-  const lastCall = new Map<string, Promise<void>>()
+// tibiamarket cuenta los 5 s desde que termina de procesar la consulta anterior (medido: 5,1 s entre
+// inicios todavía da 429 tras una respuesta grande), así que ahí el intervalo empieza al llegar la respuesta.
+const AFTER_RESPONSE = new Set(['api.tibiamarket.top'])
 
-  // Serializa las llamadas por host respetando el intervalo mínimo.
-  async function throttle(host: string): Promise<void> {
-    const interval = MIN_INTERVAL_MS[host] ?? 200
+/** Espera antes de reintentar: Retry-After (segundos o fecha HTTP) con tope de 60 s, o 1 s · 2^intento. */
+export function retryDelayMs(retryAfter: string | null, attempt: number, now = Date.now()): number {
+  const fallback = 1_000 * 2 ** attempt
+  if (!retryAfter) return fallback
+  const secs = Number(retryAfter)
+  const ms = Number.isFinite(secs) ? secs * 1_000 : Date.parse(retryAfter) - now
+  return Number.isFinite(ms) && ms > 0 ? Math.min(60_000, Math.max(fallback, ms + 250)) : fallback
+}
+
+/** `intervalOverrides` cambia el intervalo mínimo por host (los tests usan 0 para no esperar). */
+export function createHttpClient(db: Db, log: Logger, fetchImpl: typeof fetch = fetch, intervalOverrides: Record<string, number> = {}): HttpClient {
+  const lastCall = new Map<string, Promise<void>>()
+  const intervals = { ...MIN_INTERVAL_MS, ...intervalOverrides }
+
+  // Serializa las llamadas por host respetando el intervalo mínimo. Devuelve la función que avisa que
+  // llegó la respuesta (solo importa en los hosts de AFTER_RESPONSE).
+  async function throttle(host: string): Promise<() => void> {
+    const interval = intervals[host] ?? 200
     const prev = lastCall.get(host) ?? Promise.resolve()
-    const next = prev.then(() => new Promise<void>((r) => setTimeout(r, interval)))
+    let release = () => undefined as void
+    const answered = AFTER_RESPONSE.has(host) ? new Promise<void>((r) => (release = r)) : Promise.resolve()
+    const next = prev.then(() => answered).then(() => new Promise<void>((r) => setTimeout(r, interval)))
     lastCall.set(host, next.catch(() => undefined))
     await prev
+    return release
   }
 
   async function request(url: string, timeoutMs: number, retries: number): Promise<Response> {
     const host = new URL(url).host
     let lastErr: unknown
     for (let attempt = 0; attempt <= retries; attempt++) {
-      await throttle(host)
+      const answered = await throttle(host)
       const started = Date.now()
       try {
-        const res = await fetchImpl(url, { headers: { 'User-Agent': USER_AGENT, Accept: 'application/json, image/*;q=0.9' }, signal: AbortSignal.timeout(timeoutMs) })
+        const res = await fetchImpl(url, { headers: { 'User-Agent': USER_AGENT, Accept: 'application/json, image/*;q=0.9' }, signal: AbortSignal.timeout(timeoutMs) }).finally(answered)
         run(db, 'INSERT INTO external_fetch_log (host, endpoint, fetched_at, status, duration_ms, bytes, error) VALUES (?,?,?,?,?,?,NULL)', [
           host,
           new URL(url).pathname,
@@ -72,8 +92,9 @@ export function createHttpClient(db: Db, log: Logger, fetchImpl: typeof fetch = 
           Number(res.headers.get('content-length') ?? 0),
         ])
         if (res.status === 429 || res.status >= 500) {
-          lastErr = new ExternalError(`${host} respondió ${res.status}`, res.status)
-          if (attempt < retries) await new Promise((r) => setTimeout(r, 1_000 * 2 ** attempt))
+          lastErr = new ExternalError(res.status === 429 ? `${host} limitó las consultas (429); prueba de nuevo en unos segundos` : `${host} respondió ${res.status}`, res.status)
+          // Si el servidor dice cuánto esperar (Retry-After), se respeta; si no, espera exponencial.
+          if (attempt < retries) await new Promise((r) => setTimeout(r, retryDelayMs(res.headers.get('retry-after'), attempt)))
           continue
         }
         if (!res.ok) throw new ExternalError(`${host} respondió ${res.status}`, res.status)

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router'
-import { CheckCircle2, Plus, ScanText, Trash2, XCircle } from 'lucide-react'
-import type { ConfirmOfferInput, ConfirmStatsInput, ItemSummary, Screenshot } from '@shared/api'
+import { CheckCircle2, Plus, ScanText, Sparkles, Trash2, XCircle } from 'lucide-react'
+import type { ConfirmOfferInput, ConfirmStatsInput, ItemIdentificationResult, ItemSummary, Screenshot, ScreenshotAnalysis } from '@shared/api'
 import { parseGp } from '@core/domain/money/gp'
 import { OCR_VERSION, PARSER_VERSION, reviewLevel, validateRows } from '@core/ocr/pipeline'
 import type { DetailsField, OcrOfferRow, OcrProfile, OcrResult, ScreenType } from '@core/ocr/types'
@@ -36,6 +36,18 @@ const fieldFrom = (f: { raw: string; value: number | null; confidence: number })
 const valueOf = (f: EditField | null) => (f ? parseGp(f.text) : null)
 const edited = (f: EditField | null) => !!f && valueOf(f) !== f.ocr
 
+const DECISION: Record<ScreenshotAnalysis['decision'], { label: string; tone: 'good' | 'warn' | 'bad' | 'info' }> = {
+  confirmed: { label: 'guardada sola', tone: 'good' },
+  review: { label: 'para revisar', tone: 'warn' },
+  not_market: { label: 'no es el Market', tone: 'info' },
+  error: { label: 'error', tone: 'bad' },
+}
+
+/** Perfil a usar por defecto: el que ubica la ventana solo (ancla) y tiene glifos; si no, el de la misma resolución. */
+function preferredProfile(candidates: OcrProfile[], width: number, height: number): OcrProfile | null {
+  return candidates.find((p) => p.anchor && p.atlas.glyphs.length) ?? candidates.find((p) => p.refWidth === width && p.refHeight === height && p.atlas.glyphs.length) ?? candidates[0] ?? null
+}
+
 const FIELDS: DetailsField[] = ['transactions', 'highest', 'average', 'lowest']
 const FIELD_LABEL: Record<DetailsField, string> = { transactions: 'Transacciones', highest: 'Máximo', average: 'Promedio', lowest: 'Mínimo' }
 
@@ -45,19 +57,44 @@ export function OcrReviewPage() {
   const list = useApi('collector.screenshots.list', { status: null, limit: 100 })
   const shot = list.data?.find((s) => s.id === shotId) ?? null
   const pending = (list.data ?? []).filter((s) => s.status === 'new' || s.status === 'processed')
+  const analyze = useApiMutation('collector.analyze', ['collector.screenshots.list', 'market.coverage', 'app.info'])
 
   return (
-    <Page title="Revisión OCR" subtitle="Corrige lo que leyó el OCR antes de guardarlo. La captura original se conserva intacta.">
+    <Page
+      title="Revisión OCR"
+      subtitle="Las capturas del Market que llegan de la carpeta de Tibia se analizan solas: ventana, item, mundo y ofertas. Aquí quedan solo las que necesitan tu revisión."
+    >
       <div className="grid gap-4 xl:grid-cols-[260px_1fr]">
-        <Card title={`Pendientes (${pending.length})`}>
+        <Card
+          title={`Pendientes (${pending.length})`}
+          actions={
+            pending.length > 0 && (
+              <Button onClick={() => analyze.mutate({ ids: null })} busy={analyze.isPending} title="Analizar automáticamente todas las pendientes (y guardar las que cuadren)">
+                <Sparkles className="size-4" /> Analizar
+              </Button>
+            )
+          }
+        >
+          {analyze.data && (
+            <p className="mb-2 text-xs text-muted">
+              {analyze.data.analyzed} analizadas · <span className="text-good">{analyze.data.confirmed} guardadas</span> · {analyze.data.review} para revisar · {analyze.data.notMarket} sin Market
+            </p>
+          )}
+          <ErrorBox error={analyze.error} />
           <div className="flex max-h-[75vh] flex-col gap-2 overflow-auto">
             {pending.length === 0 && <Empty>No hay capturas pendientes.</Empty>}
             {pending.map((s) => (
               <button key={s.id} onClick={() => setParams({ shot: s.id })} className={`flex flex-col gap-1 rounded-lg border p-1.5 text-left ${s.id === shotId ? 'border-accent' : 'border-line hover:border-accent/60'}`}>
                 <img src={s.url} alt="" className="h-16 w-full rounded object-contain" loading="lazy" />
                 <span className="text-[11px] text-muted">
-                  {formatDateTime(s.capturedAtUtc)} · {s.screenType ?? 'sin tipo'}
+                  {formatDateTime(s.capturedAtUtc)} · {s.analysis?.item?.name ?? s.screenType ?? 'sin tipo'}
                 </span>
+                {s.analysis && (
+                  <span className="flex flex-wrap items-center gap-1 text-[11px]">
+                    <Badge tone={DECISION[s.analysis.decision].tone}>{DECISION[s.analysis.decision].label}</Badge>
+                    <span className="line-clamp-2 text-muted">{s.analysis.reasons[0]}</span>
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -81,7 +118,9 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
   const [world, setWorld] = useState<string | null>(null)
   const [item, setItem] = useState<ItemSummary | null>(null)
   const [profileId, setProfileId] = useState<number | null>(null)
-  const [editing, setEditing] = useState<OcrProfile | null>(null)
+  const [editing, setEditing] = useState<{ profile: OcrProfile; calibrate: boolean } | null>(null)
+  const [identified, setIdentified] = useState<ItemIdentificationResult | null>(null)
+  const analyze = useApiMutation('collector.analyze', ['collector.screenshots.list', 'market.coverage', 'app.info'])
   const [result, setResult] = useState<OcrResult | null>(null)
   const [rows, setRows] = useState<EditRow[]>([])
   const [details, setDetails] = useState<Record<string, EditField>>({})
@@ -89,20 +128,22 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
   const [error, setError] = useState<unknown>(null)
   const [hover, setHover] = useState<number | null>(null)
 
+  // Mundo: el detectado por el personaje de la captura; si no se pudo, tu mundo principal.
+  const homeWorld = settings.data?.homeWorld ?? null
   useEffect(() => {
     if (shot.worldId && worlds.data) setWorld(worlds.data.find((w) => w.id === shot.worldId)?.name ?? null)
-  }, [shot.worldId, worlds.data])
+    else if (!shot.worldId && homeWorld) setWorld((cur) => cur ?? homeWorld)
+  }, [shot.worldId, worlds.data, homeWorld])
   useEffect(() => {
     if (shot.itemId) void call('catalog.items.get', { id: shot.itemId }).then((i) => i && setItem(i))
   }, [shot.itemId])
   const candidates = (profiles.data ?? []).filter((p) => p.screenType === screenType)
   useEffect(() => {
-    if (profileId === null && candidates.length) {
-      // Preferir un perfil con la misma resolución que la captura.
-      setProfileId((candidates.find((p) => p.refWidth === shot.width && p.refHeight === shot.height) ?? candidates[0]!).id)
-    }
+    if (profileId === null && candidates.length) setProfileId(preferredProfile(candidates, shot.width, shot.height)?.id ?? null)
   }, [candidates, profileId, shot.width, shot.height])
   const profile = candidates.find((p) => p.id === profileId) ?? null
+  const defaultProfile = preferredProfile(candidates, shot.width, shot.height)
+  const noGlyphs = !!profile && profile.atlas.glyphs.length === 0
   const thresholds = settings.data?.ocr ?? { acceptThreshold: 0.98, reviewThreshold: 0.9 }
   const worldId = worlds.data?.find((w) => w.name === world)?.id ?? null
 
@@ -130,12 +171,34 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
         })),
       )
       setDetails(Object.fromEntries(r.details.map((d) => [`${d.side}:${d.field}`, fieldFrom(d.value)])))
+      // Item seleccionado en la lista del Market: se busca en el catálogo y, si es claro, se elige solo.
+      const raw = r.item?.selected?.raw
+      if (raw) {
+        const id = await call('ocr.identifyItem', { raw })
+        setIdentified(id)
+        if (id.confident && id.best && !item) {
+          const found = await call('catalog.items.get', { id: id.best.id })
+          if (found) {
+            setItem(found)
+            persistMeta({ itemId: found.id })
+          }
+        }
+      } else setIdentified(null)
     } catch (e) {
       setError(e)
     } finally {
       setBusy(false)
     }
   }
+
+  // Con un perfil calibrado, el OCR corre solo al abrir la captura.
+  const autoRan = useRef(false)
+  useEffect(() => {
+    if (autoRan.current || !profile || profile.atlas.glyphs.length === 0) return
+    autoRan.current = true
+    void run()
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo una vez por captura, con el primer perfil válido
+  }, [profile])
 
   // Validación sobre los valores editados (no sobre lo que leyó el OCR).
   const validated = useMemo(() => {
@@ -193,8 +256,21 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
           corrections: FIELDS.flatMap((f) => (get(f) ? correction(f, get(f)!) : [])),
         }
       })
+    const sel = result?.item?.selected
     confirm.mutate(
-      { screenshotId: shot.id, profileId: profile?.id ?? null, worldId: worldId!, itemId: item!.id, screenType, ocrVersion: result?.ocrVersion ?? OCR_VERSION, parserVersion: PARSER_VERSION, offers, stats },
+      {
+        screenshotId: shot.id,
+        profileId: profile?.id ?? null,
+        worldId: worldId!,
+        itemId: item!.id,
+        screenType,
+        ocrVersion: result?.ocrVersion ?? OCR_VERSION,
+        parserVersion: PARSER_VERSION,
+        offers,
+        stats,
+        // Con el nombre real del item, la app aprende las letras que el OCR no reconoció.
+        itemRead: sel ? { rect: sel.rect, raw: sel.raw } : null,
+      },
       { onSuccess: onDone },
     )
   }
@@ -204,8 +280,12 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
     setRows((rs) => rs.map((r) => (r.key === key ? { ...r, [field]: { ...(r[field] ?? { raw: '', ocr: null, confidence: 0 }), text } } : r)))
 
   const overlay = result
-    ? result.rows.map((r, i) => ({ rect: r.rect, label: '', tone: (validated.get(`${r.side}-${r.rowIndex}`)?.length ? 'bad' : 'good') as 'bad' | 'good', i }))
+    ? [
+        ...result.rows.map((r, i) => ({ rect: r.rect, label: '', tone: (validated.get(`${r.side}-${r.rowIndex}`)?.length ? 'bad' : 'good') as 'bad' | 'good', i })),
+        ...(result.item?.selected ? [{ rect: result.item.selected.rect, label: 'item', tone: 'info' as const }] : []),
+      ]
     : (profile?.tables ?? []).map((t) => ({ rect: t.rect, label: `Tabla ${t.side}`, tone: 'info' as const }))
+  const a = shot.analysis
 
   return (
     <div className="flex flex-col gap-4">
@@ -218,6 +298,29 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
             <div className="text-xs text-muted">
               {formatDateTime(shot.capturedAtUtc)} (local {shot.capturedAtLocal.slice(0, 16).replace('T', ' ')}) · {shot.width}×{shot.height} · {shot.sourceMode} · sha256 {shot.sha256.slice(0, 12)}…
             </div>
+            {a && (
+              <div className="rounded-lg border border-line p-2 text-xs">
+                <div className="mb-1 flex flex-wrap items-center gap-2">
+                  <span className="font-medium">Análisis automático</span>
+                  <Badge tone={DECISION[a.decision].tone}>{DECISION[a.decision].label}</Badge>
+                  <span className="text-muted">{formatDateTime(a.at)}</span>
+                  <Button variant="ghost" onClick={() => analyze.mutate({ ids: [shot.id] })} busy={analyze.isPending}>
+                    Analizar de nuevo
+                  </Button>
+                </div>
+                <div className="text-muted">
+                  Item leído: <span className="font-mono">{a.itemRead ?? '—'}</span>
+                  {a.item && ` → ${a.item.name} (${Math.round(a.item.score * 100)} %)`} · Personaje: {a.character ?? '—'} · Mundo: {a.world ?? '—'}
+                </div>
+                {a.reasons.length > 0 && (
+                  <ul className="mt-1 list-disc pl-4 text-warn">
+                    {a.reasons.map((x) => (
+                      <li key={x}>{x}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
             <Field label="Pantalla">
               <Select
                 value={screenType}
@@ -245,7 +348,7 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
                 }}
               />
             </Field>
-            <Field label="Item">
+            <Field label="Item" hint={result?.item?.selected ? `Lista del Market: «${result.item.selected.raw}» ('?' = letra que aún no conoce)` : undefined}>
               <ItemPicker
                 value={item}
                 onChange={(i) => {
@@ -253,6 +356,26 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
                   persistMeta({ itemId: i?.id ?? null })
                 }}
               />
+              {identified && !identified.confident && identified.candidates.length > 0 && (
+                <span className="mt-1 flex flex-wrap items-center gap-1 text-xs">
+                  <span className="text-muted">¿Es…?</span>
+                  {identified.candidates.slice(0, 4).map((c) => (
+                    <Button
+                      key={c.id}
+                      variant="secondary"
+                      onClick={() =>
+                        void call('catalog.items.get', { id: c.id }).then((found) => {
+                          if (!found) return
+                          setItem(found)
+                          persistMeta({ itemId: found.id })
+                        })
+                      }
+                    >
+                      {c.name} <span className="text-muted">{Math.round(c.score * 100)} %</span>
+                    </Button>
+                  ))}
+                </span>
+              )}
             </Field>
             <Field label="Perfil OCR">
               <div className="flex gap-2">
@@ -261,7 +384,7 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
                   onChange={(e) => setProfileId(Number(e.target.value) || null)}
                   options={[{ value: '', label: candidates.length ? 'Elegir…' : 'Sin perfiles para esta pantalla' }, ...candidates.map((p) => ({ value: String(p.id), label: `${p.name} (v${p.version}, ${p.refWidth}×${p.refHeight})` }))]}
                 />
-                <Button onClick={() => setEditing(profile ?? emptyProfile(screenType, shot.width, shot.height))}>{profile ? 'Editar' : 'Crear'}</Button>
+                <Button onClick={() => setEditing({ profile: profile ?? emptyProfile(screenType, shot.width, shot.height), calibrate: false })}>{profile ? 'Editar' : 'Crear'}</Button>
                 {profile && (
                   <Button variant="ghost" onClick={() => profile.id && exportProfile.mutate({ id: profile.id })} title="Exportar perfil (JSON)">
                     Exportar
@@ -281,8 +404,24 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
                 <XCircle className="size-4" /> Rechazar captura
               </Button>
             </div>
-            <ErrorBox error={error ?? confirm.error ?? reject.error} />
-            {result && <Warnings items={result.warnings} />}
+            {noGlyphs && (
+              <div className="rounded-lg border border-warn/50 bg-warn/10 p-2 text-xs">
+                <p className="mb-2">
+                  El perfil «{profile.name}» todavía no sabe leer números: le faltan los glifos (la forma de cada dígito y de la coma).
+                  {defaultProfile && defaultProfile.id !== profile.id && ' El perfil por defecto ya viene calibrado con capturas reales del Market a 1920×1080.'}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {defaultProfile && defaultProfile.id !== profile.id && defaultProfile.atlas.glyphs.length > 0 && (
+                    <Button variant="primary" onClick={() => setProfileId(defaultProfile.id)}>
+                      Usar «{defaultProfile.name}»
+                    </Button>
+                  )}
+                  <Button onClick={() => setEditing({ profile, calibrate: true })}>Calibrar ahora</Button>
+                </div>
+              </div>
+            )}
+            <ErrorBox error={error ?? confirm.error ?? reject.error ?? analyze.error} />
+            {result && <Warnings items={noGlyphs ? result.warnings.filter((w) => !w.includes('glifos')) : result.warnings} />}
           </div>
         </div>
       </Card>
@@ -414,12 +553,13 @@ function Review({ shot, onDone }: { shot: Screenshot; onDone: () => void }) {
       )}
       {editing && (
         <ProfileEditor
-          initial={editing}
+          initial={editing.profile}
+          calibrate={editing.calibrate}
           imageUrl={shot.url}
           onClose={() => setEditing(null)}
           onSaved={(p) => {
             setProfileId(p.id)
-            setEditing(p)
+            setEditing({ profile: p, calibrate: editing.calibrate })
           }}
         />
       )}

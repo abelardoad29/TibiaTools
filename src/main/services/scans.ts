@@ -2,12 +2,16 @@ import { randomUUID } from 'node:crypto'
 import type { ConfirmScanInput } from '@shared/api'
 import { diffSnapshots } from '@core/domain/market/snapshot-diff'
 import type { OfferLevel } from '@core/domain/market/order-book'
-import type { OcrProfile } from '@core/ocr/types'
+import type { Glyph, OcrProfile } from '@core/ocr/types'
+import { mergeAtlas } from '@core/ocr/glyphs'
+import marketOffers1080 from '@seed/ocr-profiles/market-offers-1920x1080.json'
 import { all, get, nowIso, parseJson, run, tx, type Db } from '../db/database'
 import { getScreenshot } from './evidence'
 import { TIBIA_COINS_ID } from './catalog'
 
 // ---------- Perfiles OCR (versionados: cada guardado incrementa la versión) ----------
+
+const DEFAULT_PROFILES = [marketOffers1080 as OcrProfile]
 
 interface ProfileRow {
   id: number
@@ -22,8 +26,10 @@ interface ProfileRow {
   updated_at: string
 }
 
+type Regions = Pick<OcrProfile, 'tables' | 'detailsFields' | 'anchor' | 'itemList'>
+
 const toProfile = (r: ProfileRow): OcrProfile => {
-  const regions = parseJson<{ tables: OcrProfile['tables']; detailsFields: OcrProfile['detailsFields'] }>(r.regions_json, { tables: [], detailsFields: [] })
+  const regions = parseJson<Regions>(r.regions_json, { tables: [], detailsFields: [] })
   return {
     id: r.id,
     name: r.name,
@@ -32,6 +38,8 @@ const toProfile = (r: ProfileRow): OcrProfile => {
     refHeight: r.screen_height,
     tables: regions.tables,
     detailsFields: regions.detailsFields,
+    anchor: regions.anchor ?? null,
+    itemList: regions.itemList ?? null,
     preprocess: parseJson(r.preprocessing_json, { threshold: 'otsu', darkText: false, spaceGap: 3 }),
     atlas: parseJson(r.glyphs_json, { glyphs: [] }),
     version: r.version,
@@ -49,7 +57,7 @@ export function getProfile(db: Db, id: number): OcrProfile | null {
 }
 
 export function saveProfile(db: Db, p: OcrProfile): OcrProfile {
-  const regions = JSON.stringify({ tables: p.tables, detailsFields: p.detailsFields })
+  const regions = JSON.stringify({ tables: p.tables, detailsFields: p.detailsFields, anchor: p.anchor ?? null, itemList: p.itemList ?? null } satisfies Regions)
   const now = nowIso()
   if (p.id === null) {
     const r = run(
@@ -66,6 +74,32 @@ export function saveProfile(db: Db, p: OcrProfile): OcrProfile {
     [p.name, p.screenType, p.refWidth, p.refHeight, regions, JSON.stringify(p.preprocess), JSON.stringify(p.atlas), now, p.id],
   )
   return getProfile(db, p.id)!
+}
+
+/**
+ * Perfiles que trae la app (calibrados con capturas reales, ver scripts/calibrate-market.ts). Se crean si no
+ * existe uno con ese nombre; si el usuario lo editó, se respeta su versión.
+ */
+export function ensureDefaultProfiles(db: Db): void {
+  for (const p of DEFAULT_PROFILES) {
+    if (!get(db, 'SELECT 1 FROM collector_profiles WHERE name = ?', [p.name])) saveProfile(db, { ...p, id: null })
+  }
+}
+
+/** El perfil por defecto (con ancla) o, si no existe, el primero de ofertas con glifos. */
+export function defaultOffersProfile(db: Db): OcrProfile | null {
+  const offers = listProfiles(db).filter((p) => p.screenType === 'offers')
+  return offers.find((p) => p.name === DEFAULT_PROFILES[0]!.name) ?? offers.find((p) => p.anchor && p.atlas.glyphs.length) ?? null
+}
+
+/** Agrega glifos de letras al perfil (aprendidos de un nombre de item confirmado). Devuelve cuántos son nuevos. */
+export function addItemGlyphs(db: Db, profileId: number, glyphs: Glyph[]): number {
+  const p = getProfile(db, profileId)
+  if (!p?.itemList) return 0
+  const atlas = mergeAtlas(p.itemList.atlas, glyphs)
+  const added = atlas.glyphs.length - p.itemList.atlas.glyphs.length
+  if (added > 0) saveProfile(db, { ...p, itemList: { ...p.itemList, atlas } })
+  return added
 }
 
 export function deleteProfile(db: Db, id: number): void {
